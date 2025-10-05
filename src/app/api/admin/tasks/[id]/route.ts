@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth-session'
+import { isAdmin } from '@/lib/auth-admin'
 import { prisma } from '@/lib/prisma'
 
 export async function DELETE(
@@ -11,6 +12,10 @@ export async function DELETE(
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const { id } = await context.params

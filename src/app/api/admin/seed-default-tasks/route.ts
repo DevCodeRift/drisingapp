@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth-session'
+import { isAdmin } from '@/lib/auth-admin'
 import { prisma } from '@/lib/prisma'
 import { TaskCategory, ResetType } from '@/types/tasks'
 
@@ -51,6 +52,10 @@ export async function POST() {
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     let created = 0

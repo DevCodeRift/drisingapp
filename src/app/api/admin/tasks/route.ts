@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth-session'
+import { isAdmin } from '@/lib/auth-admin'
 import { prisma } from '@/lib/prisma'
 import { TaskCategory, ResetType } from '@/types/tasks'
 
@@ -9,6 +10,10 @@ export async function GET() {
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const templates = await prisma.taskTemplate.findMany({
@@ -34,6 +39,10 @@ export async function POST(request: NextRequest) {
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
     }
 
     const { title, description, category, resetType } = await request.json()

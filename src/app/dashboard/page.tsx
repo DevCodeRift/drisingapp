@@ -10,13 +10,25 @@ export default function Dashboard() {
   const { data: session, status } = useSession()
   const [tasks, setTasks] = useState<UserTask[]>([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     if (session) {
       initializeUser()
       fetchTasks()
+      checkAdminStatus()
     }
   }, [session])
+
+  const checkAdminStatus = async () => {
+    try {
+      const response = await fetch('/api/admin/check')
+      const data = await response.json()
+      setIsAdmin(data.isAdmin)
+    } catch (error) {
+      setIsAdmin(false)
+    }
+  }
 
   const initializeUser = async () => {
     try {
@@ -103,12 +115,14 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="flex items-center space-x-4">
-            <a
-              href="/admin"
-              className="px-4 py-2 bg-destiny-purple text-white rounded-lg hover:bg-destiny-purple/80 transition-colors"
-            >
-              Admin Panel
-            </a>
+            {isAdmin && (
+              <a
+                href="/admin"
+                className="px-4 py-2 bg-destiny-purple text-white rounded-lg hover:bg-destiny-purple/80 transition-colors"
+              >
+                Admin Panel
+              </a>
+            )}
             <LoginButton />
           </div>
         </div>

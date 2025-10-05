@@ -16,6 +16,8 @@ export default function AdminPage() {
   const { data: session } = useSession()
   const [templates, setTemplates] = useState<TaskTemplate[]>([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [checkingAdmin, setCheckingAdmin] = useState(true)
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
@@ -24,8 +26,32 @@ export default function AdminPage() {
   })
 
   useEffect(() => {
-    fetchTemplates()
-  }, [])
+    checkAdminStatus()
+  }, [session])
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchTemplates()
+    }
+  }, [isAdmin])
+
+  const checkAdminStatus = async () => {
+    if (!session) {
+      setCheckingAdmin(false)
+      return
+    }
+
+    try {
+      const response = await fetch('/api/admin/check')
+      const data = await response.json()
+      setIsAdmin(data.isAdmin)
+    } catch (error) {
+      console.error('Error checking admin status:', error)
+      setIsAdmin(false)
+    } finally {
+      setCheckingAdmin(false)
+    }
+  }
 
   const fetchTemplates = async () => {
     try {
@@ -93,10 +119,32 @@ export default function AdminPage() {
     }
   }
 
+  if (checkingAdmin || loading) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-destiny-orange"></div>
+      </div>
+    )
+  }
+
   if (!session) {
     return (
       <div className="min-h-screen p-8 flex items-center justify-center">
         <p className="text-gray-300">Please sign in to access admin panel</p>
+      </div>
+    )
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen p-8 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-destiny-orange mb-4">Access Denied</h1>
+          <p className="text-gray-300">You do not have permission to access the admin panel.</p>
+          <a href="/dashboard" className="mt-4 inline-block px-6 py-3 bg-destiny-orange text-white rounded-lg hover:bg-destiny-orange/80 transition-colors">
+            Go to Dashboard
+          </a>
+        </div>
       </div>
     )
   }
