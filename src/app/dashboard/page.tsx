@@ -103,7 +103,15 @@ export default function Dashboard() {
               Welcome back, {session.user?.name}
             </p>
           </div>
-          <LoginButton />
+          <div className="flex items-center space-x-4">
+            <a
+              href="/admin"
+              className="px-4 py-2 bg-destiny-purple text-white rounded-lg hover:bg-destiny-purple/80 transition-colors"
+            >
+              Admin Panel
+            </a>
+            <LoginButton />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
