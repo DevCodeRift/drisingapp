@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { prisma } from '@/lib/prisma'
+import { authOptions } from '../../../auth/[...nextauth]/route'
 
 export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
