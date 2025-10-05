@@ -1,7 +1,6 @@
 export enum TaskCategory {
   DAILY = 'DAILY',
   WEEKLY = 'WEEKLY',
-  FORTNIGHT = 'FORTNIGHT',
   MONTHLY = 'MONTHLY',
   SEASONAL = 'SEASONAL'
 }
@@ -9,9 +8,10 @@ export enum TaskCategory {
 export enum ResetType {
   DAILY_2AM_UTC = 'DAILY_2AM_UTC',
   WEEKLY_MONDAY = 'WEEKLY_MONDAY',
-  FORTNIGHT = 'FORTNIGHT',
+  WEEKLY_FRIDAY = 'WEEKLY_FRIDAY',
   MONTHLY = 'MONTHLY',
-  SEASONAL = 'SEASONAL'
+  SEASONAL = 'SEASONAL',
+  TIME_LIMITED_FRI_TO_MON = 'TIME_LIMITED_FRI_TO_MON'
 }
 
 export interface TaskTemplate {

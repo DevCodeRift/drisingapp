@@ -157,7 +157,6 @@ export default function AdminPage() {
                 >
                   <option value={TaskCategory.DAILY}>Daily</option>
                   <option value={TaskCategory.WEEKLY}>Weekly</option>
-                  <option value={TaskCategory.FORTNIGHT}>Fortnight</option>
                   <option value={TaskCategory.MONTHLY}>Monthly</option>
                   <option value={TaskCategory.SEASONAL}>Seasonal</option>
                 </select>
@@ -173,9 +172,10 @@ export default function AdminPage() {
                 >
                   <option value={ResetType.DAILY_2AM_UTC}>Daily 2AM UTC</option>
                   <option value={ResetType.WEEKLY_MONDAY}>Weekly Monday</option>
-                  <option value={ResetType.FORTNIGHT}>Fortnight</option>
+                  <option value={ResetType.WEEKLY_FRIDAY}>Weekly Friday</option>
                   <option value={ResetType.MONTHLY}>Monthly</option>
                   <option value={ResetType.SEASONAL}>Seasonal</option>
+                  <option value={ResetType.TIME_LIMITED_FRI_TO_MON}>Time Limited (Friday to Monday)</option>
                 </select>
               </div>
             </div>

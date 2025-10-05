@@ -83,7 +83,6 @@ model UserTask {
 enum TaskCategory {
   DAILY
   WEEKLY
-  FORTNIGHT
   MONTHLY
   SEASONAL
 }
@@ -91,7 +90,8 @@ enum TaskCategory {
 enum ResetType {
   DAILY_2AM_UTC
   WEEKLY_MONDAY
-  FORTNIGHT
+  WEEKLY_FRIDAY
   MONTHLY
   SEASONAL
+  TIME_LIMITED_FRI_TO_MON
 }

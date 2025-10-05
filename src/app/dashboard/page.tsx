@@ -87,7 +87,6 @@ export default function Dashboard() {
 
   const dailyTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.DAILY)
   const weeklyTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.WEEKLY)
-  const fortnightTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.FORTNIGHT)
   const monthlyTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.MONTHLY)
   const seasonalTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.SEASONAL)
 
@@ -130,15 +129,6 @@ export default function Dashboard() {
             tasks={weeklyTasks}
             category={TaskCategory.WEEKLY}
             color="destiny-blue"
-            onToggleTask={toggleTask}
-          />
-
-          <TaskSection
-            title="Fortnight Tasks"
-            subtitle="Reset every 2 weeks"
-            tasks={fortnightTasks}
-            category={TaskCategory.FORTNIGHT}
-            color="destiny-purple"
             onToggleTask={toggleTask}
           />
 
