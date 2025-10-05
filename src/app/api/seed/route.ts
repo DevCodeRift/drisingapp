@@ -33,10 +33,6 @@ const taskTemplates = [
   { title: 'Complete weekly Battle Pass Quests', category: TaskCategory.WEEKLY, resetType: ResetType.WEEKLY_MONDAY },
   { title: 'Complete weekly Pack Quests', category: TaskCategory.WEEKLY, resetType: ResetType.WEEKLY_MONDAY },
 
-  // Fortnight Tasks
-  { title: 'Complete The Expanse', category: TaskCategory.FORTNIGHT, resetType: ResetType.FORTNIGHT },
-  { title: 'Complete Calamity Ops', category: TaskCategory.FORTNIGHT, resetType: ResetType.FORTNIGHT },
-
   // Monthly Tasks
   { title: 'Mentor Exchange', category: TaskCategory.MONTHLY, resetType: ResetType.MONTHLY },
   { title: 'Fortuna Dust Exchange', category: TaskCategory.MONTHLY, resetType: ResetType.MONTHLY },
