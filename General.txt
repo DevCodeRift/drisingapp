@@ -1,0 +1,11 @@
+Futuristic, Clean, Destiny Rising (New Destiny Game) themed UI.
+
+Features:
+Across all sections of the website discord oauth accounts to use.
+Timetable / Tracker for Daily Tasks (Already made)
+User Forum / Character Build / Guide area where people can upvote other peoples builds, filter by character etc.. There should be a central admin registry that can be used to update the list of characters that people can make builds on. By default things should be filtered by highest upvotes, then highest upvotes on the character they're filtering for etc..
+Destiny Rising News area where people can create their own news articles, youtube videos, content etc.. and upvote it.
+LFG Area where people can post looking for activiites.
+Clan Recruitment area where people can post recruitment for their clans.
+Users should be able to obtain different achievements, like founding users, beta users, 100 upvotes etc.. and obtain that title for their discord account on the website forums. We should have an indepth forum management system where the Admin can assign different special affects like animations or glows for users names.
+

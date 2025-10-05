@@ -43,6 +43,14 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tasks         UserTask[]
+  builds        Build[]
+  news          News[]
+  lfgPosts      LFGPost[]
+  clanPosts     ClanRecruitment[]
+  upvotes       Upvote[]
+  achievements  UserAchievement[]
+  profile       UserProfile?
+  createdAt     DateTime  @default(now())
 }
 
 model VerificationToken {
@@ -94,4 +102,147 @@ enum ResetType {
   MONTHLY
   SEASONAL
   TIME_LIMITED_FRI_TO_MON
+}
+
+// Character registry for builds
+model Character {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  builds      Build[]
+}
+
+// User-created character builds
+model Build {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  characterId String
+  userId      String
+  content     String   // JSON or detailed build info
+  upvoteCount Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upvotes   Upvote[]
+
+  @@index([characterId])
+  @@index([upvoteCount])
+}
+
+// News/Content posts
+model News {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  type        NewsType @default(ARTICLE)
+  url         String?  // For youtube videos or external links
+  userId      String
+  upvoteCount Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  upvotes Upvote[]
+
+  @@index([upvoteCount])
+}
+
+enum NewsType {
+  ARTICLE
+  VIDEO
+  GUIDE
+  OTHER
+}
+
+// LFG Posts
+model LFGPost {
+  id          String   @id @default(cuid())
+  activity    String
+  description String
+  playerCount Int      // How many players needed
+  platform    String?
+  userId      String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([active])
+  @@index([createdAt])
+}
+
+// Clan Recruitment
+model ClanRecruitment {
+  id          String   @id @default(cuid())
+  clanName    String
+  description String
+  requirements String?
+  contactInfo String
+  userId      String
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([active])
+}
+
+// Generic upvote system
+model Upvote {
+  id        String   @id @default(cuid())
+  userId    String
+  buildId   String?
+  newsId    String?
+  createdAt DateTime @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  build Build? @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  news  News?  @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, buildId])
+  @@unique([userId, newsId])
+}
+
+// Achievement system
+model Achievement {
+  id          String   @id @default(cuid())
+  key         String   @unique // e.g., "founding_user", "beta_user", "upvotes_100"
+  name        String
+  description String
+  icon        String?
+  createdAt   DateTime @default(now())
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+// User profile with special effects
+model UserProfile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  displayTitle   String?  // Achievement title to display
+  nameEffect     String?  // Animation/glow effect for name
+  customColor    String?  // Custom name color
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

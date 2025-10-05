@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
+import Navigation from '@/components/Navigation'
 import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Destiny Rising Task Manager',
-  description: 'Command your operations. Track missions and seasonal events for Destiny Rising.',
+  title: 'Destiny Rising Community Hub',
+  description: 'Track tasks, share builds, find groups, and connect with the Destiny Rising community.',
 }
 
 export default function RootLayout({
@@ -20,6 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
+          <Navigation />
           {children}
         </Providers>
         <Analytics />
