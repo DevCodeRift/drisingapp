@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
+import { getServerSession } from '@/lib/auth-session'
 import { prisma } from '@/lib/prisma'
-import { authOptions } from '@/lib/auth'
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
 
     // Check task templates
     const taskTemplates = await prisma.taskTemplate.findMany()
