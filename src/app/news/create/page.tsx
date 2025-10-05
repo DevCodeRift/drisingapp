@@ -3,6 +3,10 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function CreateNewsPage() {
   const { data: session } = useSession();
@@ -101,12 +105,11 @@ export default function CreateNewsPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Content</label>
-            <textarea
+            <ReactQuill
+              theme="snow"
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              required
-              rows={12}
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              onChange={(value) => setFormData({ ...formData, content: value })}
+              className="bg-white text-black rounded-lg"
               placeholder="Write your post content here..."
             />
           </div>

@@ -3,6 +3,10 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function CreateLFGPage() {
   const { data: session } = useSession();
@@ -70,12 +74,11 @@ export default function CreateLFGPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Description</label>
-            <textarea
+            <ReactQuill
+              theme="snow"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              required
-              rows={4}
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              onChange={(value) => setFormData({ ...formData, description: value })}
+              className="bg-white text-black rounded-lg"
               placeholder="Describe what you're looking for..."
             />
           </div>

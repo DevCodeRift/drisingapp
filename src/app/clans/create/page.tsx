@@ -3,6 +3,10 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function CreateClanPage() {
   const { data: session } = useSession();
@@ -72,12 +76,11 @@ export default function CreateClanPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Description</label>
-            <textarea
+            <ReactQuill
+              theme="snow"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              required
-              rows={4}
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              onChange={(value) => setFormData({ ...formData, description: value })}
+              className="bg-white text-black rounded-lg"
               placeholder="Describe your clan, playstyle, goals, etc..."
             />
           </div>
@@ -86,11 +89,11 @@ export default function CreateClanPage() {
             <label className="block text-sm font-medium mb-2">
               Requirements (optional)
             </label>
-            <textarea
+            <ReactQuill
+              theme="snow"
               value={formData.requirements}
-              onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-              rows={3}
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              onChange={(value) => setFormData({ ...formData, requirements: value })}
+              className="bg-white text-black rounded-lg"
               placeholder="e.g., 18+, mic required, active 3+ days/week"
             />
           </div>

@@ -11,24 +11,25 @@
     "db:push": "prisma db push"
   },
   "dependencies": {
+    "@next-auth/prisma-adapter": "^1.0.7",
+    "@prisma/client": "^6.14.0",
+    "@vercel/analytics": "^1.4.1",
     "next": "15.0.3",
+    "next-auth": "^4.24.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "next-auth": "^4.24.10",
-    "@next-auth/prisma-adapter": "^1.0.7",
-    "prisma": "^5.20.0",
-    "@prisma/client": "^5.20.0",
-    "@vercel/analytics": "^1.4.1"
+    "react-quill": "^2.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3"
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8",
+    "prisma": "^6.14.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
