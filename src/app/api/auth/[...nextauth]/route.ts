@@ -12,22 +12,17 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    session: async ({ session, token }) => {
-      if (session?.user) {
-        session.user.id = token.sub!
+    session: async ({ session, user }) => {
+      if (session?.user && user) {
+        session.user.id = user.id
       }
       return session
     },
-    jwt: async ({ user, token }) => {
-      if (user) {
-        token.uid = user.id
-      }
-      return token
-    },
   },
-  session: {
-    strategy: 'jwt',
+  pages: {
+    error: '/auth/error',
   },
+  debug: process.env.NODE_ENV === 'development',
 })
 
 export { handler as GET, handler as POST }
