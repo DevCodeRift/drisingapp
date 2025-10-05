@@ -22,11 +22,11 @@ export async function GET(req: NextRequest) {
             image: true,
           },
         },
-        upvotes: true,
+        votes: true,
       },
       orderBy: sortBy === 'recent'
         ? { createdAt: 'desc' }
-        : { upvoteCount: 'desc' },
+        : { voteCount: 'desc' },
     });
 
     return NextResponse.json(news);
