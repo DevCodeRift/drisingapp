@@ -3,10 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function CreateNewsPage() {
   const { data: session } = useSession();
@@ -105,11 +102,9 @@ export default function CreateNewsPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Content</label>
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.content}
               onChange={(value) => setFormData({ ...formData, content: value })}
-              className="bg-white text-black rounded-lg"
               placeholder="Write your post content here..."
             />
           </div>

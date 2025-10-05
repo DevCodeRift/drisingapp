@@ -3,10 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function CreateLFGPage() {
   const { data: session } = useSession();
@@ -74,11 +71,9 @@ export default function CreateLFGPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Description</label>
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.description}
               onChange={(value) => setFormData({ ...formData, description: value })}
-              className="bg-white text-black rounded-lg"
               placeholder="Describe what you're looking for..."
             />
           </div>

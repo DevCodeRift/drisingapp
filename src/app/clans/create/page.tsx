@@ -3,10 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function CreateClanPage() {
   const { data: session } = useSession();
@@ -76,11 +73,9 @@ export default function CreateClanPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">Description</label>
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.description}
               onChange={(value) => setFormData({ ...formData, description: value })}
-              className="bg-white text-black rounded-lg"
               placeholder="Describe your clan, playstyle, goals, etc..."
             />
           </div>
@@ -89,11 +84,9 @@ export default function CreateClanPage() {
             <label className="block text-sm font-medium mb-2">
               Requirements (optional)
             </label>
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.requirements}
               onChange={(value) => setFormData({ ...formData, requirements: value })}
-              className="bg-white text-black rounded-lg"
               placeholder="e.g., 18+, mic required, active 3+ days/week"
             />
           </div>
