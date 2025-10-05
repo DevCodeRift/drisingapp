@@ -6,8 +6,8 @@ import Providers from '@/components/Providers'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Destiny Task Manager',
-  description: 'Track your daily, weekly, and seasonal Destiny 2 tasks',
+  title: 'Destiny Rising Task Manager',
+  description: 'Command your operations. Track missions and seasonal events for Destiny Rising.',
 }
 
 export default function RootLayout({

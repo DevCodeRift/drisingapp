@@ -108,7 +108,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold text-destiny-orange">
-              Destiny Task Manager
+              Destiny Rising Task Manager
             </h1>
             <p className="text-gray-300 mt-2">
               Welcome back, {session.user?.name}
