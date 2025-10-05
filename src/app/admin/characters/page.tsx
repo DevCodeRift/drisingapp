@@ -12,7 +12,7 @@ interface Character {
 }
 
 export default function AdminCharactersPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,12 +23,14 @@ export default function AdminCharactersPage() {
   });
 
   useEffect(() => {
-    if (!session) {
+    if (status === 'unauthenticated') {
       router.push('/api/auth/signin');
       return;
     }
-    fetchCharacters();
-  }, [session]);
+    if (status === 'authenticated') {
+      fetchCharacters();
+    }
+  }, [status, router]);
 
   const fetchCharacters = async () => {
     try {
@@ -65,7 +67,15 @@ export default function AdminCharactersPage() {
     }
   };
 
-  if (!session) {
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-destiny-darker text-white flex items-center justify-center">
+        <p className="text-xl">Loading...</p>
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated') {
     return null;
   }
 
