@@ -47,7 +47,8 @@ model User {
   news          News[]
   lfgPosts      LFGPost[]
   clanPosts     ClanRecruitment[]
-  upvotes       Upvote[]
+  votes         Vote[]
+  comments      Comment[]
   achievements  UserAchievement[]
   profile       UserProfile?
   createdAt     DateTime  @default(now())
@@ -122,35 +123,37 @@ model Build {
   description String
   characterId String
   userId      String
-  content     String   // JSON or detailed build info
-  upvoteCount Int      @default(0)
+  content     String   // Rich HTML content
+  voteCount   Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes   Upvote[]
+  votes     Vote[]
+  comments  Comment[]
 
   @@index([characterId])
-  @@index([upvoteCount])
+  @@index([voteCount])
 }
 
 // News/Content posts
 model News {
-  id          String   @id @default(cuid())
-  title       String
-  content     String
-  type        NewsType @default(ARTICLE)
-  url         String?  // For youtube videos or external links
-  userId      String
-  upvoteCount Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  content   String   // Rich HTML content
+  type      NewsType @default(ARTICLE)
+  url       String?  // For youtube videos or external links
+  userId    String
+  voteCount Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes Upvote[]
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  votes    Vote[]
+  comments Comment[]
 
-  @@index([upvoteCount])
+  @@index([voteCount])
 }
 
 enum NewsType {
@@ -166,7 +169,7 @@ model LFGPost {
   activity    String
   description String
   playerCount Int      // How many players needed
-  platform    String?
+  region      String?  // NA, EMEA, APAC
   userId      String
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -195,12 +198,13 @@ model ClanRecruitment {
   @@index([active])
 }
 
-// Generic upvote system
-model Upvote {
+// Generic vote system (upvote/downvote)
+model Vote {
   id        String   @id @default(cuid())
   userId    String
   buildId   String?
   newsId    String?
+  value     Int      // 1 for upvote, -1 for downvote
   createdAt DateTime @default(now())
 
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -209,6 +213,24 @@ model Upvote {
 
   @@unique([userId, buildId])
   @@unique([userId, newsId])
+}
+
+// Comments for builds and news
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  buildId   String?
+  newsId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  build Build? @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  news  News?  @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@index([buildId])
+  @@index([newsId])
 }
 
 // Achievement system

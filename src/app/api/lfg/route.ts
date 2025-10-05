@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { activity, description, playerCount, platform, expiresAt } = body;
+    const { activity, description, playerCount, region, expiresAt } = body;
 
     if (!activity || !description || !playerCount) {
       return NextResponse.json(
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
         activity,
         description,
         playerCount: parseInt(playerCount),
-        platform,
+        region,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
         userId: session.user.id,
       },

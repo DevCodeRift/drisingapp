@@ -11,7 +11,7 @@ export default function CreateLFGPage() {
     activity: '',
     description: '',
     playerCount: 1,
-    platform: '',
+    region: '',
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -95,18 +95,17 @@ export default function CreateLFGPage() {
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              Platform (optional)
+              Region (optional)
             </label>
             <select
-              value={formData.platform}
-              onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
+              value={formData.region}
+              onChange={(e) => setFormData({ ...formData, region: e.target.value })}
               className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
             >
-              <option value="">Any Platform</option>
-              <option value="PC">PC</option>
-              <option value="PlayStation">PlayStation</option>
-              <option value="Xbox">Xbox</option>
-              <option value="Mobile">Mobile</option>
+              <option value="">Any Region</option>
+              <option value="NA">NA (North America)</option>
+              <option value="EMEA">EMEA (Europe, Middle East, Africa)</option>
+              <option value="APAC">APAC (Asia Pacific)</option>
             </select>
           </div>
 

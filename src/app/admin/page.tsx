@@ -152,6 +152,15 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-6xl mx-auto">
+        <div className="mb-6">
+          <a
+            href="/admin/characters"
+            className="inline-block text-destiny-blue hover:text-destiny-orange transition"
+          >
+            → Manage Characters
+          </a>
+        </div>
+
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-destiny-orange">
             Admin - Task Management
