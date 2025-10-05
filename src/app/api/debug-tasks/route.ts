@@ -18,7 +18,7 @@ export async function GET() {
     }
 
     // Check user tasks
-    let userTasks = []
+    let userTasks: any[] = []
     if (user) {
       userTasks = await prisma.userTask.findMany({
         where: { userId: user.id },
