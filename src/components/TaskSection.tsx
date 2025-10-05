@@ -18,8 +18,6 @@ const getCategoryIcon = (category: TaskCategory) => {
       return '☀️'
     case TaskCategory.WEEKLY:
       return '📅'
-    case TaskCategory.FORTNIGHT:
-      return '🔄'
     case TaskCategory.MONTHLY:
       return '🗓️'
     case TaskCategory.SEASONAL:
