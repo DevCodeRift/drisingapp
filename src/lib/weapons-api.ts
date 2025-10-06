@@ -1,7 +1,17 @@
 // API Routes for Weapon CRUD Operations
 // This file contains Express.js/Next.js API route handlers for managing weapons
 
-import { Request, Response } from 'express';
+// Generic request/response types
+interface Request {
+  params?: any;
+  query?: any;
+  body?: any;
+}
+
+interface Response {
+  json: (data: any) => Response;
+  status: (code: number) => Response;
+}
 import { WeaponFormData, Weapon } from '@/types/weapons';
 
 // Database interface - implement with your database client (PostgreSQL, Prisma, etc.)
