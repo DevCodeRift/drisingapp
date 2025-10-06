@@ -10,13 +10,13 @@ interface NewsPost {
   content: string;
   type: 'ARTICLE' | 'VIDEO' | 'GUIDE' | 'OTHER';
   url?: string;
-  upvoteCount: number;
+  voteCount: number;
   user: {
     id: string;
     name: string;
     image: string;
   };
-  upvotes: Array<{ userId: string }>;
+  votes: Array<{ userId: string }>;
   createdAt: string;
 }
 
@@ -71,7 +71,7 @@ export default function NewsPage() {
   };
 
   const hasUpvoted = (post: NewsPost) => {
-    return session?.user?.id && post.upvotes.some(u => u.userId === session.user.id);
+    return session?.user?.id && post.votes?.some(u => u.userId === session.user.id);
   };
 
   const getTypeColor = (type: string) => {
@@ -157,7 +157,10 @@ export default function NewsPage() {
                       <span>by {post.user.name}</span>
                       <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <p className="text-gray-300 whitespace-pre-wrap">{post.content}</p>
+                    <div
+                      className="text-gray-300 prose prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: post.content }}
+                    />
                     {post.url && (
                       <a
                         href={post.url}
@@ -179,7 +182,7 @@ export default function NewsPage() {
                     }`}
                   >
                     <span className="text-2xl">▲</span>
-                    <span className="text-lg font-bold">{post.upvoteCount}</span>
+                    <span className="text-lg font-bold">{post.voteCount || 0}</span>
                   </button>
                 </div>
               </div>

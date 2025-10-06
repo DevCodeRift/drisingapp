@@ -104,14 +104,20 @@ export default function ClansPage() {
                   </div>
                 </div>
 
-                <p className="text-gray-300 mb-4 text-lg">{post.description}</p>
+                <div
+                  className="text-gray-300 mb-4 text-lg prose prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: post.description }}
+                />
 
                 {post.requirements && (
                   <div className="mb-4">
                     <h3 className="text-sm font-bold text-destiny-blue mb-2">
                       Requirements:
                     </h3>
-                    <p className="text-gray-400">{post.requirements}</p>
+                    <div
+                      className="text-gray-400 prose prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: post.requirements }}
+                    />
                   </div>
                 )}
 

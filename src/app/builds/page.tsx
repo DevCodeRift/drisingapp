@@ -16,7 +16,7 @@ interface Build {
   title: string;
   description: string;
   content: string;
-  upvoteCount: number;
+  voteCount: number;
   characterId: string;
   character: Character;
   user: {
@@ -24,7 +24,7 @@ interface Build {
     name: string;
     image: string;
   };
-  upvotes: Array<{ userId: string }>;
+  votes: Array<{ userId: string }>;
   createdAt: string;
 }
 
@@ -91,7 +91,7 @@ export default function BuildsPage() {
   };
 
   const hasUpvoted = (build: Build) => {
-    return session?.user?.id && build.upvotes.some(u => u.userId === session.user.id);
+    return session?.user?.id && build.votes?.some(u => u.userId === session.user.id);
   };
 
   return (
@@ -170,13 +170,14 @@ export default function BuildsPage() {
                     }`}
                   >
                     <span className="text-2xl">▲</span>
-                    <span className="text-lg font-bold">{build.upvoteCount}</span>
+                    <span className="text-lg font-bold">{build.voteCount || 0}</span>
                   </button>
                 </div>
 
-                <div className="mt-4 text-gray-300 whitespace-pre-wrap">
-                  {build.content}
-                </div>
+                <div
+                  className="mt-4 text-gray-300 prose prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: build.content }}
+                />
               </div>
             ))}
           </div>

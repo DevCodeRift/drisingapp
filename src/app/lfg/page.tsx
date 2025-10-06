@@ -103,7 +103,10 @@ export default function LFGPage() {
                   )}
                 </div>
 
-                <p className="text-gray-300 mb-4">{post.description}</p>
+                <div
+                  className="text-gray-300 mb-4 prose prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: post.description }}
+                />
 
                 <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
                   <span className="text-destiny-blue">👥 {post.playerCount} players needed</span>
