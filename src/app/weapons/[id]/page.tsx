@@ -1,0 +1,217 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Weapon } from '@/types/weapons';
+import Navigation from '@/components/Navigation';
+
+export default function WeaponDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const router = useRouter();
+  const [weapon, setWeapon] = useState<Weapon | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [weaponId, setWeaponId] = useState<string>('');
+
+  useEffect(() => {
+    params.then(resolvedParams => {
+      setWeaponId(resolvedParams.id);
+      if (!resolvedParams.id) return;
+
+      fetch(`/api/weapons/${resolvedParams.id}`)
+        .then(res => res.json())
+        .then((data: Weapon) => {
+          setWeapon(data);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error loading weapon:', error);
+          setLoading(false);
+        });
+    });
+  }, [params]);
+
+  const getElementColor = (element: string) => {
+    switch (element) {
+      case 'Arc': return 'text-blue-400 bg-blue-900/20 border-blue-300';
+      case 'Solar': return 'text-orange-400 bg-orange-900/20 border-orange-300';
+      case 'Void': return 'text-purple-400 bg-purple-900/20 border-purple-300';
+      default: return 'text-gray-400 bg-gray-700/20 border-gray-300';
+    }
+  };
+
+  const getRarityStars = (rarity: number) => {
+    return '★'.repeat(rarity);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex justify-center items-center h-64">
+            <div className="text-gray-500">Loading weapon...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!weapon) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="text-center py-12">
+            <div className="text-gray-700 mb-4 text-lg">Weapon not found</div>
+            <button
+              onClick={() => router.push('/weapons')}
+              className="px-6 py-3 text-blue-600 hover:text-blue-800 font-medium bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-md transition-colors min-h-[44px] inline-flex items-center"
+            >
+              Back to Weapons Database
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Back Button */}
+        <button
+          onClick={() => router.push('/weapons')}
+          className="flex items-center text-blue-600 hover:text-blue-800 mb-6 transition-colors px-3 py-2 rounded-md hover:bg-blue-50 border border-transparent hover:border-blue-200 min-h-[44px]"
+        >
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Weapons
+        </button>
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+            {/* Left Column - Image */}
+            <div className="flex justify-center items-center bg-gray-50 rounded-lg p-8">
+              {weapon.imageUrl ? (
+                <img
+                  src={weapon.imageUrl}
+                  alt={weapon.name}
+                  className="max-w-full max-h-80 object-contain"
+                />
+              ) : (
+                <div className="w-48 h-48 bg-gray-300 rounded flex items-center justify-center">
+                  <span className="text-gray-500">No Image</span>
+                </div>
+              )}
+            </div>
+
+            {/* Right Column - Details */}
+            <div className="space-y-6">
+              {/* Header */}
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">{weapon.name}</h1>
+                <p className="text-xl text-gray-600">{weapon.weaponType}</p>
+              </div>
+
+              {/* Key Stats */}
+              <div className="flex flex-wrap gap-4">
+                <div className={`px-4 py-2 rounded-lg border ${getElementColor(weapon.element)}`}>
+                  <span className="font-medium">{weapon.element}</span>
+                </div>
+                <div className="px-4 py-2 bg-gray-100 rounded-lg border border-gray-300">
+                  <span className="text-gray-700 font-medium">{weapon.slot}</span>
+                </div>
+                <div className="px-4 py-2 bg-yellow-50 rounded-lg border border-yellow-300">
+                  <span className="text-yellow-700 font-medium">
+                    {getRarityStars(weapon.rarity)} ({weapon.rarity} Stars)
+                  </span>
+                </div>
+              </div>
+
+              {/* Basic Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="text-sm text-gray-600">Combat Style</div>
+                  <div className="font-semibold text-gray-900">{weapon.combatStyle}</div>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="text-sm text-gray-600">Base Power</div>
+                  <div className="font-semibold text-gray-900">{weapon.basePower}</div>
+                </div>
+              </div>
+
+              {/* Weapon Stats */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Stats</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {weapon.dps && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">DPS</div>
+                      <div className="font-semibold">{weapon.dps}</div>
+                    </div>
+                  )}
+                  {weapon.damage && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Damage</div>
+                      <div className="font-semibold">{weapon.damage}</div>
+                    </div>
+                  )}
+                  {weapon.range && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Range</div>
+                      <div className="font-semibold">{weapon.range}</div>
+                    </div>
+                  )}
+                  {weapon.stability && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Stability</div>
+                      <div className="font-semibold">{weapon.stability}</div>
+                    </div>
+                  )}
+                  {weapon.handling && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Handling</div>
+                      <div className="font-semibold">{weapon.handling}</div>
+                    </div>
+                  )}
+                  {weapon.reloadSpeed && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Reload Speed</div>
+                      <div className="font-semibold">{weapon.reloadSpeed}</div>
+                    </div>
+                  )}
+                  {weapon.magazineCap && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Magazine</div>
+                      <div className="font-semibold">{weapon.magazineCap}</div>
+                    </div>
+                  )}
+                  {weapon.maxAmmo && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Max Ammo</div>
+                      <div className="font-semibold">{weapon.maxAmmo}</div>
+                    </div>
+                  )}
+                  {weapon.rateOfFire && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Rate of Fire</div>
+                      <div className="font-semibold">{weapon.rateOfFire}</div>
+                    </div>
+                  )}
+                  {weapon.precisionBonus && (
+                    <div className="bg-gray-50 p-3 rounded">
+                      <div className="text-sm text-gray-600">Precision Bonus</div>
+                      <div className="font-semibold">{weapon.precisionBonus}x</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
