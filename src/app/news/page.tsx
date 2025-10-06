@@ -88,14 +88,14 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-destiny-bg-primary text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-destiny-orange">Destiny Rising News</h1>
+          <h1 className="text-4xl font-bold">Destiny Rising News</h1>
           {session && (
             <button
               onClick={() => router.push('/news/create')}
-              className="bg-destiny-orange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
             >
               Create Post
             </button>
@@ -107,7 +107,7 @@ export default function NewsPage() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
+            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2.5 rounded-md border border-gray-300 dark:border-gray-700 hover:border-blue-500 focus:border-blue-600 focus:outline-none transition-all"
           >
             <option value="">All Types</option>
             <option value="ARTICLE">Articles</option>
@@ -119,7 +119,7 @@ export default function NewsPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
-            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
+            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2.5 rounded-md border border-gray-300 dark:border-gray-700 hover:border-blue-500 focus:border-blue-600 focus:outline-none transition-all"
           >
             <option value="upvotes">Most Upvoted</option>
             <option value="recent">Most Recent</option>
@@ -138,23 +138,23 @@ export default function NewsPage() {
             {news.map((post) => (
               <div
                 key={post.id}
-                className="bg-destiny-dark border border-gray-700 rounded-lg p-6 hover:border-destiny-orange transition cursor-pointer"
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-500 dark:hover:border-blue-500 transition cursor-pointer shadow-sm"
                 onClick={() => router.push(`/news/${post.id}`)}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className={`text-xs font-bold uppercase ${getTypeColor(post.type)}`}>
+                      <span className={`text-xs font-bold uppercase px-2 py-1 rounded ${getTypeColor(post.type)} bg-opacity-10`}>
                         {post.type}
                       </span>
                       {post.url && post.type === 'VIDEO' && (
-                        <span className="text-xs text-gray-400">[VIDEO]</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">[VIDEO]</span>
                       )}
                     </div>
-                    <h2 className="text-2xl font-bold text-destiny-orange mb-2">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                       {post.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span>by {post.user.name}</span>
                       <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                     </div>
@@ -167,8 +167,8 @@ export default function NewsPage() {
                     }}
                     className={`flex flex-col items-center px-4 py-2 rounded-lg transition ${
                       hasUpvoted(post)
-                        ? 'bg-destiny-orange text-white'
-                        : 'bg-destiny-darker border border-gray-600 hover:border-destiny-orange'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400'
                     }`}
                   >
                     <span className="text-2xl">▲</span>

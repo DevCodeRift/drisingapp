@@ -61,14 +61,14 @@ export default function LFGPage() {
   };
 
   return (
-    <div className="min-h-screen bg-destiny-darker text-white p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-destiny-orange">Looking For Group</h1>
+          <h1 className="text-4xl font-bold">Looking For Group</h1>
           {session && (
             <button
               onClick={() => router.push('/lfg/create')}
-              className="bg-destiny-orange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
             >
               Create LFG Post
             </button>
@@ -78,7 +78,7 @@ export default function LFGPage() {
         {loading ? (
           <div className="text-center py-8">Loading LFG posts...</div>
         ) : lfgPosts.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             No active LFG posts. Be the first to create one!
           </div>
         ) : (
@@ -86,34 +86,34 @@ export default function LFGPage() {
             {lfgPosts.map((post) => (
               <div
                 key={post.id}
-                className={`bg-destiny-dark border rounded-lg p-6 transition ${
+                className={`bg-white dark:bg-gray-800 border rounded-lg p-6 transition shadow-sm ${
                   post.active
-                    ? 'border-destiny-orange'
-                    : 'border-gray-700 opacity-60'
+                    ? 'border-blue-500 dark:border-blue-500'
+                    : 'border-gray-300 dark:border-gray-700 opacity-60'
                 }`}
               >
                 <div className="flex justify-between items-start mb-3">
-                  <h2 className="text-2xl font-bold text-destiny-orange">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                     {post.activity}
                   </h2>
                   {!post.active && (
-                    <span className="text-xs bg-gray-700 px-2 py-1 rounded">
+                    <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded font-medium">
                       CLOSED
                     </span>
                   )}
                 </div>
 
                 <div
-                  className="text-gray-300 mb-4 prose prose-invert max-w-none"
+                  className="text-gray-700 dark:text-gray-300 mb-4 prose dark:prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: post.description }}
                 />
 
-                <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                  <span className="text-destiny-blue">{post.playerCount} players needed</span>
+                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">{post.playerCount} players needed</span>
                   {post.region && <span>Region: {post.region}</span>}
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
+                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
                   <span>Posted by {post.user.name}</span>
                   <span>{new Date(post.createdAt).toLocaleString()}</span>
                 </div>
