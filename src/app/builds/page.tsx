@@ -37,12 +37,13 @@ export default function BuildsPage() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<string>('');
   const [sortBy, setSortBy] = useState<'upvotes' | 'recent'>('upvotes');
+  const [showPrivate, setShowPrivate] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCharacters();
     fetchBuilds();
-  }, [selectedCharacter, sortBy]);
+  }, [selectedCharacter, sortBy, showPrivate]);
 
   const fetchCharacters = async () => {
     try {
@@ -60,6 +61,7 @@ export default function BuildsPage() {
       const params = new URLSearchParams({
         sortBy,
         ...(selectedCharacter && { characterId: selectedCharacter }),
+        ...(showPrivate && session && { showPrivate: 'true' }),
       });
       const res = await fetch(`/api/builds?${params}`);
       const data = await res.json();
@@ -117,7 +119,7 @@ export default function BuildsPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-3 mb-8">
+        <div className="flex gap-3 mb-8 flex-wrap">
           <select
             value={selectedCharacter}
             onChange={(e) => setSelectedCharacter(e.target.value)}
@@ -149,6 +151,27 @@ export default function BuildsPage() {
             <option value="upvotes">Most Upvoted</option>
             <option value="recent">Most Recent</option>
           </select>
+
+          {session && (
+            <label
+              className="flex items-center gap-2 px-4 py-2.5 rounded-md border cursor-pointer transition-all min-h-[44px]"
+              style={{
+                backgroundColor: colors.surface,
+                borderColor: colors.border.primary
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={showPrivate}
+                onChange={(e) => setShowPrivate(e.target.checked)}
+                className="w-4 h-4 rounded"
+                style={{
+                  accentColor: colors.primary
+                }}
+              />
+              <span style={{ color: colors.text.primary }}>My Builds Only</span>
+            </label>
+          )}
         </div>
 
         {/* Builds List */}
