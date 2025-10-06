@@ -114,6 +114,7 @@ model Character {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   builds      Build[]
+  compatibleWeapons WeaponCharacterCompatibility[]
 }
 
 // User-created character builds
@@ -268,3 +269,242 @@ model UserProfile {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+// ============================================================================
+// WEAPONS SYSTEM
+// ============================================================================
+
+model Weapon {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  rarity      Int      // 3-6 stars (3=Rare, 4=Legendary, 5=Mythic, 6=Exotic)
+  weaponType  String   // Auto Rifle, Hand Cannon, etc.
+  basePower   Int      // Single base power value
+  combatStyle String   // Rapid-Fire, Impact, Piercing, Spread
+  element     String   // Arc, Solar, Void
+  slot        String   // Primary, Power
+  imageUrl    String?
+
+  // Stats
+  dps             Int?
+  precisionBonus  Float?
+  magazineCap     Int?
+  rateOfFire      Int?
+  maxAmmo         Int?     // Added this field you requested
+  damage          Int?
+  reloadSpeed     Int?
+  stability       Int?
+  handling        Int?
+  range           Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  traits                WeaponTrait[]
+  perks                 WeaponPerkAssignment[]
+  catalysts             WeaponCatalyst[]
+  mods                  WeaponModAssignment[]
+  compatibleCharacters  WeaponCharacterCompatibility[]
+
+  @@index([weaponType])
+  @@index([element])
+  @@index([rarity])
+}
+
+model Trait {
+  id          String @id @default(cuid())
+  name        String @unique
+  type        String // 'intrinsic' or 'origin'
+  description String?
+  effect      String?
+  iconUrl     String?
+  createdAt   DateTime @default(now())
+
+  weapons WeaponTrait[]
+
+  @@index([type])
+}
+
+model WeaponTrait {
+  id       String @id @default(cuid())
+  weaponId String
+  traitId  String
+  slot     Int    // 1: Intrinsic, 2: Origin
+  createdAt DateTime @default(now())
+
+  weapon Weapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+  trait  Trait  @relation(fields: [traitId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, slot])
+  @@index([weaponId])
+  @@index([traitId])
+}
+
+model Perk {
+  id          String @id @default(cuid())
+  name        String @unique
+  slot        Int    // 3-4 (Perk slots)
+  description String?
+  effect      String?
+  iconUrl     String?
+  createdAt   DateTime @default(now())
+
+  weapons    WeaponPerkAssignment[]
+  modUpgrades ModPerkUpgrade[]
+
+  @@index([slot])
+}
+
+model WeaponPerkAssignment {
+  id       String @id @default(cuid())
+  weaponId String
+  perkId   String
+  slot     Int    // 3: Perk 1, 4: Perk 2
+  createdAt DateTime @default(now())
+
+  weapon Weapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+  perk   Perk   @relation(fields: [perkId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, slot])
+  @@index([weaponId])
+  @@index([perkId])
+}
+
+model Catalyst {
+  id                     String @id @default(cuid())
+  name                   String @unique
+  description            String?
+  effect                 String?
+  requirementDescription String?
+  iconUrl                String?
+  createdAt              DateTime @default(now())
+
+  weapons WeaponCatalyst[]
+}
+
+model WeaponCatalyst {
+  id         String @id @default(cuid())
+  weaponId   String
+  catalystId String
+  createdAt  DateTime @default(now())
+
+  weapon   Weapon   @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+  catalyst Catalyst @relation(fields: [catalystId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, catalystId])
+  @@index([weaponId])
+}
+
+model ModRarity {
+  id                    String @id @default(cuid())
+  name                  String @unique // 'Exotic', 'Mythic', 'Legendary', 'Rare'
+  mainAttributeCount    Int    @default(1)
+  randomAttributeCount  Int    @default(0)
+  colorCode             String? // Hex color for UI
+
+  mods WeaponMod[]
+}
+
+model ModAttribute {
+  id          String @id @default(cuid())
+  name        String
+  description String?
+  statBonus   String // e.g., "+10% damage", "+5% reload speed"
+  createdAt   DateTime @default(now())
+
+  mainMods   ModMainAttribute[]
+  randomMods ModRandomAttribute[]
+}
+
+model WeaponMod {
+  id                      String  @id @default(cuid())
+  name                    String
+  category                String  // 'Ammo', 'Scope', 'Magazine'
+  rarityId                String?
+  description             String?
+  combatStyle             String? // 'rapid-fire', 'impact', 'piercing', 'spread', or NULL for all
+  unlocksPerkUpgrade      Boolean @default(false)
+  perkUpgradeDescription  String?
+  iconUrl                 String?
+  createdAt               DateTime @default(now())
+
+  rarity          ModRarity?           @relation(fields: [rarityId], references: [id])
+  mainAttributes  ModMainAttribute[]
+  randomAttributes ModRandomAttribute[]
+  perkUpgrades    ModPerkUpgrade[]
+  weapons         WeaponModAssignment[]
+
+  @@index([category])
+  @@index([rarityId])
+  @@index([combatStyle])
+}
+
+model ModMainAttribute {
+  id          String @id @default(cuid())
+  modId       String
+  attributeId String
+  createdAt   DateTime @default(now())
+
+  mod       WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
+  attribute ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+}
+
+model ModRandomAttribute {
+  id          String @id @default(cuid())
+  modId       String
+  attributeId String
+  createdAt   DateTime @default(now())
+
+  mod       WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
+  attribute ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+}
+
+model ModPerkUpgrade {
+  id                  String @id @default(cuid())
+  modId               String
+  perkId              String
+  upgradeDescription  String?
+  createdAt           DateTime @default(now())
+
+  mod  WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
+  perk Perk      @relation(fields: [perkId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+  @@index([perkId])
+}
+
+model WeaponModAssignment {
+  id           String @id @default(cuid())
+  weaponId     String
+  modId        String
+  slotCategory String // 'Ammo', 'Scope', 'Magazine'
+  displayOrder Int    @default(0)
+  createdAt    DateTime @default(now())
+
+  weapon Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+  mod    WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
+  @@index([modId])
+}
+
+model WeaponCharacterCompatibility {
+  id          String @id @default(cuid())
+  weaponId    String
+  characterId String
+  createdAt   DateTime @default(now())
+
+  weapon    Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, characterId])
+  @@index([weaponId])
+  @@index([characterId])
+}
+

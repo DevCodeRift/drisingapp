@@ -1,0 +1,25 @@
+# Backup of original weapon file names before renaming
+# Generated on $(date)
+
+=== AUTOCROSSBOW ===
+chirping-cicada-BTmuIPyI.webp
+hon3-eibellakks-BMXvU3Gy.webp
+mahamayuri-DsBU3bpK.webp
+p45-turbot-By1AEGV6.webp
+saizo-6X93LANj.webp
+
+=== AUTORIFLES ===
+Thumbs.db (skip this)
+cognitum-carbine-BIw9tXdY.webp
+p22-tamarin-CpYCHghN.webp
+sweet-business-CB1zpO-G.webp
+sworn-oath-C_0jySbH.webp
+
+=== HANDCANNONS ===
+amatoxin-BFaFcdVK.webp
+aocs-r1-revolver-b3x7Z7ha.webp
+crimson--yqfH4_V.webp
+del7-simit-D66CVaQD.webp
+p6-somniosus-30EyoP5A.webp
+
+Pattern: [weapon-name]-[8-char-hash].webp should become [weapon-name].webp

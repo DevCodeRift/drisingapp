@@ -1,24 +1,23 @@
 // TypeScript interfaces for Lightbearer weapons database
 
 export interface Weapon {
-  id: number;
+  id: string;
   name: string;
   slug: string;
-  rarity: number;
+  rarity: number; // 3-6 stars (3=Rare, 4=Legendary, 5=Mythic, 6=Exotic)
   weaponType: string;
-  basePowerMin: number;
-  basePowerMax: number;
+  basePower: number; // Single base power value
   combatStyle: string;
   element: string;
-  weaponSlot: string;
+  slot: string; // Primary, Power
   imageUrl?: string;
-  thumbnailUrl?: string;
 
   // Stats
   dps?: number;
   precisionBonus?: number;
-  magazineCapacity?: number;
+  magazineCap?: number;
   rateOfFire?: number;
+  maxAmmo?: number; // Added this field
   damage?: number;
   reloadSpeed?: number;
   stability?: number;
@@ -29,9 +28,11 @@ export interface Weapon {
   updatedAt: Date;
 
   // Relations
-  mods?: WeaponMod[];
-  compatibleCharacters?: Character[];
-  perks?: Perk[];
+  traits?: WeaponTrait[];
+  perks?: WeaponPerkAssignment[];
+  catalysts?: WeaponCatalyst[];
+  mods?: WeaponModAssignment[];
+  compatibleCharacters?: WeaponCharacterCompatibility[];
 }
 
 export interface WeaponMod {
@@ -125,25 +126,45 @@ export interface PerkFormData {
   displayOrder?: number;
 }
 
-// Enums for dropdown options
+// Enums for dropdown options - matching our directory structure
 export const WEAPON_TYPES = [
-  'Hand Cannon',
-  'Auto Rifle',
-  'Pulse Rifle',
-  'Scout Rifle',
-  'Sniper Rifle',
-  'Shotgun',
-  'Fusion Rifle',
-  'Linear Fusion Rifle',
-  'Submachine Gun',
-  'Sidearm',
-  'Machine Gun',
-  'Rocket Launcher',
-  'Grenade Launcher',
-  'Light Grenade Launcher',
-  'Auto Crossbow',
-  'Sword'
+  'autocrossbow',
+  'autorifles',
+  'fusionrifles',
+  'grenadelaunchers',
+  'handcannons',
+  'lightgrenadelaunchers',
+  'linearfusionrifles',
+  'machineguns',
+  'pulserifles',
+  'rocketlaunchers',
+  'scoutrifles',
+  'shotguns',
+  'sidearms',
+  'sniperrifles',
+  'submachineguns',
+  'swords'
 ] as const;
+
+// Human-readable weapon type names
+export const WEAPON_TYPE_NAMES: Record<string, string> = {
+  'autocrossbow': 'Auto Crossbow',
+  'autorifles': 'Auto Rifle',
+  'fusionrifles': 'Fusion Rifle',
+  'grenadelaunchers': 'Grenade Launcher',
+  'handcannons': 'Hand Cannon',
+  'lightgrenadelaunchers': 'Light Grenade Launcher',
+  'linearfusionrifles': 'Linear Fusion Rifle',
+  'machineguns': 'Machine Gun',
+  'pulserifles': 'Pulse Rifle',
+  'rocketlaunchers': 'Rocket Launcher',
+  'scoutrifles': 'Scout Rifle',
+  'shotguns': 'Shotgun',
+  'sidearms': 'Sidearm',
+  'sniperrifles': 'Sniper Rifle',
+  'submachineguns': 'Submachine Gun',
+  'swords': 'Sword'
+};
 
 export const ELEMENTS = [
   'Arc',
