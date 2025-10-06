@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
 
 interface Character {
   id: string;
@@ -109,8 +110,9 @@ export default function AdminCharactersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-destiny-darker text-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-destiny-darker text-white">
+      <AdminNav />
+      <div className="max-w-6xl mx-auto px-8 pb-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-destiny-orange">Manage Characters</h1>
           <div className="flex gap-4">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AdminNav from '@/components/AdminNav';
 
 interface ModAttribute {
   id: number;
@@ -171,18 +172,11 @@ export default function AdminModsPage() {
   if (loading) return <div className="min-h-screen bg-gray-900 text-white p-8">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <AdminNav />
+      <div className="max-w-7xl mx-auto px-8 pb-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Manage Weapon Mods</h1>
-          <div className="flex gap-4">
-            <Link href="/admin/mod-attributes" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
-              Manage Attributes
-            </Link>
-            <Link href="/admin/weapons" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
-              ← Back to Weapons
-            </Link>
-          </div>
         </div>
 
         {/* Create Form */}

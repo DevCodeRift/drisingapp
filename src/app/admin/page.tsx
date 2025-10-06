@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { TaskCategory, ResetType } from '@/types/tasks'
+import AdminNav from '@/components/AdminNav'
 
 interface TaskTemplate {
   id: string
@@ -150,20 +151,12 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <a
-            href="/admin/characters"
-            className="inline-block text-destiny-blue hover:text-destiny-orange transition"
-          >
-            → Manage Characters
-          </a>
-        </div>
-
+    <div className="min-h-screen">
+      <AdminNav />
+      <div className="max-w-6xl mx-auto px-8 pb-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-destiny-orange">
-            Admin - Task Management
+            Admin Dashboard - Task Management
           </h1>
           <button
             onClick={reinitializeAllUsers}

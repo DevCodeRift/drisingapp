@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AdminNav from '@/components/AdminNav';
 
 interface Trait {
   id: number;
@@ -68,13 +69,11 @@ export default function AdminTraitsPage() {
   if (loading) return <div className="min-h-screen bg-gray-900 text-white p-8">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <AdminNav />
+      <div className="max-w-6xl mx-auto px-8 pb-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Manage Traits</h1>
-          <Link href="/admin/weapons" className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
-            ← Back to Weapons
-          </Link>
         </div>
 
         {/* Create Form */}

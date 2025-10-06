@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Weapon } from '@/types/weapons';
+import AdminNav from '@/components/AdminNav';
 
 export default function AdminWeaponsPage() {
   const [weapons, setWeapons] = useState<Weapon[]>([]);
@@ -49,8 +50,9 @@ export default function AdminWeaponsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-900 text-white">
+      <AdminNav />
+      <div className="max-w-7xl mx-auto px-8 pb-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Manage Weapons</h1>
           <Link
