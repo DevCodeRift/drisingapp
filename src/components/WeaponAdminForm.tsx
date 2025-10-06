@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { WeaponFormData, WeaponModFormData, PerkFormData, WEAPON_TYPES, ELEMENTS, COMBAT_STYLES, WEAPON_SLOTS, MOD_CATEGORIES } from '@/types/weapons';
 import ImageSelector from './ImageSelector';
 
+import WeaponSlotSelectors from './WeaponSlotSelectors';
 interface WeaponAdminFormProps {
   initialData?: WeaponFormData;
   onSubmit: (data: WeaponFormData) => Promise<void>;
@@ -193,6 +194,17 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
 <div className="form-row">            <div className="form-group">              <ImageSelector                label="Image URL"                value={formData.imageUrl || ''}                onChange={(url) => handleInputChange('imageUrl', url)}              />            </div>            <div className="form-group">              <ImageSelector                label="Thumbnail URL"                value={formData.thumbnailUrl || ''}                onChange={(url) => handleInputChange('thumbnailUrl', url)}              />            </div>          </div>
           </div>
         </section>
+        {/* Traits & Perks Section */}
+        <WeaponSlotSelectors
+          rarity={formData.rarity}
+          intrinsicTraitId={formData.intrinsicTraitId}
+          originTraitId={formData.originTraitId}
+          perk1Id={formData.perk1Id}
+          perk2Id={formData.perk2Id}
+          catalystId={formData.catalystId}
+          onChange={handleInputChange}
+        />
+
 
         {/* Stats Section */}
         <section className="form-section">

@@ -279,6 +279,44 @@ export async function createWeapon(req: Request, res: Response, db: DatabaseClie
           );
         }
       }
+
+      // Insert traits (intrinsic and origin)
+      if (formData.intrinsicTraitId) {
+        await trx.query(
+          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          [weaponId, formData.intrinsicTraitId, 1]
+        );
+      }
+
+      if (formData.originTraitId) {
+        await trx.query(
+          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          [weaponId, formData.originTraitId, 2]
+        );
+      }
+
+      // Insert perk assignments (slots 3 and 4)
+      if (formData.perk1Id) {
+        await trx.query(
+          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          [weaponId, formData.perk1Id, 3]
+        );
+      }
+
+      if (formData.perk2Id) {
+        await trx.query(
+          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          [weaponId, formData.perk2Id, 4]
+        );
+      }
+
+      // Insert catalyst (only for exotic/6-star weapons)
+      if (formData.catalystId && formData.rarity >= 6) {
+        await trx.query(
+          `INSERT INTO weapon_catalysts (weapon_id, catalyst_id) VALUES ($1, $2)`,
+          [weaponId, formData.catalystId]
+        );
+      }
     });
 
     res.status(201).json({ message: 'Weapon created successfully', slug });
@@ -318,10 +356,13 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
         ]
       );
 
-      // Delete existing mods, characters, and perks
+      // Delete existing mods, characters, perks, traits, perk assignments, and catalysts
       await trx.query('DELETE FROM weapon_mods WHERE weapon_id = $1', [id]);
       await trx.query('DELETE FROM weapon_character_compatibility WHERE weapon_id = $1', [id]);
       await trx.query('DELETE FROM perks WHERE weapon_id = $1', [id]);
+      await trx.query('DELETE FROM weapon_traits WHERE weapon_id = $1', [id]);
+      await trx.query('DELETE FROM weapon_perk_assignments WHERE weapon_id = $1', [id]);
+      await trx.query('DELETE FROM weapon_catalysts WHERE weapon_id = $1', [id]);
 
       // Re-insert mods
       if (formData.mods && formData.mods.length > 0) {
@@ -355,6 +396,44 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
             [id, perk.perkName, perk.perkDescription, perk.perkType, perk.displayOrder || 0]
           );
         }
+      }
+
+      // Re-insert traits (intrinsic and origin)
+      if (formData.intrinsicTraitId) {
+        await trx.query(
+          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          [id, formData.intrinsicTraitId, 1]
+        );
+      }
+
+      if (formData.originTraitId) {
+        await trx.query(
+          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          [id, formData.originTraitId, 2]
+        );
+      }
+
+      // Re-insert perk assignments (slots 3 and 4)
+      if (formData.perk1Id) {
+        await trx.query(
+          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          [id, formData.perk1Id, 3]
+        );
+      }
+
+      if (formData.perk2Id) {
+        await trx.query(
+          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          [id, formData.perk2Id, 4]
+        );
+      }
+
+      // Re-insert catalyst (only for exotic/6-star weapons)
+      if (formData.catalystId && formData.rarity >= 6) {
+        await trx.query(
+          `INSERT INTO weapon_catalysts (weapon_id, catalyst_id) VALUES ($1, $2)`,
+          [id, formData.catalystId]
+        );
       }
     });
 

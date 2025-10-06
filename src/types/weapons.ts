@@ -96,6 +96,13 @@ export interface WeaponFormData {
   handling?: number;
   range?: number;
 
+  // Trait/Perk/Catalyst selections
+  intrinsicTraitId?: number;
+  originTraitId?: number;
+  perk1Id?: number;
+  perk2Id?: number;
+  catalystId?: number;
+
   // Nested data
   mods: WeaponModFormData[];
   compatibleCharacterIds: number[];
