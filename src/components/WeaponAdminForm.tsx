@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { WeaponFormData, WeaponModFormData, PerkFormData, WEAPON_TYPES, ELEMENTS, COMBAT_STYLES, WEAPON_SLOTS, MOD_CATEGORIES } from '@/types/weapons';
+import ImageSelector from './ImageSelector';
 
 interface WeaponAdminFormProps {
   initialData?: WeaponFormData;
@@ -189,27 +190,7 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
           </div>
 
           <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="imageUrl">Image URL</label>
-              <input
-                id="imageUrl"
-                type="text"
-                value={formData.imageUrl}
-                onChange={(e) => handleInputChange('imageUrl', e.target.value)}
-                placeholder="URL to weapon image"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="thumbnailUrl">Thumbnail URL</label>
-              <input
-                id="thumbnailUrl"
-                type="text"
-                value={formData.thumbnailUrl}
-                onChange={(e) => handleInputChange('thumbnailUrl', e.target.value)}
-                placeholder="URL to weapon thumbnail"
-              />
-            </div>
+<div className="form-row">            <div className="form-group">              <ImageSelector                label="Image URL"                value={formData.imageUrl || ''}                onChange={(url) => handleInputChange('imageUrl', url)}              />            </div>            <div className="form-group">              <ImageSelector                label="Thumbnail URL"                value={formData.thumbnailUrl || ''}                onChange={(url) => handleInputChange('thumbnailUrl', url)}              />            </div>          </div>
           </div>
         </section>
 
