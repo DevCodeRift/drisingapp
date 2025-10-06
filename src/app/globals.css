@@ -2,33 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Default CSS variables - will be overridden by ThemeContext */
+  --color-primary: #3b82f6;
+  --color-secondary: #64748b;
+  --color-accent: #f59e0b;
+  --color-background: #ffffff;
+  --color-surface: #f8fafc;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-border-primary: #e5e7eb;
+  --color-border-secondary: #d1d5db;
+  --color-button-primary: #3b82f6;
+  --color-button-secondary: #6b7280;
+  --color-button-hover: #2563eb;
+  --color-nav-background: #ffffff;
+  --color-nav-text: #1f2937;
+  --color-nav-active: #3b82f6;
+}
+
 html {
   height: 100%;
 }
 
 body {
-  background: #ffffff;
-  color: #111827;
+  background: var(--color-background);
+  color: var(--color-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
   line-height: 1.6;
 }
 
-/* Ensure high contrast text throughout the app */
-.text-gray-600 {
-  color: #4b5563 !important;
+/* Theme-aware utility classes */
+.theme-bg {
+  background-color: var(--color-background);
 }
 
-.text-gray-500 {
-  color: #6b7280 !important;
+.theme-surface {
+  background-color: var(--color-surface);
 }
 
-.text-gray-700 {
-  color: #374151 !important;
+.theme-text {
+  color: var(--color-text-primary);
 }
 
-.text-gray-900 {
-  color: #111827 !important;
+.theme-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--color-text-muted);
+}
+
+.theme-border {
+  border-color: var(--color-border-primary);
+}
+
+.theme-button {
+  background-color: var(--color-button-primary);
+  color: white;
+  border-color: var(--color-button-primary);
+}
+
+.theme-button:hover {
+  background-color: var(--color-button-hover);
+}
+
+.theme-button-secondary {
+  background-color: var(--color-button-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
 }
 
 /* Improve mobile touch targets */
