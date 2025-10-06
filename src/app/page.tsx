@@ -52,109 +52,209 @@ export default function Home() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background }}>
-        <div className="flex items-center space-x-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: colors.primary }}></div>
-          <span style={{ color: colors.text.secondary }}>Loading...</span>
-        </div>
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: colors.background }}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center space-y-6"
+        >
+          <motion.div
+            className="w-16 h-16 rounded-full border-4"
+            style={{
+              borderColor: colors.primary,
+              borderTopColor: 'transparent'
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          />
+          <span
+            className="text-2xl font-bold"
+            style={{
+              color: colors.text.primary,
+              textShadow: `2px 2px 4px rgba(0,0,0,0.5)`
+            }}
+          >
+            🚀 Loading Destiny Rising... 🚀
+          </span>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen overflow-hidden" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
+    <main className="min-h-screen overflow-hidden" style={{ background: colors.background }}>
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-orange-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20" />
+      <div className="relative overflow-hidden min-h-screen flex items-center justify-center">
+        {/* Animated particles background */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                background: `radial-gradient(circle, ${colors.primary}, transparent)`,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.3, 1, 0.3],
+                scale: [0.5, 1.5, 0.5],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            />
+          ))}
+        </div>
 
-        {/* Floating orbs */}
+        {/* Floating energy orbs */}
+        <motion.div
+          animate={{
+            x: [0, 200, 0],
+            y: [0, -100, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-20 left-20 w-64 h-64 rounded-full blur-3xl opacity-30"
+          style={{ background: `radial-gradient(circle, ${colors.primary}, transparent)` }}
+        />
+        <motion.div
+          animate={{
+            x: [0, -150, 0],
+            y: [0, 80, 0],
+            scale: [1, 0.8, 1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute bottom-20 right-20 w-80 h-80 rounded-full blur-3xl opacity-25"
+          style={{ background: `radial-gradient(circle, ${colors.accent}, transparent)` }}
+        />
         <motion.div
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
+            scale: [1, 1.5, 1],
           }}
           transition={{
-            duration: 20,
+            duration: 12,
             repeat: Infinity,
-            ease: "linear"
+            ease: "easeInOut"
           }}
-          className="absolute top-20 left-20 w-32 h-32 bg-blue-500/10 rounded-full blur-xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, -100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute top-40 right-20 w-48 h-48 bg-orange-500/10 rounded-full blur-xl"
-        />
-        <motion.div
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -25, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute bottom-20 left-1/3 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20"
+          style={{ background: `radial-gradient(circle, ${colors.secondary}, transparent)` }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-8 py-24 text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-block mb-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-12"
           >
-            <div className="px-6 py-3 rounded-full border backdrop-blur-sm" style={{
-              backgroundColor: colors.primary + '15',
-              borderColor: colors.primary + '30'
-            }}>
-              <span className="font-semibold tracking-wider uppercase text-sm bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
-                Destiny Rising
+            <div
+              className="inline-block px-8 py-4 rounded-full border-2 backdrop-blur-md shadow-2xl"
+              style={{
+                background: colors.surface,
+                borderColor: colors.primary,
+                boxShadow: `0 0 30px ${colors.primary}50`
+              }}
+            >
+              <span
+                className="font-bold tracking-widest uppercase text-lg"
+                style={{ color: colors.primary }}
+              >
+                ⚡ DESTINY RISING ⚡
               </span>
             </div>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black mb-8 leading-tight"
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="text-7xl md:text-9xl font-black mb-8 leading-none"
+            style={{
+              textShadow: `0 0 20px ${colors.primary}80`,
+              color: colors.text.primary
+            }}
           >
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-orange-600 bg-clip-text text-transparent">
-              Community
+            <span
+              className="block"
+              style={{
+                background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              COMMUNITY
             </span>
-            <br />
-            <span className="bg-gradient-to-r from-orange-600 via-red-500 to-blue-600 bg-clip-text text-transparent">
-              Hub
+            <span
+              className="block"
+              style={{
+                background: `linear-gradient(45deg, ${colors.accent}, ${colors.primary})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              HUB
             </span>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed"
-            style={{ color: colors.text.secondary }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mb-12"
           >
-            Track tasks, share builds, find fireteams, and connect with the community in the ultimate Destiny experience
-          </motion.p>
+            <p
+              className="text-2xl md:text-3xl mb-6 max-w-5xl mx-auto leading-relaxed font-semibold"
+              style={{
+                color: colors.text.primary,
+                textShadow: `0 2px 4px rgba(0,0,0,0.3)`
+              }}
+            >
+              🎯 Track Tasks • 🛠️ Share Builds • 👥 Find Teams • 🏆 Achieve Glory
+            </p>
+            <div
+              className="w-32 h-1 mx-auto rounded-full"
+              style={{ background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` }}
+            />
+          </motion.div>
 
           {!session && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
             >
-              <LoginButton />
+              <Button
+                variant="destiny"
+                size="lg"
+                className="text-xl px-12 py-6 rounded-full font-bold uppercase tracking-wider shadow-2xl"
+                style={{
+                  background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
+                  boxShadow: `0 10px 30px ${colors.primary}40, 0 0 50px ${colors.primary}60`,
+                  border: `2px solid ${colors.accent}`
+                }}
+                onClick={() => router.push('/api/auth/signin')}
+              >
+                🚀 JOIN THE COMMUNITY 🚀
+              </Button>
             </motion.div>
           )}
         </div>
@@ -168,11 +268,26 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
-            Explore Features
+          <h2
+            className="text-5xl font-bold mb-6"
+            style={{
+              background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: `0 0 30px ${colors.primary}50`
+            }}
+          >
+            🔥 EXPLORE FEATURES 🔥
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Everything you need to enhance your Destiny Rising experience
+          <p
+            className="text-xl font-semibold max-w-3xl mx-auto"
+            style={{
+              color: colors.text.primary,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+            }}
+          >
+            Everything you need to dominate your Destiny Rising experience
           </p>
         </motion.div>
 
@@ -230,15 +345,40 @@ export default function Home() {
               <Card
                 hover
                 glow
-                className="group p-8 h-full cursor-pointer bg-white/80 backdrop-blur-sm border-white/20 hover:bg-white/90"
+                className="group p-8 h-full cursor-pointer backdrop-blur-md transition-all duration-300"
+                style={{
+                  background: colors.surface,
+                  borderColor: colors.border.primary,
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.2), 0 0 20px ${colors.primary}20`
+                }}
                 onClick={() => router.push(item.href)}
               >
                 <div className="text-center">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r ${item.color} mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <item.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-gray-900">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                  <motion.div
+                    className={`inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-r ${item.color} mb-6 shadow-2xl`}
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <item.icon className="w-10 h-10 text-white" />
+                  </motion.div>
+                  <h3
+                    className="text-2xl font-bold mb-4"
+                    style={{
+                      color: colors.text.primary,
+                      textShadow: `1px 1px 2px rgba(0,0,0,0.3)`
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    className="leading-relaxed font-medium"
+                    style={{
+                      color: colors.text.secondary,
+                      textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                    }}
+                  >
+                    {item.description}
+                  </p>
                 </div>
               </Card>
             </motion.div>
@@ -252,150 +392,307 @@ export default function Home() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
-            Recent Activity
+          <h2
+            className="text-5xl font-bold mb-6"
+            style={{
+              background: `linear-gradient(45deg, ${colors.accent}, ${colors.primary})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: `0 0 30px ${colors.accent}50`
+            }}
+          >
+            ⚡ RECENT ACTIVITY ⚡
           </h2>
-          <p className="text-lg text-gray-600">
+          <p
+            className="text-xl font-semibold"
+            style={{
+              color: colors.text.primary,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+            }}
+          >
             See what&apos;s happening in the community
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Recent Builds */}
-          <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
-            <h3 className="text-xl font-bold mb-4 text-blue-600">Latest Builds</h3>
+          <Card
+            className="p-8 backdrop-blur-md border-2 shadow-2xl"
+            style={{
+              background: colors.surface,
+              borderColor: colors.border.primary,
+              boxShadow: `0 0 30px ${colors.primary}30`
+            }}
+          >
+            <h3
+              className="text-2xl font-bold mb-6 flex items-center gap-3"
+              style={{ color: colors.primary }}
+            >
+              🛠️ Latest Builds
+            </h3>
             {activity.builds.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No builds yet</p>
             ) : (
               <div className="space-y-3">
                 {activity.builds.map((build) => (
-                  <div
+                  <motion.div
                     key={build.id}
                     onClick={() => router.push(`/builds/${build.id}`)}
-                    className="p-3 rounded cursor-pointer transition border"
+                    className="p-4 rounded-xl cursor-pointer transition-all duration-200 border-2"
                     style={{
-                      backgroundColor: colors.background,
-                      borderColor: colors.border.secondary
+                      background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
+                      borderColor: colors.border.primary,
+                      boxShadow: `0 4px 15px rgba(0,0,0,0.1)`
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.background}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: `0 8px 25px ${colors.primary}20`
+                    }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <div className="font-bold" style={{ color: colors.text.primary }}>{build.title}</div>
-                    <div className="text-sm" style={{ color: colors.text.secondary }}>
-                      {build.character.name} • by {build.user.name}
+                    <div
+                      className="font-bold text-lg mb-1"
+                      style={{
+                        color: colors.text.primary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      {build.title}
                     </div>
-                  </div>
+                    <div
+                      className="text-sm font-medium"
+                      style={{
+                        color: colors.text.secondary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                      }}
+                    >
+                      🎯 {build.character.name} • by {build.user.name}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             )}
             <Button
               onClick={() => router.push('/builds')}
-              variant="ghost"
-              size="sm"
-              className="mt-4 text-blue-600 hover:text-blue-700"
+              variant="destiny"
+              size="md"
+              className="mt-6 font-bold uppercase tracking-wider"
+              style={{
+                background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
+                boxShadow: `0 4px 15px ${colors.primary}40`
+              }}
             >
-              View all builds →
+              🔥 View All Builds 🔥
             </Button>
           </Card>
 
           {/* Recent News */}
-          <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
-            <h3 className="text-xl font-bold mb-4 text-yellow-600">Latest News</h3>
+          <Card
+            className="p-8 backdrop-blur-md border-2 shadow-2xl"
+            style={{
+              background: colors.surface,
+              borderColor: colors.border.primary,
+              boxShadow: `0 0 30px ${colors.accent}30`
+            }}
+          >
+            <h3
+              className="text-2xl font-bold mb-6 flex items-center gap-3"
+              style={{ color: colors.accent }}
+            >
+              📰 Latest News
+            </h3>
             {activity.news.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No news yet</p>
             ) : (
               <div className="space-y-3">
                 {activity.news.map((post) => (
-                  <div
+                  <motion.div
                     key={post.id}
                     onClick={() => router.push(`/news/${post.id}`)}
-                    className="p-3 rounded cursor-pointer transition border"
+                    className="p-4 rounded-xl cursor-pointer transition-all duration-200 border-2"
                     style={{
-                      backgroundColor: colors.background,
-                      borderColor: colors.border.secondary
+                      background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
+                      borderColor: colors.border.primary,
+                      boxShadow: `0 4px 15px rgba(0,0,0,0.1)`
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.background}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: `0 8px 25px ${colors.accent}20`
+                    }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <div className="font-bold" style={{ color: colors.text.primary }}>{post.title}</div>
-                    <div className="text-sm" style={{ color: colors.text.secondary }}>
-                      {post.type} • by {post.user.name}
+                    <div
+                      className="font-bold text-lg mb-1"
+                      style={{
+                        color: colors.text.primary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      {post.title}
                     </div>
-                  </div>
+                    <div
+                      className="text-sm font-medium"
+                      style={{
+                        color: colors.text.secondary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                      }}
+                    >
+                      📰 {post.type} • by {post.user.name}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             )}
             <Button
               onClick={() => router.push('/news')}
-              variant="ghost"
-              size="sm"
-              className="mt-4 text-yellow-600 hover:text-yellow-700"
+              variant="destiny"
+              size="md"
+              className="mt-6 font-bold uppercase tracking-wider"
+              style={{
+                background: `linear-gradient(45deg, ${colors.accent}, ${colors.primary})`,
+                boxShadow: `0 4px 15px ${colors.accent}40`
+              }}
             >
-              View all news →
+              📰 View All News 📰
             </Button>
           </Card>
 
           {/* Recent LFG */}
-          <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
-            <h3 className="text-xl font-bold mb-4 text-purple-600">Active LFG</h3>
+          <Card
+            className="p-8 backdrop-blur-md border-2 shadow-2xl"
+            style={{
+              background: colors.surface,
+              borderColor: colors.border.primary,
+              boxShadow: `0 0 30px ${colors.primary}30`
+            }}
+          >
+            <h3
+              className="text-2xl font-bold mb-6 flex items-center gap-3"
+              style={{ color: colors.primary }}
+            >
+              👥 Active LFG
+            </h3>
             {activity.lfg.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No active LFG posts</p>
             ) : (
               <div className="space-y-3">
                 {activity.lfg.map((post) => (
-                  <div
+                  <motion.div
                     key={post.id}
-                    className="p-3 rounded border"
+                    className="p-4 rounded-xl border-2"
                     style={{
-                      backgroundColor: colors.background,
-                      borderColor: colors.border.secondary
+                      background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
+                      borderColor: colors.border.primary,
+                      boxShadow: `0 4px 15px rgba(0,0,0,0.1)`
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: `0 8px 25px ${colors.primary}20`
                     }}
                   >
-                    <div className="font-bold" style={{ color: colors.text.primary }}>{post.activity}</div>
-                    <div className="text-sm" style={{ color: colors.text.secondary }}>by {post.user.name}</div>
-                  </div>
+                    <div
+                      className="font-bold text-lg mb-1"
+                      style={{
+                        color: colors.text.primary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      {post.activity}
+                    </div>
+                    <div
+                      className="text-sm font-medium"
+                      style={{
+                        color: colors.text.secondary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                      }}
+                    >
+                      👤 by {post.user.name}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             )}
             <Button
               onClick={() => router.push('/lfg')}
-              variant="ghost"
-              size="sm"
-              className="mt-4 text-purple-600 hover:text-purple-700"
+              variant="destiny"
+              size="md"
+              className="mt-6 font-bold uppercase tracking-wider"
+              style={{
+                background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
+                boxShadow: `0 4px 15px ${colors.primary}40`
+              }}
             >
-              View all LFG →
+              👥 View All LFG 👥
             </Button>
           </Card>
 
           {/* Recent Clans */}
-          <Card className="p-6 bg-white/80 backdrop-blur-sm border-white/20">
-            <h3 className="text-xl font-bold mb-4 text-red-600">Recruiting Clans</h3>
+          <Card
+            className="p-8 backdrop-blur-md border-2 shadow-2xl"
+            style={{
+              background: colors.surface,
+              borderColor: colors.border.primary,
+              boxShadow: `0 0 30px ${colors.accent}30`
+            }}
+          >
+            <h3
+              className="text-2xl font-bold mb-6 flex items-center gap-3"
+              style={{ color: colors.accent }}
+            >
+              🏰 Recruiting Clans
+            </h3>
             {activity.clans.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No clan recruitment posts</p>
             ) : (
               <div className="space-y-3">
                 {activity.clans.map((post) => (
-                  <div
+                  <motion.div
                     key={post.id}
-                    className="p-3 rounded border"
+                    className="p-4 rounded-xl border-2"
                     style={{
-                      backgroundColor: colors.background,
-                      borderColor: colors.border.secondary
+                      background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
+                      borderColor: colors.border.primary,
+                      boxShadow: `0 4px 15px rgba(0,0,0,0.1)`
+                    }}
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: `0 8px 25px ${colors.accent}20`
                     }}
                   >
-                    <div className="font-bold" style={{ color: colors.text.primary }}>{post.clanName}</div>
-                    <div className="text-sm" style={{ color: colors.text.secondary }}>by {post.user.name}</div>
-                  </div>
+                    <div
+                      className="font-bold text-lg mb-1"
+                      style={{
+                        color: colors.text.primary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      {post.clanName}
+                    </div>
+                    <div
+                      className="text-sm font-medium"
+                      style={{
+                        color: colors.text.secondary,
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                      }}
+                    >
+                      👤 by {post.user.name}
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             )}
             <Button
               onClick={() => router.push('/clans')}
-              variant="ghost"
-              size="sm"
-              className="mt-4 text-red-600 hover:text-red-700"
+              variant="destiny"
+              size="md"
+              className="mt-6 font-bold uppercase tracking-wider"
+              style={{
+                background: `linear-gradient(45deg, ${colors.accent}, ${colors.primary})`,
+                boxShadow: `0 4px 15px ${colors.accent}40`
+              }}
             >
-              View all clans →
+              🏰 View All Clans 🏰
             </Button>
           </Card>
         </div>

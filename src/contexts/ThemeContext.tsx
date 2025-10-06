@@ -33,55 +33,55 @@ interface ThemeColors {
 
 const themes: Record<Theme, ThemeColors> = {
   light: {
-    primary: '#3b82f6',
-    secondary: '#64748b',
-    accent: '#f59e0b',
-    background: '#ffffff',
-    surface: '#f8fafc',
+    primary: '#ff6b35',
+    secondary: '#2d3748',
+    accent: '#ffd700',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    surface: 'rgba(255, 255, 255, 0.95)',
     text: {
-      primary: '#1f2937',
-      secondary: '#6b7280',
-      muted: '#9ca3af'
+      primary: '#1a202c',
+      secondary: '#4a5568',
+      muted: '#718096'
     },
     border: {
-      primary: '#e5e7eb',
-      secondary: '#d1d5db'
+      primary: 'rgba(255, 255, 255, 0.2)',
+      secondary: 'rgba(255, 255, 255, 0.1)'
     },
     button: {
-      primary: '#3b82f6',
-      secondary: '#6b7280',
-      hover: '#2563eb'
+      primary: '#ff6b35',
+      secondary: 'rgba(255, 255, 255, 0.1)',
+      hover: '#e55a2b'
     },
     navigation: {
-      background: '#ffffff',
-      text: '#1f2937',
-      active: '#3b82f6'
+      background: 'rgba(255, 255, 255, 0.1)',
+      text: '#1a202c',
+      active: '#ff6b35'
     }
   },
   dark: {
-    primary: '#3b82f6',
-    secondary: '#64748b',
-    accent: '#f59e0b',
-    background: '#111827',
-    surface: '#1f2937',
+    primary: '#ff8c42',
+    secondary: '#a0aec0',
+    accent: '#ffd700',
+    background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+    surface: 'rgba(26, 32, 46, 0.95)',
     text: {
-      primary: '#ffffff',
-      secondary: '#e5e7eb',
-      muted: '#d1d5db'
+      primary: '#f7fafc',
+      secondary: '#e2e8f0',
+      muted: '#a0aec0'
     },
     border: {
-      primary: '#374151',
-      secondary: '#4b5563'
+      primary: 'rgba(255, 140, 66, 0.3)',
+      secondary: 'rgba(255, 140, 66, 0.1)'
     },
     button: {
-      primary: '#3b82f6',
-      secondary: '#6b7280',
-      hover: '#2563eb'
+      primary: '#ff8c42',
+      secondary: 'rgba(255, 140, 66, 0.1)',
+      hover: '#ff7629'
     },
     navigation: {
-      background: '#1f2937',
-      text: '#ffffff',
-      active: '#3b82f6'
+      background: 'rgba(26, 32, 46, 0.95)',
+      text: '#f7fafc',
+      active: '#ff8c42'
     }
   }
 }

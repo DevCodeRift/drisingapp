@@ -171,98 +171,137 @@ export default function WeaponsPage() {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Main Content */}
-        <div
-          className="flex-1"
-          style={{ backgroundColor: colors.background }}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex-1 backdrop-blur-md rounded-2xl border-2 shadow-2xl"
+          style={{
+            background: colors.surface,
+            borderColor: colors.border.primary,
+            boxShadow: `0 0 40px ${colors.primary}20`
+          }}
         >
           {/* Header with slot filters and results count */}
           <div
-            className="flex justify-between items-center p-6 border-b"
+            className="flex justify-between items-center p-8 border-b-2"
             style={{ borderColor: colors.border.primary }}
           >
-            <div className="flex gap-2">
-              <button
+            <div className="flex gap-4">
+              <motion.button
                 onClick={() => setFilters(prev => ({ ...prev, slot: '' }))}
-                className="px-4 py-2 text-sm rounded transition-colors border"
+                className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
                 style={{
-                  backgroundColor: !filters.slot ? colors.primary : colors.button.secondary,
+                  background: !filters.slot ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
                   color: !filters.slot ? '#ffffff' : colors.text.primary,
-                  borderColor: colors.border.primary
+                  borderColor: !filters.slot ? colors.accent : colors.border.primary,
+                  boxShadow: !filters.slot ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
+                  textShadow: !filters.slot ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
                 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                All Slots
-              </button>
-              <button
+                🎯 All Slots
+              </motion.button>
+              <motion.button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Primary' }))}
-                className="px-4 py-2 text-sm rounded transition-colors border"
+                className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
                 style={{
-                  backgroundColor: filters.slot === 'Primary' ? colors.primary : colors.button.secondary,
+                  background: filters.slot === 'Primary' ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
                   color: filters.slot === 'Primary' ? '#ffffff' : colors.text.primary,
-                  borderColor: colors.border.primary
+                  borderColor: filters.slot === 'Primary' ? colors.accent : colors.border.primary,
+                  boxShadow: filters.slot === 'Primary' ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
+                  textShadow: filters.slot === 'Primary' ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
                 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Primary
-              </button>
-              <button
+                ⚡ Primary
+              </motion.button>
+              <motion.button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Power' }))}
-                className="px-4 py-2 text-sm rounded transition-colors border"
+                className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
                 style={{
-                  backgroundColor: filters.slot === 'Power' ? colors.primary : colors.button.secondary,
+                  background: filters.slot === 'Power' ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
                   color: filters.slot === 'Power' ? '#ffffff' : colors.text.primary,
-                  borderColor: colors.border.primary
+                  borderColor: filters.slot === 'Power' ? colors.accent : colors.border.primary,
+                  boxShadow: filters.slot === 'Power' ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
+                  textShadow: filters.slot === 'Power' ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
                 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Power
-              </button>
+                💥 Power
+              </motion.button>
             </div>
             <div
-              className="text-sm"
-              style={{ color: colors.text.secondary }}
+              className="text-lg font-bold flex items-center gap-3"
+              style={{ color: colors.text.primary, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}
             >
-              Results: <span style={{ color: colors.text.primary, fontWeight: 'medium' }}>{loading ? '...' : weapons.length}</span>
+              <Star className="w-5 h-5" style={{ color: colors.accent }} />
+              Results: <span style={{ color: colors.primary }}>{loading ? '...' : weapons.length}</span>
             </div>
           </div>
 
           {/* Table */}
-          <div className="p-6">
+          <div className="p-8">
             {/* Table Header */}
-            <div
-              className="border rounded-t-lg"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="border-2 rounded-2xl overflow-hidden shadow-2xl"
               style={{
-                backgroundColor: colors.surface,
-                borderColor: colors.border.primary
+                background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
+                borderColor: colors.border.primary,
+                boxShadow: `0 0 30px ${colors.primary}20`
               }}
             >
               <div
-                className="grid grid-cols-12 gap-6 px-6 py-4 border-b"
-                style={{ borderColor: colors.border.primary }}
+                className="grid grid-cols-12 gap-6 px-8 py-6 border-b-2"
+                style={{
+                  borderColor: colors.border.primary,
+                  background: `linear-gradient(90deg, ${colors.primary}20, ${colors.accent}20)`
+                }}
               >
                 <div
-                  className="col-span-5 text-sm font-medium uppercase tracking-wider"
-                  style={{ color: colors.text.secondary }}
+                  className="col-span-5 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                  style={{
+                    color: colors.text.primary,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}
                 >
-                  Name
+                  🎯 Weapon Name
                 </div>
                 <div
-                  className="col-span-2 text-sm font-medium uppercase tracking-wider"
-                  style={{ color: colors.text.secondary }}
+                  className="col-span-2 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                  style={{
+                    color: colors.text.primary,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}
                 >
-                  Combat Style
+                  ⚔️ Combat Style
                 </div>
                 <div
-                  className="col-span-2 text-sm font-medium uppercase tracking-wider"
-                  style={{ color: colors.text.secondary }}
+                  className="col-span-2 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                  style={{
+                    color: colors.text.primary,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}
                 >
-                  Slot
+                  📦 Slot
                 </div>
                 <div
-                  className="col-span-3 text-sm font-medium uppercase tracking-wider"
-                  style={{ color: colors.text.secondary }}
+                  className="col-span-3 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                  style={{
+                    color: colors.text.primary,
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  }}
                 >
-                  Characters
+                  👥 Characters
                 </div>
               </div>
 
@@ -383,14 +422,14 @@ export default function WeaponsPage() {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
         </div>
       </div>
     </div>
