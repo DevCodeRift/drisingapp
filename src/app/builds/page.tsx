@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
+import { getCharacterImage } from '@/lib/image-assets';
 
 interface Character {
   id: string;
@@ -196,12 +197,12 @@ export default function BuildsPage() {
                 onClick={() => router.push(`/builds/${build.id}`)}
               >
                 {/* Character Image Background */}
-                {build.character.imageUrl && (
+                {build.character.name && (
                   <div className="relative h-32 overflow-hidden" style={{
                     background: `linear-gradient(to bottom, ${colors.surface}, ${colors.background})`
                   }}>
                     <img
-                      src={build.character.imageUrl}
+                      src={getCharacterImage(build.character.name) || ''}
                       alt={build.character.name}
                       className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
                     />
