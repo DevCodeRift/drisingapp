@@ -2,6 +2,7 @@
 
 import { UserTask, TaskCategory } from '@/types/tasks'
 import TaskCard from './TaskCard'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface TaskSectionProps {
   title: string
@@ -12,70 +13,23 @@ interface TaskSectionProps {
   onToggleTask: (taskId: string) => void
 }
 
-const getCategoryIcon = (category: TaskCategory) => {
-  switch (category) {
-    case TaskCategory.DAILY:
-      return (
-        <div className="w-6 h-6 rounded bg-orange-100 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-        </div>
-      )
-    case TaskCategory.WEEKLY:
-      return (
-        <div className="w-6 h-6 rounded bg-blue-100 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-        </div>
-      )
-    case TaskCategory.MONTHLY:
-      return (
-        <div className="w-6 h-6 rounded bg-yellow-100 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-        </div>
-      )
-    case TaskCategory.SEASONAL:
-      return (
-        <div className="w-6 h-6 rounded bg-purple-100 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-        </div>
-      )
-    default:
-      return (
-        <div className="w-6 h-6 rounded bg-gray-100 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-gray-400"></div>
-        </div>
-      )
-  }
+const getCategoryIcon = (category: TaskCategory, colors: any) => {
+  const iconColors = {
+    [TaskCategory.DAILY]: { bg: '#fed7aa', dot: '#ea580c' },
+    [TaskCategory.WEEKLY]: { bg: '#dbeafe', dot: '#2563eb' },
+    [TaskCategory.MONTHLY]: { bg: '#fef3c7', dot: '#d97706' },
+    [TaskCategory.SEASONAL]: { bg: '#ede9fe', dot: '#7c3aed' }
+  };
+
+  const iconColor = iconColors[category] || { bg: colors.surface, dot: colors.text.secondary };
+
+  return (
+    <div className="w-6 h-6 rounded flex items-center justify-center" style={{ backgroundColor: iconColor.bg }}>
+      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: iconColor.dot }}></div>
+    </div>
+  )
 }
 
-const getColorClass = (color: string) => {
-  switch (color) {
-    case 'destiny-orange':
-      return 'text-orange-600'
-    case 'destiny-blue':
-      return 'text-blue-600'
-    case 'destiny-purple':
-      return 'text-purple-600'
-    case 'destiny-gold':
-      return 'text-yellow-600'
-    default:
-      return 'text-gray-900'
-  }
-}
-
-const getProgressBarColor = (color: string) => {
-  switch (color) {
-    case 'destiny-orange':
-      return 'bg-orange-500'
-    case 'destiny-blue':
-      return 'bg-blue-500'
-    case 'destiny-purple':
-      return 'bg-purple-500'
-    case 'destiny-gold':
-      return 'bg-yellow-500'
-    default:
-      return 'bg-gray-400'
-  }
-}
 
 export default function TaskSection({
   title,
@@ -85,36 +39,53 @@ export default function TaskSection({
   color,
   onToggleTask
 }: TaskSectionProps) {
+  const { colors } = useTheme()
   const completedTasks = tasks.filter(task => task.completed).length
   const totalTasks = tasks.length
 
+  const categoryColors = {
+    'destiny-orange': colors.primary,
+    'destiny-blue': '#2563eb',
+    'destiny-purple': '#7c3aed',
+    'destiny-gold': '#d97706'
+  }
+
+  const activeColor = categoryColors[color as keyof typeof categoryColors] || colors.primary
+
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-300 hover:shadow-md transition-shadow">
+    <div className="p-6 rounded-xl shadow-sm border hover:shadow-md transition-shadow" style={{
+      backgroundColor: colors.surface,
+      borderColor: colors.border.primary
+    }}>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className={`text-lg font-semibold flex items-center gap-3 ${getColorClass(color)}`}>
-            {getCategoryIcon(category)}
+          <h2 className="text-lg font-semibold flex items-center gap-3" style={{ color: activeColor }}>
+            {getCategoryIcon(category, colors)}
             {title}
           </h2>
-          <p className="text-gray-600 text-sm mt-1">{subtitle}</p>
+          <p className="text-sm mt-1" style={{ color: colors.text.secondary }}>{subtitle}</p>
         </div>
         <div className="text-right">
-          <div className={`text-lg font-bold ${getColorClass(color)}`}>
+          <div className="text-lg font-bold" style={{ color: activeColor }}>
             {completedTasks}/{totalTasks}
           </div>
-          <div className="text-xs text-gray-500">completed</div>
+          <div className="text-xs" style={{ color: colors.text.muted }}>completed</div>
         </div>
       </div>
 
       <div className="space-y-2">
         {tasks.length === 0 ? (
           <div className="text-center py-8">
-            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style={{
+              backgroundColor: colors.surface
+            }}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{
+                color: colors.text.muted
+              }}>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
-            <p className="text-gray-500 text-sm">No tasks available</p>
+            <p className="text-sm" style={{ color: colors.text.muted }}>No tasks available</p>
           </div>
         ) : (
           tasks.map(task => (
@@ -129,13 +100,16 @@ export default function TaskSection({
 
       {totalTasks > 0 && (
         <div className="mt-6">
-          <div className="bg-gray-200 rounded-full h-2">
+          <div className="rounded-full h-2" style={{ backgroundColor: colors.border.secondary }}>
             <div
-              className={`h-2 rounded-full transition-all duration-500 ${getProgressBarColor(color)}`}
-              style={{ width: `${(completedTasks / totalTasks) * 100}%` }}
+              className="h-2 rounded-full transition-all duration-500"
+              style={{
+                width: `${(completedTasks / totalTasks) * 100}%`,
+                backgroundColor: activeColor
+              }}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-2">
+          <div className="flex justify-between text-xs mt-2" style={{ color: colors.text.muted }}>
             <span>{completedTasks} completed</span>
             <span>{Math.round((completedTasks / totalTasks) * 100)}%</span>
           </div>
