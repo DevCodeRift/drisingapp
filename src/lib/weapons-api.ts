@@ -64,7 +64,7 @@ export async function getAllWeapons(req: Request, res: Response, db: DatabaseCli
       data: result.rows.map((row: any) => ({
         id: row.id,
         name: row.name,
-        slug: row.slug,
+        slug: row.slug || generateSimpleSlug(row.name), // Generate slug if missing
         rarity: row.rarity,
         weaponType: row.weaponType,
         basePower: row.basePower,
@@ -115,7 +115,7 @@ export async function getWeaponById(req: Request, res: Response, db: DatabaseCli
     const weapon = {
       id: row.id,
       name: row.name,
-      slug: row.slug,
+      slug: row.slug || generateSlug(row.name), // Generate slug if missing
       rarity: row.rarity,
       weaponType: row.weaponType,
       basePower: row.basePower,
@@ -153,12 +153,25 @@ export async function getWeaponBySlug(req: Request, res: Response, db: DatabaseC
   try {
     const { slug } = req.params;
 
-    // Simple query to get single weapon by slug (using same table structure as getWeaponById)
-    const sql = `SELECT * FROM "Weapon" WHERE slug = $1`;
-    const result = await db.query(sql, [slug]);
+    // First try to find by slug
+    let sql = `SELECT * FROM "Weapon" WHERE slug = $1`;
+    let result = await db.query(sql, [slug]);
 
+    // If not found by slug, try to find weapons and match by generated slug
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Weapon not found' });
+      sql = `SELECT * FROM "Weapon"`;
+      const allWeapons = await db.query(sql, []);
+
+      // Find weapon where generated slug matches
+      const matchingWeapon = allWeapons.rows.find((row: any) =>
+        generateSimpleSlug(row.name) === slug
+      );
+
+      if (matchingWeapon) {
+        result = { rows: [matchingWeapon] };
+      } else {
+        return res.status(404).json({ error: 'Weapon not found' });
+      }
     }
 
     // Map the result to the expected format (same as getWeaponById)
@@ -166,7 +179,7 @@ export async function getWeaponBySlug(req: Request, res: Response, db: DatabaseC
     const weapon = {
       id: row.id,
       name: row.name,
-      slug: row.slug,
+      slug: row.slug || generateSlug(row.name), // Generate slug if missing
       rarity: row.rarity,
       weaponType: row.weaponType,
       basePower: row.basePower,
@@ -443,14 +456,29 @@ export async function deleteWeapon(req: Request, res: Response, db: DatabaseClie
 
 // Helper Functions
 
-function generateSlug(name: string, weaponType: string): string {
-  const weaponTypeSlug = weaponType.toLowerCase().replace(/\s+/g, '-');
+function generateSlug(name: string, weaponType?: string): string {
   const nameSlug = name.toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/-+/g, '-')
+    .trim()
+    .replace(/^-+|-+$/g, '');
 
-  return `${weaponTypeSlug}--${nameSlug}`;
+  if (weaponType) {
+    const weaponTypeSlug = weaponType.toLowerCase().replace(/\s+/g, '-');
+    return `${weaponTypeSlug}--${nameSlug}`;
+  }
+
+  return nameSlug;
+}
+
+function generateSimpleSlug(name: string): string {
+  return name.toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim()
+    .replace(/^-+|-+$/g, '');
 }
 
 function mapDatabaseToWeapon(row: any): Weapon {

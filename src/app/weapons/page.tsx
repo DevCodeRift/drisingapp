@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Weapon } from '@/types/weapons';
 import { useTheme } from '@/contexts/ThemeContext';
-import { generateSlug } from '@/lib/slug';
 
 export default function WeaponsPage() {
   const router = useRouter();
@@ -279,7 +278,7 @@ export default function WeaponsPage() {
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
                         }}
-                        onClick={() => router.push(`/weapons/${weapon.slug || generateSlug(weapon.name)}`)}
+                        onClick={() => router.push(`/weapons/${weapon.slug}`)}
                       >
                         {/* Name Column */}
                         <div className="col-span-5 flex items-center gap-4">
