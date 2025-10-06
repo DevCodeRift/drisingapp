@@ -101,165 +101,223 @@ export default function BuildsPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold" style={{ color: colors.text.primary }}>Character Builds</h1>
-          {session && (
-            <button
-              onClick={() => router.push('/builds/create')}
-              className="text-white px-6 py-2 rounded-lg transition min-h-[44px] flex items-center"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header Section */}
+        <div className="mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+            <div>
+              <h1 className="text-5xl font-bold mb-2" style={{ color: colors.text.primary }}>
+                Community Builds
+              </h1>
+              <p className="text-lg" style={{ color: colors.text.secondary }}>
+                Discover and share powerful character builds
+              </p>
+            </div>
+            {session && (
+              <button
+                onClick={() => router.push('/builds/create')}
+                className="text-white px-8 py-3 rounded-lg transition-all font-semibold shadow-md hover:shadow-lg min-h-[44px] flex items-center gap-2"
+                style={{
+                  backgroundColor: colors.primary
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.accent;
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.primary;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Create Build
+              </button>
+            )}
+          </div>
+
+          {/* Filters */}
+          <div
+            className="flex gap-3 flex-wrap p-6 rounded-xl shadow-sm"
+            style={{
+              backgroundColor: colors.surface,
+              borderLeft: `4px solid ${colors.primary}`
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" style={{ color: colors.text.secondary }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <span className="font-semibold" style={{ color: colors.text.secondary }}>Filters:</span>
+            </div>
+
+            <select
+              value={selectedCharacter}
+              onChange={(e) => setSelectedCharacter(e.target.value)}
+              className="px-4 py-2 rounded-lg border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all min-h-[44px] font-medium"
               style={{
-                backgroundColor: colors.primary
+                backgroundColor: colors.background,
+                color: colors.text.primary,
+                borderColor: colors.border.primary,
+                focusRingColor: colors.primary
               }}
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.accent}
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
             >
-              Create Build
-            </button>
-          )}
-        </div>
+              <option value="">All Characters</option>
+              {characters.map((char) => (
+                <option key={char.id} value={char.id}>
+                  {char.name}
+                </option>
+              ))}
+            </select>
 
-        {/* Filters */}
-        <div className="flex gap-3 mb-8 flex-wrap">
-          <select
-            value={selectedCharacter}
-            onChange={(e) => setSelectedCharacter(e.target.value)}
-            className="px-4 py-2.5 rounded-md border focus:outline-none transition-all min-h-[44px]"
-            style={{
-              backgroundColor: colors.surface,
-              color: colors.text.primary,
-              borderColor: colors.border.primary
-            }}
-          >
-            <option value="">All Characters</option>
-            {characters.map((char) => (
-              <option key={char.id} value={char.id}>
-                {char.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
-            className="px-4 py-2.5 rounded-md border focus:outline-none transition-all min-h-[44px]"
-            style={{
-              backgroundColor: colors.surface,
-              color: colors.text.primary,
-              borderColor: colors.border.primary
-            }}
-          >
-            <option value="upvotes">Most Upvoted</option>
-            <option value="recent">Most Recent</option>
-          </select>
-
-          {session && (
-            <label
-              className="flex items-center gap-2 px-4 py-2.5 rounded-md border cursor-pointer transition-all min-h-[44px]"
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
+              className="px-4 py-2 rounded-lg border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all min-h-[44px] font-medium"
               style={{
-                backgroundColor: colors.surface,
+                backgroundColor: colors.background,
+                color: colors.text.primary,
                 borderColor: colors.border.primary
               }}
             >
-              <input
-                type="checkbox"
-                checked={showPrivate}
-                onChange={(e) => setShowPrivate(e.target.checked)}
-                className="w-4 h-4 rounded"
+              <option value="upvotes">Most Upvoted</option>
+              <option value="recent">Most Recent</option>
+            </select>
+
+            {session && (
+              <label
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 cursor-pointer transition-all min-h-[44px] font-medium hover:shadow-sm"
                 style={{
-                  accentColor: colors.primary
+                  backgroundColor: showPrivate ? colors.primary + '10' : colors.background,
+                  borderColor: showPrivate ? colors.primary : colors.border.primary
                 }}
-              />
-              <span style={{ color: colors.text.primary }}>My Builds Only</span>
-            </label>
-          )}
+              >
+                <input
+                  type="checkbox"
+                  checked={showPrivate}
+                  onChange={(e) => setShowPrivate(e.target.checked)}
+                  className="w-4 h-4 rounded"
+                  style={{
+                    accentColor: colors.primary
+                  }}
+                />
+                <span style={{ color: showPrivate ? colors.primary : colors.text.primary }}>My Builds Only</span>
+              </label>
+            )}
+          </div>
         </div>
 
         {/* Builds List */}
         {loading ? (
-          <div className="text-center py-8" style={{ color: colors.text.secondary }}>Loading builds...</div>
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: colors.primary }}></div>
+            <p className="mt-4 text-lg" style={{ color: colors.text.secondary }}>Loading builds...</p>
+          </div>
         ) : builds.length === 0 ? (
-          <div className="text-center py-8" style={{ color: colors.text.secondary }}>
-            No builds found. Be the first to create one!
+          <div className="text-center py-20 px-4 rounded-xl" style={{ backgroundColor: colors.surface }}>
+            <svg className="w-24 h-24 mx-auto mb-4" style={{ color: colors.text.muted }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p className="text-xl font-semibold mb-2" style={{ color: colors.text.secondary }}>
+              No builds found
+            </p>
+            <p style={{ color: colors.text.muted }}>
+              Be the first to create one!
+            </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {builds.map((build) => (
               <div
                 key={build.id}
-                className="group rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer border"
+                className="group rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
                 style={{
                   backgroundColor: colors.surface,
-                  borderColor: colors.border.primary
+                  border: `2px solid ${colors.border.primary}`
                 }}
-                onMouseOver={(e) => e.currentTarget.style.borderColor = colors.primary}
-                onMouseOut={(e) => e.currentTarget.style.borderColor = colors.border.primary}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = colors.primary;
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = colors.border.primary;
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
                 onClick={() => router.push(`/builds/${build.id}`)}
               >
-                {/* Character Image Background */}
+                {/* Character Image Header */}
                 {build.character.name && (
-                  <div className="relative h-32 overflow-hidden" style={{
-                    background: `linear-gradient(to bottom, ${colors.surface}, ${colors.background})`
-                  }}>
+                  <div className="relative h-48 overflow-hidden">
                     <img
                       src={getCharacterImage(build.character.name) || ''}
                       alt={build.character.name}
-                      className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      style={{ objectPosition: 'center 20%' }}
                     />
-                    <div className="absolute inset-0" style={{
-                      background: `linear-gradient(to top, ${colors.surface}, transparent)`
-                    }}></div>
-                  </div>
-                )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-                <div className="p-5">
-                  {/* Character Tag */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span
-                      className="px-2 py-1 text-xs font-semibold rounded border"
-                      style={{
-                        backgroundColor: colors.primary + '20',
-                        color: colors.primary,
-                        borderColor: colors.primary + '40'
-                      }}
-                    >
-                      {build.character.name}
-                    </span>
-                    <div className="flex items-center gap-1 ml-auto">
+                    {/* Character Badge */}
+                    <div className="absolute top-4 left-4">
+                      <span
+                        className="px-3 py-1.5 text-sm font-bold rounded-lg shadow-lg backdrop-blur-sm"
+                        style={{
+                          backgroundColor: colors.primary + 'DD',
+                          color: '#ffffff'
+                        }}
+                      >
+                        {build.character.name}
+                      </span>
+                    </div>
+
+                    {/* Upvote Button */}
+                    <div className="absolute top-4 right-4">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleUpvote(build.id);
                         }}
-                        className="flex items-center gap-1 px-2 py-1 rounded text-sm transition"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg font-bold shadow-lg backdrop-blur-sm transition-all hover:scale-110"
                         style={{
-                          backgroundColor: hasUpvoted(build) ? colors.primary : colors.surface,
-                          color: hasUpvoted(build) ? '#ffffff' : colors.text.secondary,
-                          border: `1px solid ${hasUpvoted(build) ? colors.primary : colors.border.secondary}`
+                          backgroundColor: hasUpvoted(build) ? colors.primary : 'rgba(0,0,0,0.5)',
+                          color: '#ffffff'
                         }}
                       >
-                        <span>▲</span>
-                        <span className="font-semibold">{build.voteCount || 0}</span>
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span>{build.voteCount || 0}</span>
                       </button>
                     </div>
                   </div>
+                )}
 
+                <div className="p-6">
                   {/* Title */}
-                  <h3 className="text-lg font-bold mb-2 transition-colors line-clamp-2" style={{
+                  <h3 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" style={{
                     color: colors.text.primary
                   }}>
                     {build.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm mb-3 line-clamp-2" style={{ color: colors.text.secondary }}>
-                    {build.description}
+                  <p className="text-sm mb-4 line-clamp-3 leading-relaxed" style={{ color: colors.text.secondary }}>
+                    {build.description || 'No description provided.'}
                   </p>
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-xs" style={{ color: colors.text.muted }}>
-                    <span>by {build.user.name}</span>
-                    <span>{new Date(build.createdAt).toLocaleDateString()}</span>
+                  <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: colors.border.secondary }}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style={{ backgroundColor: colors.primary + '30', color: colors.primary }}>
+                        {build.user.name.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="text-sm font-medium" style={{ color: colors.text.secondary }}>
+                        {build.user.name}
+                      </span>
+                    </div>
+                    <span className="text-xs" style={{ color: colors.text.muted }}>
+                      {new Date(build.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
                   </div>
                 </div>
               </div>
