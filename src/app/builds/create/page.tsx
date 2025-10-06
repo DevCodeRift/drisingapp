@@ -153,7 +153,7 @@ export default function CreateBuildPage() {
       const weaponsData = await weaponsRes.json();
 
       setCharacters(charactersData.characters || charactersData || []);
-      setWeapons(weaponsData.weapons || weaponsData || []);
+      setWeapons(weaponsData.data || weaponsData.weapons || weaponsData || []);
     } catch (error) {
       console.error('Error loading data:', error);
       alert('Failed to load data');
