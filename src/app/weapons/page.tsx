@@ -84,185 +84,214 @@ export default function WeaponsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-
-      <div className="flex min-h-screen">
+      <div className="flex">
         {/* Left Sidebar - Weapon Type Filters */}
-        <div className="w-64 bg-gray-800 border-r border-gray-700 p-4">
-          <div className="mb-6">
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={() => setFilters(prev => ({ ...prev, slot: '' }))}
-                className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
-                  !filters.slot
-                    ? 'bg-gray-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
-              >
-                All Characters
+        <div className="w-80 bg-gray-800 min-h-screen">
+          {/* Top buttons */}
+          <div className="p-4 border-b border-gray-700">
+            <div className="flex gap-2">
+              <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
+                📄 All Characters
               </button>
-              <button className="px-3 py-2 rounded text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors">
-                Filter Weapons
+              <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
+                🔍 Filter Weapons
               </button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <button
-              onClick={() => setFilters(prev => ({ ...prev, weaponType: '' }))}
-              className={`w-full text-left px-3 py-2 rounded text-sm font-medium transition-colors ${
-                !filters.weaponType
-                  ? 'bg-gray-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-700'
-              }`}
-            >
-              ALL WEAPONS
-            </button>
-            {weaponTypes.map(type => (
+          {/* Weapon type filters */}
+          <div className="p-4">
+            <div className="bg-gray-700 rounded-lg">
               <button
-                key={type}
-                onClick={() => setFilters(prev => ({ ...prev, weaponType: type }))}
-                className={`w-full text-left px-3 py-2 rounded text-sm font-medium transition-colors ${
-                  filters.weaponType === type
+                onClick={() => setFilters(prev => ({ ...prev, weaponType: '' }))}
+                className={`w-full text-left px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                  !filters.weaponType
                     ? 'bg-gray-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700'
+                    : 'text-gray-300 hover:bg-gray-600'
                 }`}
               >
-                {type.toUpperCase()}
+                ALL WEAPONS
+                <span className="float-right text-xs opacity-60">
+                  {!filters.weaponType ? `[${weapons.length}]` : ''}
+                </span>
               </button>
-            ))}
+            </div>
+
+            <div className="mt-2 space-y-1">
+              {weaponTypes.map(type => {
+                const count = !filters.weaponType ? weapons.filter(w => w.weaponType === type).length : 0;
+                return (
+                  <button
+                    key={type}
+                    onClick={() => setFilters(prev => ({ ...prev, weaponType: type }))}
+                    className={`w-full text-left px-4 py-2 text-sm rounded transition-colors ${
+                      filters.weaponType === type
+                        ? 'bg-gray-600 text-white'
+                        : 'text-gray-400 hover:bg-gray-700 hover:text-gray-300'
+                    }`}
+                  >
+                    {type.toUpperCase()}
+                    {!filters.weaponType && (
+                      <span className="float-right text-xs opacity-60">{count}</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-6">
-          {/* Header with Results Count */}
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex gap-4">
+        <div className="flex-1 bg-gray-900">
+          {/* Header with slot filters and results count */}
+          <div className="flex justify-between items-center p-6 border-b border-gray-700">
+            <div className="flex gap-2">
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: '' }))}
-                className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                className={`px-4 py-2 text-sm rounded transition-colors ${
                   !filters.slot
-                    ? 'bg-gray-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    ? 'bg-gray-600 text-white border border-gray-500'
+                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
                 }`}
               >
                 All Slots
               </button>
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Primary' }))}
-                className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                className={`px-4 py-2 text-sm rounded transition-colors ${
                   filters.slot === 'Primary'
-                    ? 'bg-gray-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    ? 'bg-gray-600 text-white border border-gray-500'
+                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
                 }`}
               >
                 Primary
               </button>
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Power' }))}
-                className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                className={`px-4 py-2 text-sm rounded transition-colors ${
                   filters.slot === 'Power'
-                    ? 'bg-gray-600 text-white'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                    ? 'bg-gray-600 text-white border border-gray-500'
+                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
                 }`}
               >
                 Power
               </button>
             </div>
-            <div className="text-gray-400">
-              Results: {loading ? '...' : weapons.length}
+            <div className="text-gray-400 text-sm">
+              Results: <span className="text-white font-medium">{loading ? '...' : weapons.length}</span>
             </div>
           </div>
 
-          {/* Table Header */}
-          <div className="bg-gray-800 rounded-t-lg p-4">
-            <div className="grid grid-cols-12 gap-4 items-center text-gray-400 text-sm font-medium">
-              <div className="col-span-5">Name</div>
-              <div className="col-span-2">Combat Style</div>
-              <div className="col-span-2">Slot</div>
-              <div className="col-span-3">Characters</div>
+          {/* Table */}
+          <div className="p-6">
+            {/* Table Header */}
+            <div className="bg-gray-800 border border-gray-700 rounded-t-lg">
+              <div className="grid grid-cols-12 gap-6 px-6 py-4 border-b border-gray-700">
+                <div className="col-span-5 text-gray-400 text-sm font-medium uppercase tracking-wider">Name</div>
+                <div className="col-span-2 text-gray-400 text-sm font-medium uppercase tracking-wider">Combat Style</div>
+                <div className="col-span-2 text-gray-400 text-sm font-medium uppercase tracking-wider">Slot</div>
+                <div className="col-span-3 text-gray-400 text-sm font-medium uppercase tracking-wider">Characters</div>
+              </div>
+
+              {/* Table Body */}
+              {loading ? (
+                <div className="px-6 py-12 text-center text-gray-400">
+                  Loading weapons...
+                </div>
+              ) : weapons.length === 0 ? (
+                <div className="px-6 py-12 text-center text-gray-400">
+                  No weapons found matching your filters
+                </div>
+              ) : (
+                <div>
+                  {weapons.map((weapon, index) => {
+                    const rarityColors = getRarityColors(weapon.rarity);
+                    return (
+                      <div
+                        key={weapon.id}
+                        className={`grid grid-cols-12 gap-6 px-6 py-4 hover:bg-gray-700 transition-colors cursor-pointer ${
+                          index !== weapons.length - 1 ? 'border-b border-gray-700' : ''
+                        }`}
+                        onClick={() => router.push(`/weapons/${weapon.id}`)}
+                      >
+                        {/* Name Column */}
+                        <div className="col-span-5 flex items-center gap-4">
+                          {/* Weapon Image with rarity border */}
+                          <div className={`relative w-20 h-16 ${rarityColors.border} border-2 rounded-lg overflow-hidden ${rarityColors.bg}`}>
+                            {weapon.imageUrl ? (
+                              <img
+                                src={weapon.imageUrl}
+                                alt={weapon.name}
+                                className="w-full h-full object-contain p-1"
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center h-full text-gray-500 text-xs">
+                                No Image
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Weapon Info */}
+                          <div className="flex-1">
+                            {/* Rarity stars */}
+                            <div className="flex items-center gap-1 mb-1">
+                              <span className={`text-sm ${rarityColors.text}`}>
+                                {getRarityStars(weapon.rarity)}
+                              </span>
+                            </div>
+
+                            {/* Weapon name */}
+                            <h3 className={`text-lg font-semibold ${rarityColors.text} mb-1 uppercase tracking-wide`}>
+                              {weapon.name}
+                            </h3>
+
+                            {/* Weapon type and element */}
+                            <div className="flex items-center gap-2 text-sm">
+                              <span className="text-gray-400">🔫 {weapon.weaponType}</span>
+                              <span className={`px-2 py-0.5 rounded text-xs ${getElementColor(weapon.element)}`}>
+                                {weapon.element}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Combat Style Column */}
+                        <div className="col-span-2 flex items-center">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-300">⚡</span>
+                            <span className="text-gray-200 font-medium">{weapon.combatStyle}</span>
+                          </div>
+                        </div>
+
+                        {/* Slot Column */}
+                        <div className="col-span-2 flex items-center">
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
+                            weapon.slot === 'Primary'
+                              ? 'bg-green-900/50 text-green-300 border-green-600'
+                              : 'bg-purple-900/50 text-purple-300 border-purple-600'
+                          }`}>
+                            {weapon.slot === 'Primary' ? '🟢' : '🟣'} {weapon.slot}
+                          </span>
+                        </div>
+
+                        {/* Characters Column */}
+                        <div className="col-span-3 flex items-center">
+                          <div className="flex gap-2">
+                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg border border-orange-400 flex items-center justify-center">
+                              <span className="text-xs font-bold">H</span>
+                            </div>
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg border border-blue-400 flex items-center justify-center">
+                              <span className="text-xs font-bold">W</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Weapons List */}
-          {loading ? (
-            <div className="bg-gray-800 p-8 text-center text-gray-400">
-              Loading weapons...
-            </div>
-          ) : weapons.length === 0 ? (
-            <div className="bg-gray-800 p-8 text-center text-gray-400">
-              No weapons found matching your filters
-            </div>
-          ) : (
-            <div className="bg-gray-800 rounded-b-lg">
-              {weapons.map((weapon, index) => {
-                const rarityColors = getRarityColors(weapon.rarity);
-                return (
-                  <div
-                    key={weapon.id}
-                    className={`grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-700 transition-colors cursor-pointer ${
-                      index !== weapons.length - 1 ? 'border-b border-gray-700' : ''
-                    }`}
-                    onClick={() => router.push(`/weapons/${weapon.id}`)}
-                  >
-                    {/* Name Column with Image */}
-                    <div className="col-span-5 flex items-center gap-3">
-                      <div className={`w-16 h-12 ${rarityColors.bg} ${rarityColors.border} border-2 rounded flex items-center justify-center overflow-hidden`}>
-                        {weapon.imageUrl ? (
-                          <img
-                            src={weapon.imageUrl}
-                            alt={weapon.name}
-                            className="w-full h-full object-contain"
-                          />
-                        ) : (
-                          <div className="text-gray-500 text-xs">No Image</div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-400">
-                            {getRarityStars(weapon.rarity)}
-                          </span>
-                        </div>
-                        <h3 className={`font-medium ${rarityColors.text}`}>{weapon.name}</h3>
-                        <div className="flex items-center gap-1 text-xs text-gray-400">
-                          <span>{weapon.weaponType}</span>
-                          <span className={`px-1 rounded ${getElementColor(weapon.element)}`}>
-                            {weapon.element}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Combat Style Column */}
-                    <div className="col-span-2">
-                      <span className="text-gray-300">{weapon.combatStyle}</span>
-                    </div>
-
-                    {/* Slot Column */}
-                    <div className="col-span-2">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        weapon.slot === 'Primary'
-                          ? 'bg-green-900 text-green-300 border border-green-700'
-                          : 'bg-purple-900 text-purple-300 border border-purple-700'
-                      }`}>
-                        {weapon.slot}
-                      </span>
-                    </div>
-
-                    {/* Characters Column */}
-                    <div className="col-span-3">
-                      <div className="flex gap-1">
-                        {/* Placeholder character icons */}
-                        <div className="w-6 h-6 bg-gray-700 rounded border border-gray-600"></div>
-                        <div className="w-6 h-6 bg-gray-700 rounded border border-gray-600"></div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
     </div>
