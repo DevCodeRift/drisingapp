@@ -235,7 +235,7 @@ export default function Home() {
               className="text-lg"
               style={{ color: colors.text.secondary }}
             >
-              See what's happening in the community
+              See what&apos;s happening in the community
             </p>
           </motion.div>
 
