@@ -91,10 +91,10 @@ export default function WeaponsPage() {
           <div className="p-4 border-b border-gray-700">
             <div className="flex gap-2">
               <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
-                📄 All Characters
+                All Characters
               </button>
               <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
-                🔍 Filter Weapons
+                Filter Weapons
               </button>
             </div>
           </div>
@@ -217,12 +217,12 @@ export default function WeaponsPage() {
                         {/* Name Column */}
                         <div className="col-span-5 flex items-center gap-4">
                           {/* Weapon Image with rarity border */}
-                          <div className={`relative w-20 h-16 ${rarityColors.border} border-2 rounded-lg overflow-hidden ${rarityColors.bg}`}>
+                          <div className={`relative w-20 h-14 ${rarityColors.border} border-2 rounded overflow-hidden ${rarityColors.bg}`}>
                             {weapon.imageUrl ? (
                               <img
                                 src={weapon.imageUrl}
                                 alt={weapon.name}
-                                className="w-full h-full object-contain p-1"
+                                className="w-full h-full object-cover"
                               />
                             ) : (
                               <div className="flex items-center justify-center h-full text-gray-500 text-xs">
@@ -247,7 +247,7 @@ export default function WeaponsPage() {
 
                             {/* Weapon type and element */}
                             <div className="flex items-center gap-2 text-sm">
-                              <span className="text-gray-400">🔫 {weapon.weaponType}</span>
+                              <span className="text-gray-400">{weapon.weaponType}</span>
                               <span className={`px-2 py-0.5 rounded text-xs ${getElementColor(weapon.element)}`}>
                                 {weapon.element}
                               </span>
@@ -257,31 +257,28 @@ export default function WeaponsPage() {
 
                         {/* Combat Style Column */}
                         <div className="col-span-2 flex items-center">
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-300">⚡</span>
-                            <span className="text-gray-200 font-medium">{weapon.combatStyle}</span>
-                          </div>
+                          <span className="text-gray-200 font-medium">{weapon.combatStyle}</span>
                         </div>
 
                         {/* Slot Column */}
                         <div className="col-span-2 flex items-center">
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
+                          <span className={`inline-flex items-center px-3 py-1 rounded text-sm font-medium border ${
                             weapon.slot === 'Primary'
                               ? 'bg-green-900/50 text-green-300 border-green-600'
                               : 'bg-purple-900/50 text-purple-300 border-purple-600'
                           }`}>
-                            {weapon.slot === 'Primary' ? '🟢' : '🟣'} {weapon.slot}
+                            {weapon.slot}
                           </span>
                         </div>
 
                         {/* Characters Column */}
                         <div className="col-span-3 flex items-center">
                           <div className="flex gap-2">
-                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg border border-orange-400 flex items-center justify-center">
-                              <span className="text-xs font-bold">H</span>
+                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded border border-orange-400 flex items-center justify-center">
+                              <span className="text-xs font-bold text-white">H</span>
                             </div>
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg border border-blue-400 flex items-center justify-center">
-                              <span className="text-xs font-bold">W</span>
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded border border-blue-400 flex items-center justify-center">
+                              <span className="text-xs font-bold text-white">W</span>
                             </div>
                           </div>
                         </div>
