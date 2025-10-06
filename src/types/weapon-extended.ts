@@ -31,6 +31,12 @@ export interface WeaponPerk {
   description?: string;
   effect?: string;
   iconUrl?: string;
+
+  // Power Combination
+  basePower?: number;
+  activePerkUpgradePower?: number;
+  activeExtraFoundryEffectPower?: number;
+
   createdAt: Date;
 }
 
@@ -40,6 +46,11 @@ export interface WeaponPerkFormData {
   description?: string;
   effect?: string;
   iconUrl?: string;
+
+  // Power Combination
+  basePower?: number;
+  activePerkUpgradePower?: number;
+  activeExtraFoundryEffectPower?: number;
 }
 
 // ============================================================================
@@ -122,6 +133,21 @@ export interface WeaponMod {
   unlocksPerkUpgrade: boolean;
   perkUpgradeDescription?: string;
   iconUrl?: string;
+
+  // Mod Power (Refinement Power + Enhance Perk)
+  refinementPowerMin?: number; // At refinement level 1
+  refinementPowerMax?: number; // At refinement level 10
+  enhancePerkPower?: number;
+
+  // Stat Boost Range
+  statBoostMin?: number; // e.g., 1.4%
+  statBoostMax?: number; // e.g., 14%
+  statBoostType?: string; // e.g., "body shot dmg"
+
+  // Refinement Levels
+  refinementLevelMin?: number; // Default 1
+  refinementLevelMax?: number; // Default 10
+
   createdAt: Date;
 
   // Relations
@@ -139,6 +165,20 @@ export interface WeaponModFormData {
   unlocksPerkUpgrade: boolean;
   perkUpgradeDescription?: string;
   iconUrl?: string;
+
+  // Mod Power
+  refinementPowerMin?: number;
+  refinementPowerMax?: number;
+  enhancePerkPower?: number;
+
+  // Stat Boost Range
+  statBoostMin?: number;
+  statBoostMax?: number;
+  statBoostType?: string;
+
+  // Refinement Levels
+  refinementLevelMin?: number;
+  refinementLevelMax?: number;
 
   mainAttributeIds: number[];
   randomAttributeIds: number[];

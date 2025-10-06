@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminNav from '@/components/AdminNav';
+import ImageSelector from '@/components/ImageSelector';
 
 interface Trait {
   id: number;
@@ -10,6 +11,7 @@ interface Trait {
   type: string;
   description?: string;
   effect?: string;
+  iconUrl?: string;
 }
 
 export default function AdminTraitsPage() {
@@ -19,7 +21,8 @@ export default function AdminTraitsPage() {
     name: '',
     type: 'intrinsic',
     description: '',
-    effect: ''
+    effect: '',
+    iconUrl: ''
   });
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function AdminTraitsPage() {
         body: JSON.stringify(newTrait)
       });
       if (res.ok) {
-        setNewTrait({ name: '', type: 'intrinsic', description: '', effect: '' });
+        setNewTrait({ name: '', type: 'intrinsic', description: '', effect: '', iconUrl: '' });
         loadTraits();
         alert('Trait created!');
       }
@@ -122,6 +125,13 @@ export default function AdminTraitsPage() {
                 rows={3}
               />
             </div>
+            <div>
+              <ImageSelector
+                label="Icon/Logo"
+                value={newTrait.iconUrl || ''}
+                onChange={(url) => setNewTrait({...newTrait, iconUrl: url})}
+              />
+            </div>
             <button type="submit" className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded">
               Create Trait
             </button>
@@ -133,6 +143,7 @@ export default function AdminTraitsPage() {
           <table className="w-full">
             <thead className="bg-gray-700">
               <tr>
+                <th className="px-6 py-3 text-left">Icon</th>
                 <th className="px-6 py-3 text-left">Name</th>
                 <th className="px-6 py-3 text-left">Type</th>
                 <th className="px-6 py-3 text-left">Effect</th>
@@ -143,6 +154,11 @@ export default function AdminTraitsPage() {
             <tbody className="divide-y divide-gray-700">
               {traits.map(trait => (
                 <tr key={trait.id} className="hover:bg-gray-700/50">
+                  <td className="px-6 py-4">
+                    {trait.iconUrl && (
+                      <img src={trait.iconUrl} alt={trait.name} className="w-10 h-10 rounded" />
+                    )}
+                  </td>
                   <td className="px-6 py-4 font-medium">{trait.name}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded text-xs ${

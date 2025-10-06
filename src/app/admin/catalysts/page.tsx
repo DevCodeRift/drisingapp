@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminNav from '@/components/AdminNav';
+import ImageSelector from '@/components/ImageSelector';
 
 interface Catalyst {
   id: number;
@@ -10,6 +11,7 @@ interface Catalyst {
   description?: string;
   effect?: string;
   requirement?: string;
+  iconUrl?: string;
 }
 
 export default function AdminCatalystsPage() {
@@ -19,7 +21,8 @@ export default function AdminCatalystsPage() {
     name: '',
     description: '',
     effect: '',
-    requirement: ''
+    requirement: '',
+    iconUrl: ''
   });
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function AdminCatalystsPage() {
         body: JSON.stringify(newCatalyst)
       });
       if (res.ok) {
-        setNewCatalyst({ name: '', description: '', effect: '', requirement: '' });
+        setNewCatalyst({ name: '', description: '', effect: '', requirement: '', iconUrl: '' });
         loadCatalysts();
         alert('Catalyst created!');
       }
@@ -119,6 +122,13 @@ export default function AdminCatalystsPage() {
                 rows={3}
               />
             </div>
+            <div>
+              <ImageSelector
+                label="Icon/Logo"
+                value={newCatalyst.iconUrl || ''}
+                onChange={(url) => setNewCatalyst({...newCatalyst, iconUrl: url})}
+              />
+            </div>
             <button type="submit" className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded">
               Create Catalyst
             </button>
@@ -130,6 +140,7 @@ export default function AdminCatalystsPage() {
           <table className="w-full">
             <thead className="bg-gray-700">
               <tr>
+                <th className="px-6 py-3 text-left">Icon</th>
                 <th className="px-6 py-3 text-left">Name</th>
                 <th className="px-6 py-3 text-left">Effect</th>
                 <th className="px-6 py-3 text-left">Requirement</th>
@@ -140,6 +151,11 @@ export default function AdminCatalystsPage() {
             <tbody className="divide-y divide-gray-700">
               {catalysts.map(catalyst => (
                 <tr key={catalyst.id} className="hover:bg-gray-700/50">
+                  <td className="px-6 py-4">
+                    {catalyst.iconUrl && (
+                      <img src={catalyst.iconUrl} alt={catalyst.name} className="w-10 h-10 rounded" />
+                    )}
+                  </td>
                   <td className="px-6 py-4 font-medium">{catalyst.name}</td>
                   <td className="px-6 py-4 text-sm">{catalyst.effect}</td>
                   <td className="px-6 py-4 text-sm text-yellow-400">{catalyst.requirement}</td>
