@@ -38,6 +38,11 @@ export async function GET(
             catalysts: true,
             mods: true
           }
+        },
+        contentBlocks: {
+          orderBy: {
+            order: 'asc'
+          }
         }
       },
     });
@@ -86,7 +91,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { title, description, characterId, content, isPublic, artifacts, primaryWeapon, powerWeapon } = body;
+    const { title, description, characterId, content, isPublic, artifacts, primaryWeapon, powerWeapon, contentBlocks } = body;
 
     if (!title || !characterId) {
       return NextResponse.json(
@@ -95,9 +100,10 @@ export async function PUT(
       );
     }
 
-    // Delete existing artifacts and weapons
+    // Delete existing artifacts, weapons, and content blocks
     await prisma.buildArtifact.deleteMany({ where: { buildId: id } });
     await prisma.buildWeapon.deleteMany({ where: { buildId: id } });
+    await prisma.buildContentBlock.deleteMany({ where: { buildId: id } });
 
     // Update build with new data
     const build = await prisma.build.update({
@@ -180,6 +186,16 @@ export async function PUT(
                   }))
               }
             }))
+        },
+
+        // Create new content blocks
+        contentBlocks: {
+          create: (contentBlocks || []).map((block: any) => ({
+            type: block.type,
+            content: JSON.stringify(block.content),
+            order: block.order,
+            width: block.width || 'full'
+          }))
         }
       },
       include: {
@@ -203,6 +219,11 @@ export async function PUT(
             perks: true,
             catalysts: true,
             mods: true
+          }
+        },
+        contentBlocks: {
+          orderBy: {
+            order: 'asc'
           }
         }
       },

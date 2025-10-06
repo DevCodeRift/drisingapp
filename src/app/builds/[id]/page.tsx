@@ -6,6 +6,8 @@ import { useRouter, useParams } from 'next/navigation';
 import RichTextEditor from '@/components/RichTextEditor';
 import { getCharacterImage } from '@/lib/image-assets';
 import { getArtifactImagePath, formatArtifactName, type ArtifactSlot } from '@/lib/artifact-assets';
+import BlockRenderer from '@/components/builds/BlockRenderer';
+import { ContentBlock } from '@/types/blocks';
 
 interface Character {
   id: string;
@@ -87,6 +89,13 @@ interface Build {
   createdAt: string;
   artifacts: Artifact[];
   weapons: Weapon[];
+  contentBlocks?: Array<{
+    id: string;
+    type: string;
+    content: string;
+    order: number;
+    width: string;
+  }>;
 }
 
 interface Comment {
@@ -315,6 +324,18 @@ export default function BuildDetailPage() {
           </div>
         )}
 
+        {/* Custom Content Blocks */}
+        {build.contentBlocks && build.contentBlocks.length > 0 ? (
+          <BlockRenderer
+            blocks={build.contentBlocks.map((block: any) => ({
+              ...block,
+              content: JSON.parse(block.content)
+            }))}
+            artifacts={build.artifacts}
+            weapons={build.weapons}
+          />
+        ) : (
+          <>
         {/* Artifacts Section */}
         {build.artifacts && build.artifacts.length > 0 && (
           <div className="mb-10">
@@ -574,6 +595,8 @@ export default function BuildDetailPage() {
               ))}
             </div>
           </div>
+        )}
+          </>
         )}
 
         {/* Comments Section */}

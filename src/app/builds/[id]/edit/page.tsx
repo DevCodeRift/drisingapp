@@ -6,6 +6,8 @@ import { useRouter, useParams } from 'next/navigation';
 import { getCharacterImage } from '@/lib/image-assets';
 import ArtifactConfigurator from '@/components/builds/ArtifactConfigurator';
 import WeaponConfigurator from '@/components/builds/WeaponConfigurator';
+import BlockBuilder from '@/components/builds/BlockBuilder';
+import { ContentBlock } from '@/types/blocks';
 
 interface Character {
   id: string;
@@ -70,6 +72,9 @@ export default function EditBuildPage() {
   const [powerWeapon, setPowerWeapon] = useState<WeaponData>({
     weaponId: null, slot: 'Power', customName: '', gearLevel: 0, enhancementLevel: 0, rarity: 0, traits: [], perks: [], catalysts: [], mods: []
   });
+
+  // Content Blocks for layout customization
+  const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
 
   useEffect(() => {
     if (!session) {
@@ -148,6 +153,15 @@ export default function EditBuildPage() {
           setPowerWeapon(weaponData);
         }
       });
+
+      // Populate content blocks
+      if (buildData.contentBlocks && buildData.contentBlocks.length > 0) {
+        const parsedBlocks = buildData.contentBlocks.map((block: any) => ({
+          ...block,
+          content: JSON.parse(block.content)
+        }));
+        setContentBlocks(parsedBlocks);
+      }
     } catch (error) {
       console.error('Error loading data:', error);
       alert('Failed to load build data');
@@ -173,7 +187,8 @@ export default function EditBuildPage() {
         content: '',
         artifacts,
         primaryWeapon,
-        powerWeapon
+        powerWeapon,
+        contentBlocks
       };
 
       const res = await fetch(`/api/builds/${buildId}`, {
@@ -218,8 +233,8 @@ export default function EditBuildPage() {
         </div>
 
         {/* Progress Steps */}
-        <div className="mb-8 grid grid-cols-4 gap-4">
-          {['Basic Info', 'Artifacts', 'Weapons', 'Review'].map((step, idx) => (
+        <div className="mb-8 grid grid-cols-5 gap-4">
+          {['Basic Info', 'Artifacts', 'Weapons', 'Customize Layout', 'Review'].map((step, idx) => (
             <button
               key={step}
               onClick={() => setActiveStep(idx + 1)}
@@ -359,14 +374,43 @@ export default function EditBuildPage() {
                 onClick={() => setActiveStep(4)}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition"
               >
+                Next: Customize Layout →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Customize Layout */}
+        {activeStep === 4 && (
+          <div>
+            <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Customize Your Build Layout</h3>
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                Create a custom layout for your build guide. Add content blocks, rearrange them, and adjust their sizes to create a professional-looking guide similar to MOBAFire.
+              </p>
+            </div>
+
+            <BlockBuilder blocks={contentBlocks} onChange={setContentBlocks} />
+
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => setActiveStep(3)}
+                className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-3 rounded-lg transition"
+              >
+                ← Back
+              </button>
+              <button
+                onClick={() => setActiveStep(5)}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition"
+              >
                 Next: Review & Submit →
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 4: Review */}
-        {activeStep === 4 && (
+        {/* Step 5: Review */}
+        {activeStep === 5 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Review Your Changes</h2>
 
@@ -405,7 +449,7 @@ export default function EditBuildPage() {
 
             <div className="flex gap-4">
               <button
-                onClick={() => setActiveStep(3)}
+                onClick={() => setActiveStep(4)}
                 className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-3 rounded-lg transition"
               >
                 ← Back

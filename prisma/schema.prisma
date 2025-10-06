@@ -115,10 +115,28 @@ model Build {
   votes       Vote[]
   artifacts   BuildArtifact[]
   weapons     BuildWeapon[]
+  contentBlocks BuildContentBlock[]
 
   @@index([characterId])
   @@index([voteCount])
   @@index([isPublic])
+}
+
+// Content blocks for customizable build layouts
+model BuildContentBlock {
+  id        String   @id @default(cuid())
+  buildId   String
+  type      String   // "heading", "text", "video", "image", "divider", "stats", "artifacts", "weapons"
+  content   String   // JSON content specific to block type
+  order     Int      // Display order
+  width     String   @default("full") // "full", "half", "third"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  build Build @relation(fields: [buildId], references: [id], onDelete: Cascade)
+
+  @@index([buildId])
+  @@index([order])
 }
 
 // Build Artifacts (4 per build)

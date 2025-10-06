@@ -51,6 +51,11 @@ export async function GET(req: NextRequest) {
             catalysts: true,
             mods: true
           }
+        },
+        contentBlocks: {
+          orderBy: {
+            order: 'asc'
+          }
         }
       },
       orderBy: sortBy === 'recent'
@@ -78,7 +83,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { title, description, characterId, content, isPublic, artifacts, primaryWeapon, powerWeapon } = body;
+    const { title, description, characterId, content, isPublic, artifacts, primaryWeapon, powerWeapon, contentBlocks } = body;
 
     if (!title || !characterId) {
       return NextResponse.json(
@@ -172,6 +177,16 @@ export async function POST(req: NextRequest) {
                   }))
               }
             }))
+        },
+
+        // Create content blocks
+        contentBlocks: {
+          create: (contentBlocks || []).map((block: any) => ({
+            type: block.type,
+            content: JSON.stringify(block.content),
+            order: block.order,
+            width: block.width || 'full'
+          }))
         }
       },
       include: {
@@ -195,6 +210,11 @@ export async function POST(req: NextRequest) {
             perks: true,
             catalysts: true,
             mods: true
+          }
+        },
+        contentBlocks: {
+          orderBy: {
+            order: 'asc'
           }
         }
       },

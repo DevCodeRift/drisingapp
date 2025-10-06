@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { getCharacterImage } from '@/lib/image-assets';
 import ArtifactConfigurator from '@/components/builds/ArtifactConfigurator';
 import WeaponConfigurator from '@/components/builds/WeaponConfigurator';
+import BlockBuilder from '@/components/builds/BlockBuilder';
+import { ContentBlock } from '@/types/blocks';
 
 interface Character {
   id: string;
@@ -134,6 +136,9 @@ export default function CreateBuildPage() {
     mods: []
   });
 
+  // Content Blocks for layout customization
+  const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([]);
+
   useEffect(() => {
     if (!session) {
       router.push('/api/auth/signin');
@@ -179,7 +184,8 @@ export default function CreateBuildPage() {
         content: '', // Legacy field
         artifacts,
         primaryWeapon,
-        powerWeapon
+        powerWeapon,
+        contentBlocks
       };
 
       const res = await fetch('/api/builds', {
@@ -225,8 +231,8 @@ export default function CreateBuildPage() {
         </div>
 
         {/* Progress Steps */}
-        <div className="mb-8 grid grid-cols-4 gap-4">
-          {['Basic Info', 'Artifacts', 'Weapons', 'Review'].map((step, idx) => (
+        <div className="mb-8 grid grid-cols-5 gap-4">
+          {['Basic Info', 'Artifacts', 'Weapons', 'Customize Layout', 'Review'].map((step, idx) => (
             <button
               key={step}
               onClick={() => setActiveStep(idx + 1)}
@@ -366,14 +372,36 @@ export default function CreateBuildPage() {
                 onClick={() => setActiveStep(4)}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition"
               >
+                Next: Customize Layout →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Customize Layout */}
+        {activeStep === 4 && (
+          <div>
+            <BlockBuilder blocks={contentBlocks} onChange={setContentBlocks} />
+
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={() => setActiveStep(3)}
+                className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-3 rounded-lg transition"
+              >
+                ← Back
+              </button>
+              <button
+                onClick={() => setActiveStep(5)}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition"
+              >
                 Next: Review & Submit →
               </button>
             </div>
           </div>
         )}
 
-        {/* Step 4: Review */}
-        {activeStep === 4 && (
+        {/* Step 5: Review */}
+        {activeStep === 5 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-6">Review Your Build</h2>
 
@@ -412,7 +440,7 @@ export default function CreateBuildPage() {
 
             <div className="flex gap-4">
               <button
-                onClick={() => setActiveStep(3)}
+                onClick={() => setActiveStep(4)}
                 className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-3 rounded-lg transition"
               >
                 ← Back
