@@ -4,20 +4,21 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Weapon } from '@/types/weapons';
 import { useTheme } from '@/contexts/ThemeContext';
+import { slugToName } from '@/lib/slug';
 
-export default function WeaponDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function WeaponDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { colors } = useTheme();
   const router = useRouter();
   const [weapon, setWeapon] = useState<Weapon | null>(null);
   const [loading, setLoading] = useState(true);
-  const [weaponId, setWeaponId] = useState<string>('');
+  const [weaponSlug, setWeaponSlug] = useState<string>('');
 
   useEffect(() => {
     params.then(resolvedParams => {
-      setWeaponId(resolvedParams.id);
-      if (!resolvedParams.id) return;
+      setWeaponSlug(resolvedParams.slug);
+      if (!resolvedParams.slug) return;
 
-      fetch(`/api/weapons/${resolvedParams.id}`)
+      fetch(`/api/weapons/slug/${resolvedParams.slug}`)
         .then(res => res.json())
         .then((data: Weapon) => {
           setWeapon(data);

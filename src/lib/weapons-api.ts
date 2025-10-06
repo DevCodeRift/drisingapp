@@ -153,48 +153,46 @@ export async function getWeaponBySlug(req: Request, res: Response, db: DatabaseC
   try {
     const { slug } = req.params;
 
-    const sql = `
-      SELECT
-        w.*,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', wm.id,
-          'category', wm.category,
-          'name', wm.name,
-          'effect', wm.effect,
-          'statValue', wm.stat_value,
-          'statType', wm.stat_type,
-          'displayOrder', wm.display_order
-        )) FILTER (WHERE wm.id IS NOT NULL) as mods,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', c.id,
-          'name', c.name,
-          'role', c.role,
-          'rarity', c.rarity,
-          'imageUrl', c.image_url
-        )) FILTER (WHERE c.id IS NOT NULL) as compatible_characters,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', p.id,
-          'perkName', p.perk_name,
-          'perkDescription', p.perk_description,
-          'perkType', p.perk_type,
-          'displayOrder', p.display_order
-        )) FILTER (WHERE p.id IS NOT NULL) as perks
-      FROM weapons w
-      LEFT JOIN weapon_mods wm ON w.id = wm.weapon_id
-      LEFT JOIN weapon_character_compatibility wcc ON w.id = wcc.weapon_id
-      LEFT JOIN characters c ON wcc.character_id = c.id
-      LEFT JOIN perks p ON w.id = p.weapon_id
-      WHERE w.slug = $1
-      GROUP BY w.id
-    `;
-
+    // Simple query to get single weapon by slug (using same table structure as getWeaponById)
+    const sql = `SELECT * FROM "Weapon" WHERE slug = $1`;
     const result = await db.query(sql, [slug]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Weapon not found' });
     }
 
-    res.json(mapDatabaseToWeapon(result.rows[0]));
+    // Map the result to the expected format (same as getWeaponById)
+    const row = result.rows[0];
+    const weapon = {
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      rarity: row.rarity,
+      weaponType: row.weaponType,
+      basePower: row.basePower,
+      combatStyle: row.combatStyle,
+      element: row.element,
+      slot: row.slot,
+      imageUrl: row.imageUrl,
+      dps: row.dps,
+      precisionBonus: row.precisionBonus,
+      magazineCap: row.magazineCap,
+      rateOfFire: row.rateOfFire,
+      maxAmmo: row.maxAmmo,
+      damage: row.damage,
+      reloadSpeed: row.reloadSpeed,
+      stability: row.stability,
+      handling: row.handling,
+      range: row.range,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      // Empty arrays for now - we can add these back later
+      mods: [],
+      compatibleCharacters: [],
+      perks: []
+    };
+
+    res.json(weapon);
   } catch (error) {
     console.error('Error fetching weapon:', error);
     res.status(500).json({ error: 'Failed to fetch weapon' });
