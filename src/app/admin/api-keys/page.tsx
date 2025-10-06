@@ -20,17 +20,39 @@ export default function ApiKeysPage() {
   const { colors } = useTheme();
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
   const [newKeyName, setNewKeyName] = useState('');
   const [creating, setCreating] = useState(false);
   const [showKey, setShowKey] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!session) {
-      router.push('/api/auth/signin');
-    } else {
+    checkAdminStatus();
+  }, [session]);
+
+  useEffect(() => {
+    if (isAdmin) {
       fetchApiKeys();
     }
-  }, [session]);
+  }, [isAdmin]);
+
+  const checkAdminStatus = async () => {
+    if (!session) {
+      setCheckingAdmin(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/check');
+      const data = await response.json();
+      setIsAdmin(data.isAdmin);
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setIsAdmin(false);
+    } finally {
+      setCheckingAdmin(false);
+    }
+  };
 
   const fetchApiKeys = async () => {
     try {
@@ -117,8 +139,33 @@ export default function ApiKeysPage() {
     alert('API key copied to clipboard!');
   };
 
-  if (!session) {
-    return null;
+  if (checkingAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background }}>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: colors.primary }}></div>
+      </div>
+    );
+  }
+
+  if (!session || !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background }}>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4" style={{ color: colors.text.primary }}>
+            Access Denied
+          </h1>
+          <p style={{ color: colors.text.secondary }} className="mb-4">
+            You must be an admin to access this page.
+          </p>
+          <button
+            onClick={() => router.push('/admin')}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition font-semibold"
+          >
+            Go to Admin Dashboard
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (loading) {
