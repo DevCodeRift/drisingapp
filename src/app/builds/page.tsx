@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Character {
   id: string;
@@ -30,6 +31,7 @@ interface Build {
 
 export default function BuildsPage() {
   const { data: session } = useSession();
+  const { colors } = useTheme();
   const router = useRouter();
   const [builds, setBuilds] = useState<Build[]>([]);
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -95,14 +97,20 @@ export default function BuildsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Character Builds</h1>
+          <h1 className="text-4xl font-bold" style={{ color: colors.text.primary }}>Character Builds</h1>
           {session && (
             <button
               onClick={() => router.push('/builds/create')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition min-h-[44px] flex items-center"
+              className="text-white px-6 py-2 rounded-lg transition min-h-[44px] flex items-center"
+              style={{
+                backgroundColor: colors.primary,
+                '&:hover': { backgroundColor: colors.accent }
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.accent}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
             >
               Create Build
             </button>
@@ -114,7 +122,12 @@ export default function BuildsPage() {
           <select
             value={selectedCharacter}
             onChange={(e) => setSelectedCharacter(e.target.value)}
-            className="bg-white text-gray-900 px-4 py-2.5 rounded-md border border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:outline-none transition-all min-h-[44px]"
+            className="px-4 py-2.5 rounded-md border focus:outline-none transition-all min-h-[44px]"
+            style={{
+              backgroundColor: colors.surface,
+              color: colors.text.primary,
+              borderColor: colors.border.primary
+            }}
           >
             <option value="">All Characters</option>
             {characters.map((char) => (
@@ -127,7 +140,12 @@ export default function BuildsPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
-            className="bg-white text-gray-900 px-4 py-2.5 rounded-md border border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:outline-none transition-all min-h-[44px]"
+            className="px-4 py-2.5 rounded-md border focus:outline-none transition-all min-h-[44px]"
+            style={{
+              backgroundColor: colors.surface,
+              color: colors.text.primary,
+              borderColor: colors.border.primary
+            }}
           >
             <option value="upvotes">Most Upvoted</option>
             <option value="recent">Most Recent</option>
@@ -136,9 +154,9 @@ export default function BuildsPage() {
 
         {/* Builds List */}
         {loading ? (
-          <div className="text-center py-8 text-gray-600">Loading builds...</div>
+          <div className="text-center py-8" style={{ color: colors.text.secondary }}>Loading builds...</div>
         ) : builds.length === 0 ? (
-          <div className="text-center py-8 text-gray-600">
+          <div className="text-center py-8" style={{ color: colors.text.secondary }}>
             No builds found. Be the first to create one!
           </div>
         ) : (
@@ -146,25 +164,42 @@ export default function BuildsPage() {
             {builds.map((build) => (
               <div
                 key={build.id}
-                className="group bg-white border border-gray-300 rounded-lg overflow-hidden hover:border-blue-400 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                className="group rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer border"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border.primary
+                }}
+                onMouseOver={(e) => e.currentTarget.style.borderColor = colors.primary}
+                onMouseOut={(e) => e.currentTarget.style.borderColor = colors.border.primary}
                 onClick={() => router.push(`/builds/${build.id}`)}
               >
                 {/* Character Image Background */}
                 {build.character.imageUrl && (
-                  <div className="relative h-32 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden">
+                  <div className="relative h-32 overflow-hidden" style={{
+                    background: `linear-gradient(to bottom, ${colors.surface}, ${colors.background})`
+                  }}>
                     <img
                       src={build.character.imageUrl}
                       alt={build.character.name}
                       className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-gray-50 via-transparent"></div>
+                    <div className="absolute inset-0" style={{
+                      background: `linear-gradient(to top, ${colors.surface}, transparent)`
+                    }}></div>
                   </div>
                 )}
 
                 <div className="p-5">
                   {/* Character Tag */}
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded border border-blue-200">
+                    <span
+                      className="px-2 py-1 text-xs font-semibold rounded border"
+                      style={{
+                        backgroundColor: colors.primary + '20',
+                        color: colors.primary,
+                        borderColor: colors.primary + '40'
+                      }}
+                    >
                       {build.character.name}
                     </span>
                     <div className="flex items-center gap-1 ml-auto">
@@ -173,11 +208,12 @@ export default function BuildsPage() {
                           e.stopPropagation();
                           handleUpvote(build.id);
                         }}
-                        className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition ${
-                          hasUpvoted(build)
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                        }`}
+                        className="flex items-center gap-1 px-2 py-1 rounded text-sm transition"
+                        style={{
+                          backgroundColor: hasUpvoted(build) ? colors.primary : colors.surface,
+                          color: hasUpvoted(build) ? '#ffffff' : colors.text.secondary,
+                          border: `1px solid ${hasUpvoted(build) ? colors.primary : colors.border.secondary}`
+                        }}
                       >
                         <span>▲</span>
                         <span className="font-semibold">{build.voteCount || 0}</span>
@@ -186,17 +222,19 @@ export default function BuildsPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="text-lg font-bold mb-2 transition-colors line-clamp-2" style={{
+                    color: colors.text.primary
+                  }}>
                     {build.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                  <p className="text-sm mb-3 line-clamp-2" style={{ color: colors.text.secondary }}>
                     {build.description}
                   </p>
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center justify-between text-xs" style={{ color: colors.text.muted }}>
                     <span>by {build.user.name}</span>
                     <span>{new Date(build.createdAt).toLocaleDateString()}</span>
                   </div>
