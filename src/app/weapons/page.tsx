@@ -84,7 +84,8 @@ export default function WeaponsPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <div className="flex">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex">
         {/* Left Sidebar - Weapon Type Filters */}
         <div className="w-80 bg-gray-800 min-h-screen">
           {/* Top buttons */}
@@ -217,7 +218,7 @@ export default function WeaponsPage() {
                         {/* Name Column */}
                         <div className="col-span-5 flex items-center gap-4">
                           {/* Weapon Image with rarity border */}
-                          <div className={`relative w-20 h-14 ${rarityColors.border} border-2 rounded overflow-hidden ${rarityColors.bg}`}>
+                          <div className={`relative w-40 h-16 ${rarityColors.border} border-2 rounded overflow-hidden ${rarityColors.bg}`}>
                             {weapon.imageUrl ? (
                               <img
                                 src={weapon.imageUrl}
@@ -289,6 +290,7 @@ export default function WeaponsPage() {
               )}
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
