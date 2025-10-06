@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Weapon } from '@/types/weapons';
-import Navigation from '@/components/Navigation';
 
 export default function WeaponDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -45,7 +44,6 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
             <div className="text-gray-500">Loading weapon...</div>
@@ -58,7 +56,6 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
   if (!weapon) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Navigation />
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center py-12">
             <div className="text-gray-700 mb-4 text-lg">Weapon not found</div>
@@ -76,8 +73,6 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Back Button */}
         <button

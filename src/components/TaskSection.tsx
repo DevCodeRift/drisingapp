@@ -16,26 +16,26 @@ const getCategoryIcon = (category: TaskCategory) => {
   switch (category) {
     case TaskCategory.DAILY:
       return (
-        <div className="w-6 h-6 rounded bg-destiny-solar/10 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-destiny-solar"></div>
+        <div className="w-6 h-6 rounded bg-orange-100 flex items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-orange-500"></div>
         </div>
       )
     case TaskCategory.WEEKLY:
       return (
-        <div className="w-6 h-6 rounded bg-destiny-arc/10 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-destiny-arc"></div>
+        <div className="w-6 h-6 rounded bg-blue-100 flex items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
         </div>
       )
     case TaskCategory.MONTHLY:
       return (
-        <div className="w-6 h-6 rounded bg-destiny-gold/10 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-destiny-gold"></div>
+        <div className="w-6 h-6 rounded bg-yellow-100 flex items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
         </div>
       )
     case TaskCategory.SEASONAL:
       return (
-        <div className="w-6 h-6 rounded bg-destiny-void/10 flex items-center justify-center">
-          <div className="w-3 h-3 rounded-full bg-destiny-void"></div>
+        <div className="w-6 h-6 rounded bg-purple-100 flex items-center justify-center">
+          <div className="w-3 h-3 rounded-full bg-purple-500"></div>
         </div>
       )
     default:
@@ -50,28 +50,28 @@ const getCategoryIcon = (category: TaskCategory) => {
 const getColorClass = (color: string) => {
   switch (color) {
     case 'destiny-orange':
-      return 'text-destiny-solar'
+      return 'text-orange-600'
     case 'destiny-blue':
-      return 'text-destiny-arc'
+      return 'text-blue-600'
     case 'destiny-purple':
-      return 'text-destiny-void'
+      return 'text-purple-600'
     case 'destiny-gold':
-      return 'text-destiny-gold'
+      return 'text-yellow-600'
     default:
-      return 'text-text-primary'
+      return 'text-gray-900'
   }
 }
 
 const getProgressBarColor = (color: string) => {
   switch (color) {
     case 'destiny-orange':
-      return 'bg-destiny-solar'
+      return 'bg-orange-500'
     case 'destiny-blue':
-      return 'bg-destiny-arc'
+      return 'bg-blue-500'
     case 'destiny-purple':
-      return 'bg-destiny-void'
+      return 'bg-purple-500'
     case 'destiny-gold':
-      return 'bg-destiny-gold'
+      return 'bg-yellow-500'
     default:
       return 'bg-gray-400'
   }
@@ -89,20 +89,20 @@ export default function TaskSection({
   const totalTasks = tasks.length
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-card border border-gray-200 hover:shadow-card-hover transition-shadow">
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-300 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className={`text-lg font-semibold flex items-center gap-3 ${getColorClass(color)}`}>
             {getCategoryIcon(category)}
             {title}
           </h2>
-          <p className="text-text-secondary text-sm mt-1">{subtitle}</p>
+          <p className="text-gray-600 text-sm mt-1">{subtitle}</p>
         </div>
         <div className="text-right">
           <div className={`text-lg font-bold ${getColorClass(color)}`}>
             {completedTasks}/{totalTasks}
           </div>
-          <div className="text-xs text-text-muted">completed</div>
+          <div className="text-xs text-gray-500">completed</div>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export default function TaskSection({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
-            <p className="text-text-muted text-sm">No tasks available</p>
+            <p className="text-gray-500 text-sm">No tasks available</p>
           </div>
         ) : (
           tasks.map(task => (
@@ -135,7 +135,7 @@ export default function TaskSection({
               style={{ width: `${(completedTasks / totalTasks) * 100}%` }}
             />
           </div>
-          <div className="flex justify-between text-xs text-text-muted mt-2">
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
             <span>{completedTasks} completed</span>
             <span>{Math.round((completedTasks / totalTasks) * 100)}%</span>
           </div>

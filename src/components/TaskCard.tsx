@@ -29,11 +29,11 @@ export default function TaskCard({ task, onToggle }: TaskCardProps) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className={`font-medium text-sm ${task.completed ? 'line-through text-text-muted' : 'text-text-primary'}`}>
+          <h3 className={`font-medium text-sm ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
             {task.taskTemplate.title}
           </h3>
           {task.taskTemplate.description && (
-            <p className={`text-xs mt-1 ${task.completed ? 'text-text-muted line-through' : 'text-text-secondary'}`}>
+            <p className={`text-xs mt-1 ${task.completed ? 'text-gray-500 line-through' : 'text-gray-600'}`}>
               {task.taskTemplate.description}
             </p>
           )}

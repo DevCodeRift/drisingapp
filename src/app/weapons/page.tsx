@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Weapon } from '@/types/weapons';
-import Navigation from '@/components/Navigation';
 
 export default function WeaponsPage() {
   const router = useRouter();
@@ -75,7 +74,6 @@ export default function WeaponsPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}

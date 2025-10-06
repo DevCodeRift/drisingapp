@@ -95,14 +95,14 @@ export default function BuildsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-destiny-bg-primary text-white">
+    <div className="min-h-screen bg-white text-gray-900">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-destiny-orange">Character Builds</h1>
+          <h1 className="text-4xl font-bold text-gray-900">Character Builds</h1>
           {session && (
             <button
               onClick={() => router.push('/builds/create')}
-              className="bg-destiny-orange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition min-h-[44px] flex items-center"
             >
               Create Build
             </button>
@@ -114,7 +114,7 @@ export default function BuildsPage() {
           <select
             value={selectedCharacter}
             onChange={(e) => setSelectedCharacter(e.target.value)}
-            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
+            className="bg-white text-gray-900 px-4 py-2.5 rounded-md border border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:outline-none transition-all min-h-[44px]"
           >
             <option value="">All Characters</option>
             {characters.map((char) => (
@@ -127,7 +127,7 @@ export default function BuildsPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
-            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
+            className="bg-white text-gray-900 px-4 py-2.5 rounded-md border border-gray-300 hover:border-gray-400 focus:border-blue-500 focus:outline-none transition-all min-h-[44px]"
           >
             <option value="upvotes">Most Upvoted</option>
             <option value="recent">Most Recent</option>
@@ -136,9 +136,9 @@ export default function BuildsPage() {
 
         {/* Builds List */}
         {loading ? (
-          <div className="text-center py-8">Loading builds...</div>
+          <div className="text-center py-8 text-gray-600">Loading builds...</div>
         ) : builds.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
+          <div className="text-center py-8 text-gray-600">
             No builds found. Be the first to create one!
           </div>
         ) : (
@@ -146,25 +146,25 @@ export default function BuildsPage() {
             {builds.map((build) => (
               <div
                 key={build.id}
-                className="group bg-destiny-bg-secondary border border-destiny-border-subtle rounded-lg overflow-hidden hover:border-destiny-orange hover:shadow-destiny-card transition-all duration-300 cursor-pointer"
+                className="group bg-white border border-gray-300 rounded-lg overflow-hidden hover:border-blue-400 hover:shadow-lg transition-all duration-300 cursor-pointer"
                 onClick={() => router.push(`/builds/${build.id}`)}
               >
                 {/* Character Image Background */}
                 {build.character.imageUrl && (
-                  <div className="relative h-32 bg-gradient-to-b from-destiny-bg-tertiary to-destiny-bg-secondary overflow-hidden">
+                  <div className="relative h-32 bg-gradient-to-b from-gray-100 to-gray-50 overflow-hidden">
                     <img
                       src={build.character.imageUrl}
                       alt={build.character.name}
                       className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-destiny-bg-secondary via-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-50 via-transparent"></div>
                   </div>
                 )}
 
                 <div className="p-5">
                   {/* Character Tag */}
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-1 text-xs font-semibold bg-destiny-blue/20 text-destiny-blue rounded">
+                    <span className="px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded border border-blue-200">
                       {build.character.name}
                     </span>
                     <div className="flex items-center gap-1 ml-auto">
@@ -175,8 +175,8 @@ export default function BuildsPage() {
                         }}
                         className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition ${
                           hasUpvoted(build)
-                            ? 'bg-destiny-orange text-white'
-                            : 'bg-destiny-bg-tertiary text-destiny-text-secondary hover:text-destiny-orange'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                         }`}
                       >
                         <span>▲</span>
@@ -186,17 +186,17 @@ export default function BuildsPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg font-bold text-destiny-text-primary mb-2 group-hover:text-destiny-orange transition-colors line-clamp-2">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
                     {build.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-destiny-text-secondary mb-3 line-clamp-2">
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
                     {build.description}
                   </p>
 
                   {/* Meta */}
-                  <div className="flex items-center justify-between text-xs text-destiny-text-muted">
+                  <div className="flex items-center justify-between text-xs text-gray-500">
                     <span>by {build.user.name}</span>
                     <span>{new Date(build.createdAt).toLocaleDateString()}</span>
                   </div>
