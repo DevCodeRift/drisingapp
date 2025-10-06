@@ -46,29 +46,7 @@ export default function WeaponsPage() {
     'Shotgun', 'Sidearm', 'Sniper Rifle', 'Submachine Gun', 'Sword'
   ];
 
-  const clearFilters = () => {
-    setFilters({ slot: '', weaponType: '', element: '', rarity: '' });
-  };
 
-  const getFilterButtonStyle = (isActive: boolean, variant: 'primary' | 'secondary' = 'secondary') => {
-    if (variant === 'primary') {
-      return isActive
-        ? 'bg-blue-600 text-white border-2 border-blue-600 shadow-sm'
-        : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 shadow-sm';
-    }
-    return isActive
-      ? 'bg-blue-600 text-white border border-blue-600 shadow-sm'
-      : 'bg-white text-gray-900 border border-gray-300 hover:border-gray-400 hover:bg-gray-50 shadow-sm';
-  };
-
-  const getElementColor = (element: string) => {
-    switch (element) {
-      case 'Arc': return 'text-blue-400 bg-blue-900/20';
-      case 'Solar': return 'text-orange-400 bg-orange-900/20';
-      case 'Void': return 'text-purple-400 bg-purple-900/20';
-      default: return 'text-gray-400 bg-gray-700/20';
-    }
-  };
 
   const getRarityStars = (rarity: number) => {
     return '★'.repeat(rarity);
@@ -132,14 +110,17 @@ export default function WeaponsPage() {
 
           {/* Weapon type filters */}
           <div className="p-4">
-            <div className="bg-gray-700 rounded-lg">
+            <div
+              className="rounded-lg"
+              style={{ backgroundColor: colors.button.secondary }}
+            >
               <button
                 onClick={() => setFilters(prev => ({ ...prev, weaponType: '' }))}
-                className={`w-full text-left px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                  !filters.weaponType
-                    ? 'bg-gray-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-600'
-                }`}
+                className="w-full text-left px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                style={{
+                  backgroundColor: !filters.weaponType ? colors.primary : 'transparent',
+                  color: !filters.weaponType ? '#ffffff' : colors.text.primary
+                }}
               >
                 ALL WEAPONS
                 <span className="float-right text-xs opacity-60">
@@ -155,11 +136,11 @@ export default function WeaponsPage() {
                   <button
                     key={type}
                     onClick={() => setFilters(prev => ({ ...prev, weaponType: type }))}
-                    className={`w-full text-left px-4 py-2 text-sm rounded transition-colors ${
-                      filters.weaponType === type
-                        ? 'bg-gray-600 text-white'
-                        : 'text-gray-400 hover:bg-gray-700 hover:text-gray-300'
-                    }`}
+                    className="w-full text-left px-4 py-2 text-sm rounded transition-colors"
+                    style={{
+                      backgroundColor: filters.weaponType === type ? colors.primary : 'transparent',
+                      color: filters.weaponType === type ? '#ffffff' : colors.text.secondary
+                    }}
                   >
                     {type.toUpperCase()}
                     {!filters.weaponType && (
@@ -173,64 +154,111 @@ export default function WeaponsPage() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 bg-gray-900">
+        <div
+          className="flex-1"
+          style={{ backgroundColor: colors.background }}
+        >
           {/* Header with slot filters and results count */}
-          <div className="flex justify-between items-center p-6 border-b border-gray-700">
+          <div
+            className="flex justify-between items-center p-6 border-b"
+            style={{ borderColor: colors.border.primary }}
+          >
             <div className="flex gap-2">
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: '' }))}
-                className={`px-4 py-2 text-sm rounded transition-colors ${
-                  !filters.slot
-                    ? 'bg-gray-600 text-white border border-gray-500'
-                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
-                }`}
+                className="px-4 py-2 text-sm rounded transition-colors border"
+                style={{
+                  backgroundColor: !filters.slot ? colors.primary : colors.button.secondary,
+                  color: !filters.slot ? '#ffffff' : colors.text.primary,
+                  borderColor: colors.border.primary
+                }}
               >
                 All Slots
               </button>
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Primary' }))}
-                className={`px-4 py-2 text-sm rounded transition-colors ${
-                  filters.slot === 'Primary'
-                    ? 'bg-gray-600 text-white border border-gray-500'
-                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
-                }`}
+                className="px-4 py-2 text-sm rounded transition-colors border"
+                style={{
+                  backgroundColor: filters.slot === 'Primary' ? colors.primary : colors.button.secondary,
+                  color: filters.slot === 'Primary' ? '#ffffff' : colors.text.primary,
+                  borderColor: colors.border.primary
+                }}
               >
                 Primary
               </button>
               <button
                 onClick={() => setFilters(prev => ({ ...prev, slot: 'Power' }))}
-                className={`px-4 py-2 text-sm rounded transition-colors ${
-                  filters.slot === 'Power'
-                    ? 'bg-gray-600 text-white border border-gray-500'
-                    : 'bg-gray-700 text-gray-300 border border-gray-600 hover:bg-gray-600'
-                }`}
+                className="px-4 py-2 text-sm rounded transition-colors border"
+                style={{
+                  backgroundColor: filters.slot === 'Power' ? colors.primary : colors.button.secondary,
+                  color: filters.slot === 'Power' ? '#ffffff' : colors.text.primary,
+                  borderColor: colors.border.primary
+                }}
               >
                 Power
               </button>
             </div>
-            <div className="text-gray-400 text-sm">
-              Results: <span className="text-white font-medium">{loading ? '...' : weapons.length}</span>
+            <div
+              className="text-sm"
+              style={{ color: colors.text.secondary }}
+            >
+              Results: <span style={{ color: colors.text.primary, fontWeight: 'medium' }}>{loading ? '...' : weapons.length}</span>
             </div>
           </div>
 
           {/* Table */}
           <div className="p-6">
             {/* Table Header */}
-            <div className="bg-gray-800 border border-gray-700 rounded-t-lg">
-              <div className="grid grid-cols-12 gap-6 px-6 py-4 border-b border-gray-700">
-                <div className="col-span-5 text-gray-400 text-sm font-medium uppercase tracking-wider">Name</div>
-                <div className="col-span-2 text-gray-400 text-sm font-medium uppercase tracking-wider">Combat Style</div>
-                <div className="col-span-2 text-gray-400 text-sm font-medium uppercase tracking-wider">Slot</div>
-                <div className="col-span-3 text-gray-400 text-sm font-medium uppercase tracking-wider">Characters</div>
+            <div
+              className="border rounded-t-lg"
+              style={{
+                backgroundColor: colors.surface,
+                borderColor: colors.border.primary
+              }}
+            >
+              <div
+                className="grid grid-cols-12 gap-6 px-6 py-4 border-b"
+                style={{ borderColor: colors.border.primary }}
+              >
+                <div
+                  className="col-span-5 text-sm font-medium uppercase tracking-wider"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Name
+                </div>
+                <div
+                  className="col-span-2 text-sm font-medium uppercase tracking-wider"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Combat Style
+                </div>
+                <div
+                  className="col-span-2 text-sm font-medium uppercase tracking-wider"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Slot
+                </div>
+                <div
+                  className="col-span-3 text-sm font-medium uppercase tracking-wider"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Characters
+                </div>
               </div>
 
               {/* Table Body */}
               {loading ? (
-                <div className="px-6 py-12 text-center text-gray-400">
+                <div
+                  className="px-6 py-12 text-center"
+                  style={{ color: colors.text.secondary }}
+                >
                   Loading weapons...
                 </div>
               ) : weapons.length === 0 ? (
-                <div className="px-6 py-12 text-center text-gray-400">
+                <div
+                  className="px-6 py-12 text-center"
+                  style={{ color: colors.text.secondary }}
+                >
                   No weapons found matching your filters
                 </div>
               ) : (
@@ -240,9 +268,16 @@ export default function WeaponsPage() {
                     return (
                       <div
                         key={weapon.id}
-                        className={`grid grid-cols-12 gap-6 px-6 py-4 hover:bg-gray-700 transition-colors cursor-pointer ${
-                          index !== weapons.length - 1 ? 'border-b border-gray-700' : ''
-                        }`}
+                        className="grid grid-cols-12 gap-6 px-6 py-4 transition-colors cursor-pointer"
+                        style={{
+                          borderBottom: index !== weapons.length - 1 ? `1px solid ${colors.border.primary}` : 'none'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.button.secondary;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
                         onClick={() => router.push(`/weapons/${weapon.id}`)}
                       >
                         {/* Name Column */}
@@ -256,7 +291,7 @@ export default function WeaponsPage() {
                                 className="w-full h-full object-cover"
                               />
                             ) : (
-                              <div className="flex items-center justify-center h-full text-gray-500 text-xs">
+                              <div className="flex items-center justify-center h-full text-xs" style={{ color: colors.text.secondary }}>
                                 No Image
                               </div>
                             )}
@@ -278,8 +313,20 @@ export default function WeaponsPage() {
 
                             {/* Weapon type and element */}
                             <div className="flex items-center gap-2 text-sm">
-                              <span className="text-gray-400">{weapon.weaponType}</span>
-                              <span className={`px-2 py-0.5 rounded text-xs ${getElementColor(weapon.element)}`}>
+                              <span style={{ color: colors.text.secondary }}>{weapon.weaponType}</span>
+                              <span
+                                className="px-2 py-0.5 rounded text-xs"
+                                style={{
+                                  backgroundColor: weapon.element === 'Arc' ? 'rgb(37 99 235 / 0.2)' :
+                                                   weapon.element === 'Solar' ? 'rgb(249 115 22 / 0.2)' :
+                                                   weapon.element === 'Void' ? 'rgb(147 51 234 / 0.2)' :
+                                                   `${colors.text.secondary}20`,
+                                  color: weapon.element === 'Arc' ? '#60a5fa' :
+                                         weapon.element === 'Solar' ? '#fb923c' :
+                                         weapon.element === 'Void' ? '#a78bfa' :
+                                         colors.text.secondary
+                                }}
+                              >
                                 {weapon.element}
                               </span>
                             </div>
@@ -288,16 +335,19 @@ export default function WeaponsPage() {
 
                         {/* Combat Style Column */}
                         <div className="col-span-2 flex items-center">
-                          <span className="text-gray-200 font-medium">{weapon.combatStyle}</span>
+                          <span className="font-medium" style={{ color: colors.text.primary }}>{weapon.combatStyle}</span>
                         </div>
 
                         {/* Slot Column */}
                         <div className="col-span-2 flex items-center">
-                          <span className={`inline-flex items-center px-3 py-1 rounded text-sm font-medium border ${
-                            weapon.slot === 'Primary'
-                              ? 'bg-green-900/50 text-green-300 border-green-600'
-                              : 'bg-purple-900/50 text-purple-300 border-purple-600'
-                          }`}>
+                          <span
+                            className="inline-flex items-center px-3 py-1 rounded text-sm font-medium border"
+                            style={{
+                              backgroundColor: weapon.slot === 'Primary' ? 'rgb(20 83 45 / 0.5)' : 'rgb(88 28 135 / 0.5)',
+                              color: weapon.slot === 'Primary' ? '#86efac' : '#d8b4fe',
+                              borderColor: weapon.slot === 'Primary' ? '#16a34a' : '#9333ea'
+                            }}
+                          >
                             {weapon.slot}
                           </span>
                         </div>
