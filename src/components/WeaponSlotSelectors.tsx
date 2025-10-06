@@ -32,7 +32,7 @@ interface WeaponSlotSelectorsProps {
   perk1Id?: number;
   perk2Id?: number;
   catalystId?: number;
-  onChange: (field: string, value: number | undefined) => void;
+  onChange: (field: string, value: any) => void;
 }
 
 export default function WeaponSlotSelectors({
