@@ -1,96 +1,252 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import LoginButton from '@/components/LoginButton'
+import { useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import LoginButton from '@/components/LoginButton';
+
+interface RecentActivity {
+  builds: Array<{ id: string; title: string; character: { name: string }; user: { name: string }; createdAt: string }>;
+  news: Array<{ id: string; title: string; type: string; user: { name: string }; createdAt: string }>;
+  lfg: Array<{ id: string; activity: string; user: { name: string }; createdAt: string }>;
+  clans: Array<{ id: string; clanName: string; user: { name: string }; createdAt: string }>;
+}
 
 export default function Home() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [activity, setActivity] = useState<RecentActivity>({ builds: [], news: [], lfg: [], clans: [] });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (session) {
-      router.push('/dashboard')
-    }
-  }, [session, router])
+    fetchRecentActivity();
+  }, []);
 
-  if (status === 'loading') {
+  const fetchRecentActivity = async () => {
+    try {
+      const [buildsRes, newsRes, lfgRes, clansRes] = await Promise.all([
+        fetch('/api/builds?sortBy=recent').then(r => r.json()),
+        fetch('/api/news?sortBy=recent').then(r => r.json()),
+        fetch('/api/lfg').then(r => r.json()),
+        fetch('/api/clans').then(r => r.json()),
+      ]);
+
+      setActivity({
+        builds: buildsRes.slice(0, 5),
+        news: newsRes.slice(0, 5),
+        lfg: lfgRes.slice(0, 5),
+        clans: clansRes.slice(0, 5),
+      });
+    } catch (error) {
+      console.error('Error fetching activity:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-destiny-darker via-destiny-dark to-black">
-        <div className="relative">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-destiny-orange"></div>
-          <div className="absolute inset-0 animate-ping rounded-full h-32 w-32 border border-destiny-orange opacity-20"></div>
-        </div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-destiny-orange"></div>
       </div>
-    )
+    );
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden bg-gradient-to-br from-destiny-darker via-destiny-dark to-black">
-      {/* Sci-fi background effects */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-destiny-orange rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-destiny-blue rounded-full blur-3xl"></div>
-      </div>
+    <main className="min-h-screen bg-gradient-to-br from-destiny-darker via-destiny-dark to-black text-white">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-destiny-orange rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-destiny-blue rounded-full blur-3xl"></div>
+        </div>
 
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNDIsMTE0LDI3LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20"></div>
-
-      <div className="relative z-10 max-w-6xl mx-auto px-8 py-20 text-center">
-        {/* Hero section */}
-        <div className="mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-8 py-20 text-center">
           <div className="inline-block mb-6">
             <div className="px-6 py-2 bg-destiny-orange/10 border border-destiny-orange/30 rounded-full backdrop-blur-sm">
               <span className="text-destiny-orange font-semibold tracking-wider uppercase text-sm">Destiny Rising</span>
             </div>
           </div>
 
-          <h1 className="text-7xl md:text-8xl font-black mb-6 bg-gradient-to-r from-destiny-orange via-destiny-gold to-destiny-orange bg-clip-text text-transparent animate-pulse">
-            TASK MANAGER
+          <h1 className="text-6xl md:text-7xl font-black mb-6 bg-gradient-to-r from-destiny-orange via-destiny-gold to-destiny-orange bg-clip-text text-transparent">
+            Community Hub
           </h1>
 
-          <p className="text-2xl text-gray-300 mb-4 max-w-3xl mx-auto leading-relaxed">
-            Command your operations. Track your missions. Conquer the cosmos.
+          <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            Track tasks, share builds, find fireteams, and connect with the community
           </p>
 
-          <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto">
-            Stay ahead of every daily commission, weekly challenge, and seasonal event with precision tactical tracking.
-          </p>
+          {!session && <LoginButton />}
+        </div>
+      </div>
 
-          <LoginButton />
+      {/* Quick Links */}
+      <div className="max-w-7xl mx-auto px-8 py-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-16">
+          <button
+            onClick={() => router.push('/tasks')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-destiny-orange/20 hover:border-destiny-orange p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">✓</div>
+            <div className="font-bold text-destiny-orange">Tasks</div>
+          </button>
+
+          <button
+            onClick={() => router.push('/builds')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-destiny-blue/20 hover:border-destiny-blue p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">⚔️</div>
+            <div className="font-bold text-destiny-blue">Builds</div>
+          </button>
+
+          <button
+            onClick={() => router.push('/news')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-destiny-gold/20 hover:border-destiny-gold p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">📰</div>
+            <div className="font-bold text-destiny-gold">News</div>
+          </button>
+
+          <button
+            onClick={() => router.push('/lfg')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-destiny-purple/20 hover:border-destiny-purple p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">👥</div>
+            <div className="font-bold text-destiny-purple">LFG</div>
+          </button>
+
+          <button
+            onClick={() => router.push('/clans')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-red-400/20 hover:border-red-400 p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">🛡️</div>
+            <div className="font-bold text-red-400">Clans</div>
+          </button>
+
+          <button
+            onClick={() => router.push('/achievements')}
+            className="group bg-destiny-dark/80 hover:bg-destiny-dark border border-green-400/20 hover:border-green-400 p-6 rounded-lg transition"
+          >
+            <div className="text-3xl mb-2">🏆</div>
+            <div className="font-bold text-green-400">Achievements</div>
+          </button>
         </div>
 
-        {/* Task categories showcase */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
-          <div className="group relative bg-gradient-to-br from-destiny-dark/80 to-destiny-darker/80 p-8 rounded-xl border border-destiny-orange/20 backdrop-blur-sm hover:border-destiny-orange/50 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-destiny-orange/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative">
-              <div className="text-4xl mb-4">☀️</div>
-              <h2 className="text-2xl font-bold text-destiny-orange mb-3">Daily Ops</h2>
-              <p className="text-gray-400">Monitor daily commissions and activities. Resets at 0200 UTC.</p>
-            </div>
+        {/* Recent Activity */}
+        <h2 className="text-3xl font-bold text-destiny-orange mb-8">Recent Activity</h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Recent Builds */}
+          <div className="bg-destiny-dark border border-gray-700 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-destiny-blue mb-4">Latest Builds</h3>
+            {activity.builds.length === 0 ? (
+              <p className="text-gray-400">No builds yet</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.builds.map((build) => (
+                  <div
+                    key={build.id}
+                    onClick={() => router.push(`/builds/${build.id}`)}
+                    className="bg-destiny-darker p-3 rounded cursor-pointer hover:bg-destiny-dark transition"
+                  >
+                    <div className="font-bold text-destiny-orange">{build.title}</div>
+                    <div className="text-sm text-gray-400">
+                      {build.character.name} • by {build.user.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => router.push('/builds')}
+              className="mt-4 text-destiny-blue hover:text-destiny-orange text-sm transition"
+            >
+              View all builds →
+            </button>
           </div>
 
-          <div className="group relative bg-gradient-to-br from-destiny-dark/80 to-destiny-darker/80 p-8 rounded-xl border border-destiny-blue/20 backdrop-blur-sm hover:border-destiny-blue/50 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-destiny-blue/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative">
-              <div className="text-4xl mb-4">📅</div>
-              <h2 className="text-2xl font-bold text-destiny-blue mb-3">Weekly Missions</h2>
-              <p className="text-gray-400">Execute weekly challenges and strategic objectives. Resets every Monday.</p>
-            </div>
+          {/* Recent News */}
+          <div className="bg-destiny-dark border border-gray-700 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-destiny-gold mb-4">Latest News</h3>
+            {activity.news.length === 0 ? (
+              <p className="text-gray-400">No news yet</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.news.map((post) => (
+                  <div
+                    key={post.id}
+                    onClick={() => router.push(`/news/${post.id}`)}
+                    className="bg-destiny-darker p-3 rounded cursor-pointer hover:bg-destiny-dark transition"
+                  >
+                    <div className="font-bold text-destiny-orange">{post.title}</div>
+                    <div className="text-sm text-gray-400">
+                      {post.type} • by {post.user.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => router.push('/news')}
+              className="mt-4 text-destiny-gold hover:text-destiny-orange text-sm transition"
+            >
+              View all news →
+            </button>
           </div>
 
-          <div className="group relative bg-gradient-to-br from-destiny-dark/80 to-destiny-darker/80 p-8 rounded-xl border border-destiny-purple/20 backdrop-blur-sm hover:border-destiny-purple/50 transition-all duration-300 hover:transform hover:scale-105">
-            <div className="absolute inset-0 bg-gradient-to-br from-destiny-purple/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <div className="relative">
-              <div className="text-4xl mb-4">🌟</div>
-              <h2 className="text-2xl font-bold text-destiny-purple mb-3">Seasonal Events</h2>
-              <p className="text-gray-400">Track time-limited operations and exclusive seasonal content.</p>
-            </div>
+          {/* Recent LFG */}
+          <div className="bg-destiny-dark border border-gray-700 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-destiny-purple mb-4">Active LFG</h3>
+            {activity.lfg.length === 0 ? (
+              <p className="text-gray-400">No active LFG posts</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.lfg.map((post) => (
+                  <div
+                    key={post.id}
+                    className="bg-destiny-darker p-3 rounded"
+                  >
+                    <div className="font-bold text-destiny-orange">{post.activity}</div>
+                    <div className="text-sm text-gray-400">by {post.user.name}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => router.push('/lfg')}
+              className="mt-4 text-destiny-purple hover:text-destiny-orange text-sm transition"
+            >
+              View all LFG →
+            </button>
+          </div>
+
+          {/* Recent Clans */}
+          <div className="bg-destiny-dark border border-gray-700 rounded-lg p-6">
+            <h3 className="text-xl font-bold text-red-400 mb-4">Recruiting Clans</h3>
+            {activity.clans.length === 0 ? (
+              <p className="text-gray-400">No clan recruitment posts</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.clans.map((post) => (
+                  <div
+                    key={post.id}
+                    className="bg-destiny-darker p-3 rounded"
+                  >
+                    <div className="font-bold text-destiny-orange">{post.clanName}</div>
+                    <div className="text-sm text-gray-400">by {post.user.name}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => router.push('/clans')}
+              className="mt-4 text-red-400 hover:text-destiny-orange text-sm transition"
+            >
+              View all clans →
+            </button>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

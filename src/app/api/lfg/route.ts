@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { activity, description, playerCount, region, expiresAt } = body;
+    const { activity, description, playerCount, region, expiresInMinutes } = body;
 
     if (!activity || !description || !playerCount) {
       return NextResponse.json(
@@ -52,13 +52,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Calculate expiration date
+    const expiresAt = expiresInMinutes
+      ? new Date(Date.now() + expiresInMinutes * 60 * 1000)
+      : null;
+
     const lfgPost = await prisma.lFGPost.create({
       data: {
         activity,
         description,
         playerCount: parseInt(playerCount),
         region,
-        expiresAt: expiresAt ? new Date(expiresAt) : null,
+        expiresAt,
         userId: session.user.id,
       },
       include: {

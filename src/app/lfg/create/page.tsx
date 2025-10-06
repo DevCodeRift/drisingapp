@@ -13,6 +13,7 @@ export default function CreateLFGPage() {
     description: '',
     playerCount: 1,
     region: '',
+    expiresInMinutes: 120, // default 2 hours
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -104,6 +105,24 @@ export default function CreateLFGPage() {
               <option value="NA">NA (North America)</option>
               <option value="EMEA">EMEA (Europe, Middle East, Africa)</option>
               <option value="APAC">APAC (Asia Pacific)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Post Expires In
+            </label>
+            <select
+              value={formData.expiresInMinutes}
+              onChange={(e) => setFormData({ ...formData, expiresInMinutes: parseInt(e.target.value) })}
+              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+            >
+              <option value={30}>30 minutes</option>
+              <option value={60}>1 hour</option>
+              <option value={120}>2 hours</option>
+              <option value={240}>4 hours</option>
+              <option value={480}>8 hours</option>
+              <option value={1440}>24 hours</option>
             </select>
           </div>
 

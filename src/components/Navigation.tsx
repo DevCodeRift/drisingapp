@@ -10,7 +10,7 @@ export default function Navigation() {
   const { data: session } = useSession();
 
   const navLinks = [
-    { href: '/dashboard', label: 'Tasks' },
+    { href: '/tasks', label: 'Tasks' },
     { href: '/builds', label: 'Builds' },
     { href: '/news', label: 'News' },
     { href: '/lfg', label: 'LFG' },
