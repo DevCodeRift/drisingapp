@@ -146,9 +146,10 @@ export default function BuildsPage() {
             {builds.map((build) => (
               <div
                 key={build.id}
-                className="bg-destiny-dark border border-gray-700 rounded-lg p-6 hover:border-destiny-orange transition"
+                className="bg-destiny-dark border border-gray-700 rounded-lg p-6 hover:border-destiny-orange transition cursor-pointer"
+                onClick={() => router.push(`/builds/${build.id}`)}
               >
-                <div className="flex justify-between items-start mb-4">
+                <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <h2 className="text-2xl font-bold text-destiny-orange mb-2">
                       {build.title}
@@ -162,7 +163,10 @@ export default function BuildsPage() {
                   </div>
 
                   <button
-                    onClick={() => handleUpvote(build.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpvote(build.id);
+                    }}
                     className={`flex flex-col items-center px-4 py-2 rounded-lg transition ${
                       hasUpvoted(build)
                         ? 'bg-destiny-orange text-white'
@@ -173,11 +177,6 @@ export default function BuildsPage() {
                     <span className="text-lg font-bold">{build.voteCount || 0}</span>
                   </button>
                 </div>
-
-                <div
-                  className="mt-4 text-gray-300 prose prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: build.content }}
-                />
               </div>
             ))}
           </div>

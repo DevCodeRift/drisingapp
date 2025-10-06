@@ -138,7 +138,8 @@ export default function NewsPage() {
             {news.map((post) => (
               <div
                 key={post.id}
-                className="bg-destiny-dark border border-gray-700 rounded-lg p-6 hover:border-destiny-orange transition"
+                className="bg-destiny-dark border border-gray-700 rounded-lg p-6 hover:border-destiny-orange transition cursor-pointer"
+                onClick={() => router.push(`/news/${post.id}`)}
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex-1">
@@ -153,28 +154,17 @@ export default function NewsPage() {
                     <h2 className="text-2xl font-bold text-destiny-orange mb-2">
                       {post.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+                    <div className="flex items-center gap-4 text-sm text-gray-400">
                       <span>by {post.user.name}</span>
                       <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                     </div>
-                    <div
-                      className="text-gray-300 prose prose-invert max-w-none"
-                      dangerouslySetInnerHTML={{ __html: post.content }}
-                    />
-                    {post.url && (
-                      <a
-                        href={post.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block mt-3 text-destiny-blue hover:text-destiny-orange transition"
-                      >
-                        View Content →
-                      </a>
-                    )}
                   </div>
 
                   <button
-                    onClick={() => handleUpvote(post.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpvote(post.id);
+                    }}
                     className={`flex flex-col items-center px-4 py-2 rounded-lg transition ${
                       hasUpvoted(post)
                         ? 'bg-destiny-orange text-white'
