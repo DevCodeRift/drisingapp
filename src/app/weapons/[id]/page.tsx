@@ -41,12 +41,22 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
     return '★'.repeat(rarity);
   };
 
+  const getRarityColors = (rarity: number) => {
+    switch (rarity) {
+      case 6: return { border: 'border-yellow-400', text: 'text-yellow-400', bg: 'bg-yellow-400/10' }; // Gold for 6 star
+      case 5: return { border: 'border-orange-400', text: 'text-orange-400', bg: 'bg-orange-400/10' }; // Orange for 5 star
+      case 4: return { border: 'border-purple-400', text: 'text-purple-400', bg: 'bg-purple-400/10' }; // Purple for 4 star
+      case 3: return { border: 'border-blue-400', text: 'text-blue-400', bg: 'bg-blue-400/10' }; // Blue for 3 star
+      default: return { border: 'border-gray-400', text: 'text-gray-400', bg: 'bg-gray-400/10' };
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex justify-center items-center h-64">
-            <div className="text-gray-500">Loading weapon...</div>
+            <div className="text-gray-400">Loading weapon...</div>
           </div>
         </div>
       </div>
@@ -55,10 +65,10 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
 
   if (!weapon) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center py-12">
-            <div className="text-gray-700 mb-4 text-lg">Weapon not found</div>
+            <div className="text-gray-300 mb-4 text-lg">Weapon not found</div>
             <button
               onClick={() => router.push('/weapons')}
               className="px-6 py-3 text-blue-600 hover:text-blue-800 font-medium bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-md transition-colors min-h-[44px] inline-flex items-center"
@@ -85,10 +95,10 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
           Back to Weapons
         </button>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
             {/* Left Column - Image */}
-            <div className="flex justify-center items-center bg-gray-50 rounded-lg p-8">
+            <div className="flex justify-center items-center bg-gray-700 rounded-lg p-8">
               {weapon.imageUrl ? (
                 <img
                   src={weapon.imageUrl}
@@ -96,8 +106,8 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
                   className="max-w-full max-h-80 object-contain"
                 />
               ) : (
-                <div className="w-48 h-48 bg-gray-300 rounded flex items-center justify-center">
-                  <span className="text-gray-500">No Image</span>
+                <div className="w-48 h-48 bg-gray-600 rounded flex items-center justify-center">
+                  <span className="text-gray-400">No Image</span>
                 </div>
               )}
             </div>
@@ -106,8 +116,8 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
             <div className="space-y-6">
               {/* Header */}
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{weapon.name}</h1>
-                <p className="text-xl text-gray-600">{weapon.weaponType}</p>
+                <h1 className={`text-3xl font-bold mb-2 ${getRarityColors(weapon.rarity).text}`}>{weapon.name}</h1>
+                <p className="text-xl text-gray-400">{weapon.weaponType}</p>
               </div>
 
               {/* Key Stats */}
@@ -115,11 +125,11 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
                 <div className={`px-4 py-2 rounded-lg border ${getElementColor(weapon.element)}`}>
                   <span className="font-medium">{weapon.element}</span>
                 </div>
-                <div className="px-4 py-2 bg-gray-100 rounded-lg border border-gray-300">
-                  <span className="text-gray-700 font-medium">{weapon.slot}</span>
+                <div className="px-4 py-2 bg-gray-700 rounded-lg border border-gray-600">
+                  <span className="text-gray-300 font-medium">{weapon.slot}</span>
                 </div>
-                <div className="px-4 py-2 bg-yellow-50 rounded-lg border border-yellow-300">
-                  <span className="text-yellow-700 font-medium">
+                <div className={`px-4 py-2 rounded-lg border ${getRarityColors(weapon.rarity).bg} ${getRarityColors(weapon.rarity).border}`}>
+                  <span className={`font-medium ${getRarityColors(weapon.rarity).text}`}>
                     {getRarityStars(weapon.rarity)} ({weapon.rarity} Stars)
                   </span>
                 </div>
@@ -127,78 +137,78 @@ export default function WeaponDetailPage({ params }: { params: Promise<{ id: str
 
               {/* Basic Info */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Combat Style</div>
-                  <div className="font-semibold text-gray-900">{weapon.combatStyle}</div>
+                <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400">Combat Style</div>
+                  <div className="font-semibold text-gray-200">{weapon.combatStyle}</div>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="text-sm text-gray-600">Base Power</div>
-                  <div className="font-semibold text-gray-900">{weapon.basePower}</div>
+                <div className="bg-gray-700 p-4 rounded-lg">
+                  <div className="text-sm text-gray-400">Base Power</div>
+                  <div className="font-semibold text-gray-200">{weapon.basePower}</div>
                 </div>
               </div>
 
               {/* Weapon Stats */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Stats</h3>
+                <h3 className="text-lg font-semibold text-gray-200 mb-4">Stats</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {weapon.dps && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">DPS</div>
-                      <div className="font-semibold">{weapon.dps}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">DPS</div>
+                      <div className="font-semibold text-gray-200">{weapon.dps}</div>
                     </div>
                   )}
                   {weapon.damage && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Damage</div>
-                      <div className="font-semibold">{weapon.damage}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Damage</div>
+                      <div className="font-semibold text-gray-200">{weapon.damage}</div>
                     </div>
                   )}
                   {weapon.range && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Range</div>
-                      <div className="font-semibold">{weapon.range}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Range</div>
+                      <div className="font-semibold text-gray-200">{weapon.range}</div>
                     </div>
                   )}
                   {weapon.stability && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Stability</div>
-                      <div className="font-semibold">{weapon.stability}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Stability</div>
+                      <div className="font-semibold text-gray-200">{weapon.stability}</div>
                     </div>
                   )}
                   {weapon.handling && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Handling</div>
-                      <div className="font-semibold">{weapon.handling}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Handling</div>
+                      <div className="font-semibold text-gray-200">{weapon.handling}</div>
                     </div>
                   )}
                   {weapon.reloadSpeed && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Reload Speed</div>
-                      <div className="font-semibold">{weapon.reloadSpeed}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Reload Speed</div>
+                      <div className="font-semibold text-gray-200">{weapon.reloadSpeed}</div>
                     </div>
                   )}
                   {weapon.magazineCap && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Magazine</div>
-                      <div className="font-semibold">{weapon.magazineCap}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Magazine</div>
+                      <div className="font-semibold text-gray-200">{weapon.magazineCap}</div>
                     </div>
                   )}
                   {weapon.maxAmmo && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Max Ammo</div>
-                      <div className="font-semibold">{weapon.maxAmmo}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Max Ammo</div>
+                      <div className="font-semibold text-gray-200">{weapon.maxAmmo}</div>
                     </div>
                   )}
                   {weapon.rateOfFire && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Rate of Fire</div>
-                      <div className="font-semibold">{weapon.rateOfFire}</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Rate of Fire</div>
+                      <div className="font-semibold text-gray-200">{weapon.rateOfFire}</div>
                     </div>
                   )}
                   {weapon.precisionBonus && (
-                    <div className="bg-gray-50 p-3 rounded">
-                      <div className="text-sm text-gray-600">Precision Bonus</div>
-                      <div className="font-semibold">{weapon.precisionBonus}x</div>
+                    <div className="bg-gray-700 p-3 rounded">
+                      <div className="text-sm text-gray-400">Precision Bonus</div>
+                      <div className="font-semibold text-gray-200">{weapon.precisionBonus}x</div>
                     </div>
                   )}
                 </div>
