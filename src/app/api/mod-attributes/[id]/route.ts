@@ -7,7 +7,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await db.query('DELETE FROM mod_attributes WHERE id = $1', [id]);
+    await db.query('DELETE FROM "ModAttribute" WHERE id = $1', [id]);
     return NextResponse.json({ message: 'Attribute deleted successfully' });
   } catch (error) {
     console.error('Error deleting attribute:', error);

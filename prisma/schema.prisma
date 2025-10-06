@@ -20,8 +20,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -35,23 +34,23 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String            @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?           @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime          @default(now())
   accounts      Account[]
-  sessions      Session[]
-  tasks         UserTask[]
   builds        Build[]
-  news          News[]
-  lfgPosts      LFGPost[]
   clanPosts     ClanRecruitment[]
-  votes         Vote[]
   comments      Comment[]
+  lfgPosts      LFGPost[]
+  news          News[]
+  sessions      Session[]
   achievements  UserAchievement[]
   profile       UserProfile?
-  createdAt     DateTime  @default(now())
+  tasks         UserTask[]
+  votes         Vote[]
 }
 
 model VerificationToken {
@@ -63,13 +62,13 @@ model VerificationToken {
 }
 
 model TaskTemplate {
-  id          String      @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   description String?
   category    TaskCategory
   resetType   ResetType
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   userTasks   UserTask[]
 }
 
@@ -82,11 +81,366 @@ model UserTask {
   resetAt        DateTime?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-
-  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  taskTemplate TaskTemplate @relation(fields: [taskTemplateId], references: [id], onDelete: Cascade)
+  taskTemplate   TaskTemplate @relation(fields: [taskTemplateId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, taskTemplateId])
+}
+
+model Character {
+  id                String                         @id @default(cuid())
+  name              String                         @unique
+  description       String?
+  imageUrl          String?
+  createdAt         DateTime                       @default(now())
+  updatedAt         DateTime                       @updatedAt
+  builds            Build[]
+  compatibleWeapons WeaponCharacterCompatibility[]
+}
+
+model Build {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  characterId String
+  userId      String
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  voteCount   Int       @default(0)
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  votes       Vote[]
+
+  @@index([characterId])
+  @@index([voteCount])
+}
+
+model News {
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  type      NewsType  @default(ARTICLE)
+  url       String?
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  voteCount Int       @default(0)
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  votes     Vote[]
+
+  @@index([voteCount])
+}
+
+model LFGPost {
+  id          String    @id @default(cuid())
+  activity    String
+  description String
+  playerCount Int
+  userId      String
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+  region      String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([active])
+  @@index([createdAt])
+}
+
+model ClanRecruitment {
+  id           String   @id @default(cuid())
+  clanName     String
+  description  String
+  requirements String?
+  contactInfo  String
+  userId       String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([active])
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  userId    String
+  buildId   String?
+  newsId    String?
+  value     Int
+  createdAt DateTime @default(now())
+  build     Build?   @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  news      News?    @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, buildId])
+  @@unique([userId, newsId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  buildId   String?
+  newsId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  build     Build?   @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  news      News?    @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([buildId])
+  @@index([newsId])
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  key              String            @unique
+  name             String
+  description      String
+  icon             String?
+  createdAt        DateTime          @default(now())
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime    @default(now())
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model UserProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  displayTitle String?
+  nameEffect   String?
+  customColor  String?
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Weapon {
+  id                   String                         @id @default(cuid())
+  name                 String
+  slug                 String                         @unique
+  rarity               Int
+  weaponType           String
+  basePower            Int
+  combatStyle          String
+  element              String
+  slot                 String
+  imageUrl             String?
+  dps                  Int?
+  precisionBonus       Float?
+  magazineCap          Int?
+  rateOfFire           Int?
+  maxAmmo              Int?
+  damage               Int?
+  reloadSpeed          Int?
+  stability            Int?
+  handling             Int?
+  range                Int?
+  createdAt            DateTime                       @default(now())
+  updatedAt            DateTime                       @updatedAt
+  catalysts            WeaponCatalyst[]
+  compatibleCharacters WeaponCharacterCompatibility[]
+  mods                 WeaponModAssignment[]
+  perks                WeaponPerkAssignment[]
+  traits               WeaponTrait[]
+
+  @@index([weaponType])
+  @@index([element])
+  @@index([rarity])
+}
+
+model Trait {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  type        String
+  description String?
+  effect      String?
+  iconUrl     String?
+  createdAt   DateTime      @default(now())
+  weapons     WeaponTrait[]
+
+  @@index([type])
+}
+
+model WeaponTrait {
+  id        String   @id @default(cuid())
+  weaponId  String
+  traitId   String
+  slot      Int
+  createdAt DateTime @default(now())
+  trait     Trait    @relation(fields: [traitId], references: [id], onDelete: Cascade)
+  weapon    Weapon   @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, slot])
+  @@index([weaponId])
+  @@index([traitId])
+}
+
+model Perk {
+  id          String                 @id @default(cuid())
+  name        String                 @unique
+  slot        Int
+  description String?
+  effect      String?
+  iconUrl     String?
+  createdAt   DateTime               @default(now())
+  modUpgrades ModPerkUpgrade[]
+  weapons     WeaponPerkAssignment[]
+
+  @@index([slot])
+}
+
+model WeaponPerkAssignment {
+  id        String   @id @default(cuid())
+  weaponId  String
+  perkId    String
+  slot      Int
+  createdAt DateTime @default(now())
+  perk      Perk     @relation(fields: [perkId], references: [id], onDelete: Cascade)
+  weapon    Weapon   @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, slot])
+  @@index([weaponId])
+  @@index([perkId])
+}
+
+model Catalyst {
+  id                     String           @id @default(cuid())
+  name                   String           @unique
+  description            String?
+  effect                 String?
+  requirementDescription String?
+  iconUrl                String?
+  createdAt              DateTime         @default(now())
+  weapons                WeaponCatalyst[]
+}
+
+model WeaponCatalyst {
+  id         String   @id @default(cuid())
+  weaponId   String
+  catalystId String
+  createdAt  DateTime @default(now())
+  catalyst   Catalyst @relation(fields: [catalystId], references: [id], onDelete: Cascade)
+  weapon     Weapon   @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, catalystId])
+  @@index([weaponId])
+}
+
+model ModRarity {
+  id                   String      @id @default(cuid())
+  name                 String      @unique
+  mainAttributeCount   Int         @default(1)
+  randomAttributeCount Int         @default(0)
+  colorCode            String?
+  mods                 WeaponMod[]
+}
+
+model ModAttribute {
+  id           String               @id @default(cuid())
+  name         String
+  description  String?
+  minStatBonus String?
+  maxStatBonus String?
+  createdAt    DateTime             @default(now())
+  mainMods     ModMainAttribute[]
+  randomMods   ModRandomAttribute[]
+}
+
+model WeaponMod {
+  id                     String                @id @default(cuid())
+  name                   String
+  category               String
+  rarityId               String?
+  description            String?
+  combatStyle            String?
+  unlocksPerkUpgrade     Boolean               @default(false)
+  perkUpgradeDescription String?
+  iconUrl                String?
+  createdAt              DateTime              @default(now())
+  mainAttributes         ModMainAttribute[]
+  perkUpgrades           ModPerkUpgrade[]
+  randomAttributes       ModRandomAttribute[]
+  rarity                 ModRarity?            @relation(fields: [rarityId], references: [id])
+  weapons                WeaponModAssignment[]
+
+  @@index([category])
+  @@index([rarityId])
+  @@index([combatStyle])
+}
+
+model ModMainAttribute {
+  id          String       @id @default(cuid())
+  modId       String
+  attributeId String
+  createdAt   DateTime     @default(now())
+  attribute   ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  mod         WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+}
+
+model ModRandomAttribute {
+  id          String       @id @default(cuid())
+  modId       String
+  attributeId String
+  createdAt   DateTime     @default(now())
+  attribute   ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
+  mod         WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+}
+
+model ModPerkUpgrade {
+  id                 String    @id @default(cuid())
+  modId              String
+  perkId             String
+  upgradeDescription String?
+  createdAt          DateTime  @default(now())
+  mod                WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
+  perk               Perk      @relation(fields: [perkId], references: [id], onDelete: Cascade)
+
+  @@index([modId])
+  @@index([perkId])
+}
+
+model WeaponModAssignment {
+  id           String    @id @default(cuid())
+  weaponId     String
+  modId        String
+  slotCategory String
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  mod          WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
+  weapon       Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
+  @@index([modId])
+}
+
+model WeaponCharacterCompatibility {
+  id          String    @id @default(cuid())
+  weaponId    String
+  characterId String
+  createdAt   DateTime  @default(now())
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+  weapon      Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@unique([weaponId, characterId])
+  @@index([weaponId])
+  @@index([characterId])
 }
 
 enum TaskCategory {
@@ -105,407 +459,9 @@ enum ResetType {
   TIME_LIMITED_FRI_TO_MON
 }
 
-// Character registry for builds
-model Character {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  description String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  builds      Build[]
-  compatibleWeapons WeaponCharacterCompatibility[]
-}
-
-// User-created character builds
-model Build {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  characterId String
-  userId      String
-  content     String   // Rich HTML content
-  voteCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  votes     Vote[]
-  comments  Comment[]
-
-  @@index([characterId])
-  @@index([voteCount])
-}
-
-// News/Content posts
-model News {
-  id        String   @id @default(cuid())
-  title     String
-  content   String   // Rich HTML content
-  type      NewsType @default(ARTICLE)
-  url       String?  // For youtube videos or external links
-  userId    String
-  voteCount Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  votes    Vote[]
-  comments Comment[]
-
-  @@index([voteCount])
-}
-
 enum NewsType {
   ARTICLE
   VIDEO
   GUIDE
   OTHER
 }
-
-// LFG Posts
-model LFGPost {
-  id          String   @id @default(cuid())
-  activity    String
-  description String
-  playerCount Int      // How many players needed
-  region      String?  // NA, EMEA, APAC
-  userId      String
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([active])
-  @@index([createdAt])
-}
-
-// Clan Recruitment
-model ClanRecruitment {
-  id          String   @id @default(cuid())
-  clanName    String
-  description String
-  requirements String?
-  contactInfo String
-  userId      String
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([active])
-}
-
-// Generic vote system (upvote/downvote)
-model Vote {
-  id        String   @id @default(cuid())
-  userId    String
-  buildId   String?
-  newsId    String?
-  value     Int      // 1 for upvote, -1 for downvote
-  createdAt DateTime @default(now())
-
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  build Build? @relation(fields: [buildId], references: [id], onDelete: Cascade)
-  news  News?  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, buildId])
-  @@unique([userId, newsId])
-}
-
-// Comments for builds and news
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  userId    String
-  buildId   String?
-  newsId    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  build Build? @relation(fields: [buildId], references: [id], onDelete: Cascade)
-  news  News?  @relation(fields: [newsId], references: [id], onDelete: Cascade)
-
-  @@index([buildId])
-  @@index([newsId])
-}
-
-// Achievement system
-model Achievement {
-  id          String   @id @default(cuid())
-  key         String   @unique // e.g., "founding_user", "beta_user", "upvotes_100"
-  name        String
-  description String
-  icon        String?
-  createdAt   DateTime @default(now())
-
-  userAchievements UserAchievement[]
-}
-
-model UserAchievement {
-  id            String   @id @default(cuid())
-  userId        String
-  achievementId String
-  earnedAt      DateTime @default(now())
-
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, achievementId])
-}
-
-// User profile with special effects
-model UserProfile {
-  id             String   @id @default(cuid())
-  userId         String   @unique
-  displayTitle   String?  // Achievement title to display
-  nameEffect     String?  // Animation/glow effect for name
-  customColor    String?  // Custom name color
-  updatedAt      DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-// ============================================================================
-// WEAPONS SYSTEM
-// ============================================================================
-
-model Weapon {
-  id          String   @id @default(cuid())
-  name        String
-  slug        String   @unique
-  rarity      Int      // 3-6 stars (3=Rare, 4=Legendary, 5=Mythic, 6=Exotic)
-  weaponType  String   // Auto Rifle, Hand Cannon, etc.
-  basePower   Int      // Single base power value
-  combatStyle String   // Rapid-Fire, Impact, Piercing, Spread
-  element     String   // Arc, Solar, Void
-  slot        String   // Primary, Power
-  imageUrl    String?
-
-  // Stats
-  dps             Int?
-  precisionBonus  Float?
-  magazineCap     Int?
-  rateOfFire      Int?
-  maxAmmo         Int?     // Added this field you requested
-  damage          Int?
-  reloadSpeed     Int?
-  stability       Int?
-  handling        Int?
-  range           Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  traits                WeaponTrait[]
-  perks                 WeaponPerkAssignment[]
-  catalysts             WeaponCatalyst[]
-  mods                  WeaponModAssignment[]
-  compatibleCharacters  WeaponCharacterCompatibility[]
-
-  @@index([weaponType])
-  @@index([element])
-  @@index([rarity])
-}
-
-model Trait {
-  id          String @id @default(cuid())
-  name        String @unique
-  type        String // 'intrinsic' or 'origin'
-  description String?
-  effect      String?
-  iconUrl     String?
-  createdAt   DateTime @default(now())
-
-  weapons WeaponTrait[]
-
-  @@index([type])
-}
-
-model WeaponTrait {
-  id       String @id @default(cuid())
-  weaponId String
-  traitId  String
-  slot     Int    // 1: Intrinsic, 2: Origin
-  createdAt DateTime @default(now())
-
-  weapon Weapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
-  trait  Trait  @relation(fields: [traitId], references: [id], onDelete: Cascade)
-
-  @@unique([weaponId, slot])
-  @@index([weaponId])
-  @@index([traitId])
-}
-
-model Perk {
-  id          String @id @default(cuid())
-  name        String @unique
-  slot        Int    // 3-4 (Perk slots)
-  description String?
-  effect      String?
-  iconUrl     String?
-  createdAt   DateTime @default(now())
-
-  weapons    WeaponPerkAssignment[]
-  modUpgrades ModPerkUpgrade[]
-
-  @@index([slot])
-}
-
-model WeaponPerkAssignment {
-  id       String @id @default(cuid())
-  weaponId String
-  perkId   String
-  slot     Int    // 3: Perk 1, 4: Perk 2
-  createdAt DateTime @default(now())
-
-  weapon Weapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
-  perk   Perk   @relation(fields: [perkId], references: [id], onDelete: Cascade)
-
-  @@unique([weaponId, slot])
-  @@index([weaponId])
-  @@index([perkId])
-}
-
-model Catalyst {
-  id                     String @id @default(cuid())
-  name                   String @unique
-  description            String?
-  effect                 String?
-  requirementDescription String?
-  iconUrl                String?
-  createdAt              DateTime @default(now())
-
-  weapons WeaponCatalyst[]
-}
-
-model WeaponCatalyst {
-  id         String @id @default(cuid())
-  weaponId   String
-  catalystId String
-  createdAt  DateTime @default(now())
-
-  weapon   Weapon   @relation(fields: [weaponId], references: [id], onDelete: Cascade)
-  catalyst Catalyst @relation(fields: [catalystId], references: [id], onDelete: Cascade)
-
-  @@unique([weaponId, catalystId])
-  @@index([weaponId])
-}
-
-model ModRarity {
-  id                    String @id @default(cuid())
-  name                  String @unique // 'Exotic', 'Mythic', 'Legendary', 'Rare'
-  mainAttributeCount    Int    @default(1)
-  randomAttributeCount  Int    @default(0)
-  colorCode             String? // Hex color for UI
-
-  mods WeaponMod[]
-}
-
-model ModAttribute {
-  id            String @id @default(cuid())
-  name          String
-  description   String?
-  minStatBonus  String? // e.g., "+5% damage" (lowest refinement)
-  maxStatBonus  String? // e.g., "+15% damage" (max refinement)
-  createdAt     DateTime @default(now())
-
-  mainMods   ModMainAttribute[]
-  randomMods ModRandomAttribute[]
-}
-
-model WeaponMod {
-  id                      String  @id @default(cuid())
-  name                    String
-  category                String  // 'Ammo', 'Scope', 'Magazine'
-  rarityId                String?
-  description             String?
-  combatStyle             String? // 'rapid-fire', 'impact', 'piercing', 'spread', or NULL for all
-  unlocksPerkUpgrade      Boolean @default(false)
-  perkUpgradeDescription  String?
-  iconUrl                 String?
-  createdAt               DateTime @default(now())
-
-  rarity          ModRarity?           @relation(fields: [rarityId], references: [id])
-  mainAttributes  ModMainAttribute[]
-  randomAttributes ModRandomAttribute[]
-  perkUpgrades    ModPerkUpgrade[]
-  weapons         WeaponModAssignment[]
-
-  @@index([category])
-  @@index([rarityId])
-  @@index([combatStyle])
-}
-
-model ModMainAttribute {
-  id          String @id @default(cuid())
-  modId       String
-  attributeId String
-  createdAt   DateTime @default(now())
-
-  mod       WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
-  attribute ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
-
-  @@index([modId])
-}
-
-model ModRandomAttribute {
-  id          String @id @default(cuid())
-  modId       String
-  attributeId String
-  createdAt   DateTime @default(now())
-
-  mod       WeaponMod    @relation(fields: [modId], references: [id], onDelete: Cascade)
-  attribute ModAttribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
-
-  @@index([modId])
-}
-
-model ModPerkUpgrade {
-  id                  String @id @default(cuid())
-  modId               String
-  perkId              String
-  upgradeDescription  String?
-  createdAt           DateTime @default(now())
-
-  mod  WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
-  perk Perk      @relation(fields: [perkId], references: [id], onDelete: Cascade)
-
-  @@index([modId])
-  @@index([perkId])
-}
-
-model WeaponModAssignment {
-  id           String @id @default(cuid())
-  weaponId     String
-  modId        String
-  slotCategory String // 'Ammo', 'Scope', 'Magazine'
-  displayOrder Int    @default(0)
-  createdAt    DateTime @default(now())
-
-  weapon Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
-  mod    WeaponMod @relation(fields: [modId], references: [id], onDelete: Cascade)
-
-  @@index([weaponId])
-  @@index([modId])
-}
-
-model WeaponCharacterCompatibility {
-  id          String @id @default(cuid())
-  weaponId    String
-  characterId String
-  createdAt   DateTime @default(now())
-
-  weapon    Weapon    @relation(fields: [weaponId], references: [id], onDelete: Cascade)
-  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
-
-  @@unique([weaponId, characterId])
-  @@index([weaponId])
-  @@index([characterId])
-}
-

@@ -38,19 +38,26 @@ export default function AdminModAttributesPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Creating attribute:', newAttribute);
     try {
       const res = await fetch('/api/mod-attributes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newAttribute)
       });
+      console.log('Response status:', res.status);
+      const data = await res.json();
+      console.log('Response data:', data);
       if (res.ok) {
         setNewAttribute({ name: '', minStatBonus: '', maxStatBonus: '' });
         loadAttributes();
         alert('Attribute created!');
+      } else {
+        alert(`Error: ${data.error || 'Failed to create attribute'}`);
       }
     } catch (error) {
       console.error('Error creating attribute:', error);
+      alert(`Error: ${error}`);
     }
   };
 
