@@ -159,8 +159,7 @@ export default function BuildsPage() {
               style={{
                 backgroundColor: colors.background,
                 color: colors.text.primary,
-                borderColor: colors.border.primary,
-                focusRingColor: colors.primary
+                borderColor: colors.border.primary
               }}
             >
               <option value="">All Characters</option>
