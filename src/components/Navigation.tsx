@@ -4,10 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import LoginButton from './LoginButton';
+import ThemeSelector from './ThemeSelector';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function Navigation() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { colors } = useTheme();
 
   const navLinks = [
     { href: '/weapons', label: 'Weapons' },
@@ -21,11 +24,23 @@ export default function Navigation() {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <nav className="bg-white border-b border-gray-300 shadow-sm">
+    <nav
+      className="border-b shadow-sm"
+      style={{
+        backgroundColor: colors.navigation.background,
+        borderColor: colors.border.primary
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center space-x-4 sm:space-x-8">
-            <Link href="/" className="text-lg sm:text-xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+            <Link
+              href="/"
+              className="text-lg sm:text-xl font-bold transition-colors"
+              style={{
+                color: colors.navigation.text
+              }}
+            >
               Destiny Rising
             </Link>
 
@@ -34,11 +49,12 @@ export default function Navigation() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                    isActive(link.href)
-                      ? 'text-blue-600 bg-blue-50 border border-blue-200'
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+                  className="px-3 py-2 text-sm font-medium transition-colors rounded-md"
+                  style={{
+                    color: isActive(link.href) ? '#ffffff' : colors.navigation.text,
+                    backgroundColor: isActive(link.href) ? colors.navigation.active : 'transparent',
+                    border: isActive(link.href) ? `1px solid ${colors.navigation.active}` : 'none'
+                  }}
                 >
                   {link.label}
                 </Link>
@@ -46,11 +62,12 @@ export default function Navigation() {
               {session && (
                 <Link
                   href="/admin"
-                  className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                    isActive('/admin')
-                      ? 'text-purple-600 bg-purple-50 border border-purple-200'
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+                  className="px-3 py-2 text-sm font-medium transition-colors rounded-md"
+                  style={{
+                    color: isActive('/admin') ? '#ffffff' : colors.navigation.text,
+                    backgroundColor: isActive('/admin') ? colors.accent : 'transparent',
+                    border: isActive('/admin') ? `1px solid ${colors.accent}` : 'none'
+                  }}
                 >
                   Admin
                 </Link>
@@ -58,23 +75,31 @@ export default function Navigation() {
             </div>
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
+            <ThemeSelector />
             <LoginButton />
           </div>
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className="md:hidden px-4 pb-3 space-y-2 bg-white border-t border-gray-200">
+      <div
+        className="md:hidden px-4 pb-3 space-y-2 border-t"
+        style={{
+          backgroundColor: colors.navigation.background,
+          borderColor: colors.border.primary
+        }}
+      >
         {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className={`block px-4 py-3 text-base font-medium transition-colors rounded-lg min-h-[44px] flex items-center ${
-              isActive(link.href)
-                ? 'text-blue-600 bg-blue-50 border border-blue-200'
-                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-            }`}
+            className="block px-4 py-3 text-base font-medium transition-colors rounded-lg min-h-[44px] flex items-center"
+            style={{
+              color: isActive(link.href) ? '#ffffff' : colors.navigation.text,
+              backgroundColor: isActive(link.href) ? colors.navigation.active : 'transparent',
+              border: isActive(link.href) ? `1px solid ${colors.navigation.active}` : 'none'
+            }}
           >
             {link.label}
           </Link>
@@ -82,11 +107,12 @@ export default function Navigation() {
         {session && (
           <Link
             href="/admin"
-            className={`block px-4 py-3 text-base font-medium transition-colors rounded-lg min-h-[44px] flex items-center ${
-              isActive('/admin')
-                ? 'text-purple-600 bg-purple-50 border border-purple-200'
-                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-            }`}
+            className="block px-4 py-3 text-base font-medium transition-colors rounded-lg min-h-[44px] flex items-center"
+            style={{
+              color: isActive('/admin') ? '#ffffff' : colors.navigation.text,
+              backgroundColor: isActive('/admin') ? colors.accent : 'transparent',
+              border: isActive('/admin') ? `1px solid ${colors.accent}` : 'none'
+            }}
           >
             Admin
           </Link>

@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Weapon } from '@/types/weapons';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function WeaponsPage() {
   const router = useRouter();
+  const { colors } = useTheme();
   const [weapons, setWeapons] = useState<Weapon[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -83,18 +85,46 @@ export default function WeaponsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div
+      className="min-h-screen"
+      style={{
+        backgroundColor: colors.background,
+        color: colors.text.primary
+      }}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex">
         {/* Left Sidebar - Weapon Type Filters */}
-        <div className="w-80 bg-gray-800 min-h-screen">
+        <div
+          className="w-80 min-h-screen"
+          style={{
+            backgroundColor: colors.surface
+          }}
+        >
           {/* Top buttons */}
-          <div className="p-4 border-b border-gray-700">
+          <div
+            className="p-4 border-b"
+            style={{ borderColor: colors.border.primary }}
+          >
             <div className="flex gap-2">
-              <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
+              <button
+                className="px-4 py-2 text-sm rounded border transition-colors"
+                style={{
+                  backgroundColor: colors.button.secondary,
+                  color: colors.text.primary,
+                  borderColor: colors.border.primary
+                }}
+              >
                 All Characters
               </button>
-              <button className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded border border-gray-600 transition-colors">
+              <button
+                className="px-4 py-2 text-sm rounded border transition-colors"
+                style={{
+                  backgroundColor: colors.button.secondary,
+                  color: colors.text.primary,
+                  borderColor: colors.border.primary
+                }}
+              >
                 Filter Weapons
               </button>
             </div>
