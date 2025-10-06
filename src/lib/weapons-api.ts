@@ -25,63 +25,27 @@ export async function getAllWeapons(req: Request, res: Response, db: DatabaseCli
   try {
     const { type, element, slot, page = 1, limit = 20 } = req.query;
 
-    let sql = `
-      SELECT
-        w.*,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', wm.id,
-          'category', wm.category,
-          'name', wm.name,
-          'effect', wm.effect,
-          'statValue', wm.stat_value,
-          'statType', wm.stat_type,
-          'displayOrder', wm.display_order
-        )) FILTER (WHERE wm.id IS NOT NULL) as mods,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', c.id,
-          'name', c.name,
-          'role', c.role,
-          'rarity', c.rarity,
-          'imageUrl', c.image_url
-        )) FILTER (WHERE c.id IS NOT NULL) as compatible_characters,
-        json_agg(DISTINCT jsonb_build_object(
-          'id', p.id,
-          'perkName', p.perk_name,
-          'perkDescription', p.perk_description,
-          'perkType', p.perk_type,
-          'displayOrder', p.display_order
-        )) FILTER (WHERE p.id IS NOT NULL) as perks
-      FROM weapons w
-      LEFT JOIN weapon_mods wm ON w.id = wm.weapon_id
-      LEFT JOIN weapon_character_compatibility wcc ON w.id = wcc.weapon_id
-      LEFT JOIN characters c ON wcc.character_id = c.id
-      LEFT JOIN perks p ON w.id = p.weapon_id
-      WHERE 1=1
-    `;
+    let sql = `SELECT * FROM "Weapon" WHERE 1=1`;
 
     const params: any[] = [];
     let paramIndex = 1;
 
     if (type) {
-      sql += ` AND w.weapon_type = $${paramIndex++}`;
+      sql += ` AND "weaponType" = $${paramIndex++}`;
       params.push(type);
     }
 
     if (element) {
-      sql += ` AND w.element = $${paramIndex++}`;
+      sql += ` AND "element" = $${paramIndex++}`;
       params.push(element);
     }
 
     if (slot) {
-      sql += ` AND w.weapon_slot = $${paramIndex++}`;
+      sql += ` AND "slot" = $${paramIndex++}`;
       params.push(slot);
     }
 
-    sql += `
-      GROUP BY w.id
-      ORDER BY w.created_at DESC
-      LIMIT $${paramIndex++} OFFSET $${paramIndex}
-    `;
+    sql += ` ORDER BY "createdAt" DESC LIMIT $${paramIndex++} OFFSET $${paramIndex}`;
 
     params.push(Number(limit), (Number(page) - 1) * Number(limit));
 
@@ -89,15 +53,38 @@ export async function getAllWeapons(req: Request, res: Response, db: DatabaseCli
 
     // Get total count
     const countResult = await db.query(
-      'SELECT COUNT(*) FROM weapons WHERE 1=1' +
-      (type ? ` AND weapon_type = $1` : '') +
-      (element ? ` AND element = $${type ? 2 : 1}` : '') +
-      (slot ? ` AND weapon_slot = $${[type, element].filter(Boolean).length + 1}` : ''),
+      'SELECT COUNT(*) FROM "Weapon" WHERE 1=1' +
+      (type ? ` AND "weaponType" = $1` : '') +
+      (element ? ` AND "element" = $${type ? 2 : 1}` : '') +
+      (slot ? ` AND "slot" = $${[type, element].filter(Boolean).length + 1}` : ''),
       [type, element, slot].filter(Boolean)
     );
 
     res.json({
-      data: result.rows.map(mapDatabaseToWeapon),
+      data: result.rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        slug: row.slug,
+        rarity: row.rarity,
+        weaponType: row.weaponType,
+        basePower: row.basePower,
+        combatStyle: row.combatStyle,
+        element: row.element,
+        slot: row.slot,
+        imageUrl: row.imageUrl,
+        dps: row.dps,
+        precisionBonus: row.precisionBonus,
+        magazineCap: row.magazineCap,
+        rateOfFire: row.rateOfFire,
+        maxAmmo: row.maxAmmo,
+        damage: row.damage,
+        reloadSpeed: row.reloadSpeed,
+        stability: row.stability,
+        handling: row.handling,
+        range: row.range,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt
+      })),
       pagination: {
         page: Number(page),
         limit: Number(limit),
