@@ -116,14 +116,14 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       text: 'New Heading',
       level: 2,
     },
-  } as HeadingBlock,
+  },
   text: {
     type: 'text',
     width: 'full',
     content: {
       html: '<p>Type your content here...</p>',
     },
-  } as TextBlock,
+  },
   video: {
     type: 'video',
     width: 'full',
@@ -131,7 +131,7 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       url: '',
       title: '',
     },
-  } as VideoBlock,
+  },
   image: {
     type: 'image',
     width: 'full',
@@ -140,21 +140,21 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       alt: '',
       caption: '',
     },
-  } as ImageBlock,
+  },
   divider: {
     type: 'divider',
     width: 'full',
     content: {
       style: 'solid',
     },
-  } as DividerBlock,
+  },
   'table-of-contents': {
     type: 'table-of-contents',
     width: 'full',
     content: {
       title: 'Table of Contents',
     },
-  } as TableOfContentsBlock,
+  },
   stats: {
     type: 'stats',
     width: 'full',
@@ -162,7 +162,7 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       title: 'Build Stats',
       stats: [],
     },
-  } as StatsBlock,
+  },
   artifacts: {
     type: 'artifacts',
     width: 'full',
@@ -170,7 +170,7 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       title: 'Artifacts',
       showAll: true,
     },
-  } as ArtifactsBlock,
+  },
   weapons: {
     type: 'weapons',
     width: 'full',
@@ -178,5 +178,5 @@ export const BLOCK_TEMPLATES: Record<BlockType, Omit<ContentBlock, 'id' | 'order
       title: 'Weapons',
       showAll: true,
     },
-  } as WeaponsBlock,
-};
+  },
+} as any;
