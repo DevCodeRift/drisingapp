@@ -107,29 +107,13 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen p-8" style={{ backgroundColor: colors.background }}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold" style={{ color: colors.primary }}>
-              Destiny Rising Task Manager
-            </h1>
-            <p className="mt-2" style={{ color: colors.text.secondary }}>
-              Welcome back, {session.user?.name}
-            </p>
-          </div>
-          <div className="flex items-center space-x-4">
-            {isAdmin && (
-              <a
-                href="/admin"
-                className="px-4 py-2 text-white rounded-lg transition-colors"
-                style={{ backgroundColor: colors.accent }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.accent + '80'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.accent}
-              >
-                Admin Panel
-              </a>
-            )}
-            <LoginButton />
-          </div>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold" style={{ color: colors.primary }}>
+            Destiny Rising Task Manager
+          </h1>
+          <p className="mt-2" style={{ color: colors.text.secondary }}>
+            Welcome back, {session.user?.name}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">

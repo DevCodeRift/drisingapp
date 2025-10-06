@@ -593,6 +593,50 @@ model WeaponCharacterCompatibility {
   @@index([characterId])
 }
 
+// Leaderboard System
+model LeaderboardSnapshot {
+  id           String   @id @default(cuid())
+  activityType String   // "power", "expanse_eternity", "expanse_echoes", "shifting_gates", "acclaim_level", "fishing", "calamity_ops", "gauntlet_onslaught", "breakin", "menace_above", "issakis_tabernacle"
+  rankingType  String   // "server" or "regional"
+  character    String?  // Character name if applicable (for Power leaderboard)
+  region       String?  // Region identifier (e.g., "North America", "Europe", "Asia")
+  subRegion    String?  // Sub-region identifier (e.g., "US East", "US West", "UK", "Germany")
+  capturedAt   DateTime @default(now())
+  entryCount   Int      @default(0) // Number of entries in this snapshot
+
+  entries LeaderboardEntry[]
+
+  @@index([activityType, rankingType, capturedAt])
+  @@index([activityType, character])
+  @@index([capturedAt])
+}
+
+model LeaderboardEntry {
+  id             String   @id @default(cuid())
+  snapshotId     String
+  rank           Int      // Position on leaderboard (1, 2, 3, etc.)
+  playerName     String   // Player's display name
+  score          Int      // Activity-specific score/value (power level, completion time, etc.)
+  clan           String?  // Player's clan/guild name
+  additionalData Json?    // Flexible field for activity-specific data (e.g., completion time, kills, etc.)
+
+  snapshot LeaderboardSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  @@index([snapshotId, rank])
+  @@index([playerName])
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  key        String    @unique
+  name       String    // Description (e.g., "Leaderboard Capture Bot")
+  isActive   Boolean   @default(true)
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([key])
+}
+
 enum TaskCategory {
   DAILY
   WEEKLY
