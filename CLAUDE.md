@@ -16,6 +16,14 @@ npm run start            # Start production server
 npm run lint             # Run ESLint
 ```
 
+### Git Workflow
+**IMPORTANT**: After each development cycle or significant set of changes, automatically push to GitHub:
+```bash
+git add .
+git commit -m "Brief description of changes 🤖 Generated with Claude Code"
+git push origin beta
+```
+
 ### Database
 ```bash
 npm run db:push          # Push schema changes to database
