@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { prisma } from '@/lib/prisma';
+import { isAdmin } from '@/lib/auth-admin';
 import { randomBytes } from 'crypto';
 
 /**
@@ -9,24 +9,11 @@ import { randomBytes } from 'crypto';
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const adminStatus = await isAdmin();
 
-    if (!session?.user?.email) {
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // TODO: Add admin check based on your admin system
-    // For now, any authenticated user can manage API keys
-    // You may want to add an isAdmin field to the User model
 
     const apiKeys = await prisma.apiKey.findMany({
       orderBy: { createdAt: 'desc' },
@@ -45,18 +32,10 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const adminStatus = await isAdmin();
 
-    if (!session?.user?.email) {
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -93,18 +72,10 @@ export async function POST(request: NextRequest) {
  */
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const adminStatus = await isAdmin();
 
-    if (!session?.user?.email) {
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -135,18 +106,10 @@ export async function PATCH(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession();
+    const adminStatus = await isAdmin();
 
-    if (!session?.user?.email) {
+    if (!adminStatus) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     const { searchParams } = new URL(request.url);
