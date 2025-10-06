@@ -334,14 +334,14 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
     await db.transaction(async (trx) => {
       // Update weapon
       await trx.query(
-        `UPDATE weapons SET
-          name = $1, slug = $2, rarity = $3, weapon_type = $4,
-          base_power_min = $5, base_power_max = $6, combat_style = $7,
-          element = $8, weapon_slot = $9, image_url = $10, thumbnail_url = $11,
-          dps = $12, precision_bonus = $13, magazine_capacity = $14,
-          rate_of_fire = $15, damage = $16, reload_speed = $17,
-          stability = $18, handling = $19, range = $20
-        WHERE id = $21`,
+        `UPDATE "Weapon" SET
+          name = $1, slug = $2, rarity = $3, "weaponType" = $4,
+          "basePower" = $5, "combatStyle" = $6,
+          element = $7, slot = $8, "imageUrl" = $9,
+          dps = $10, "precisionBonus" = $11, "magazineCap" = $12,
+          "rateOfFire" = $13, "maxAmmo" = $14, damage = $15, "reloadSpeed" = $16,
+          stability = $17, handling = $18, range = $19, "updatedAt" = NOW()
+        WHERE id = $20`,
         [
           formData.name, slug, formData.rarity, formData.weaponType,
           formData.basePower, formData.combatStyle,
@@ -353,43 +353,22 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
       );
 
       // Delete existing mods, characters, perks, traits, perk assignments, and catalysts
-      await trx.query('DELETE FROM weapon_mods WHERE weapon_id = $1', [id]);
-      await trx.query('DELETE FROM weapon_character_compatibility WHERE weapon_id = $1', [id]);
-      await trx.query('DELETE FROM perks WHERE weapon_id = $1', [id]);
-      await trx.query('DELETE FROM weapon_traits WHERE weapon_id = $1', [id]);
-      await trx.query('DELETE FROM weapon_perk_assignments WHERE weapon_id = $1', [id]);
-      await trx.query('DELETE FROM weapon_catalysts WHERE weapon_id = $1', [id]);
+      await trx.query('DELETE FROM "WeaponModAssignment" WHERE "weaponId" = $1', [id]);
+      await trx.query('DELETE FROM "WeaponCharacterCompatibility" WHERE "weaponId" = $1', [id]);
+      await trx.query('DELETE FROM "WeaponTrait" WHERE "weaponId" = $1', [id]);
+      await trx.query('DELETE FROM "WeaponPerkAssignment" WHERE "weaponId" = $1', [id]);
+      await trx.query('DELETE FROM "WeaponCatalyst" WHERE "weaponId" = $1', [id]);
 
-      // Re-insert mods
-      if (formData.mods && formData.mods.length > 0) {
-        for (const mod of formData.mods) {
-          await trx.query(
-            `INSERT INTO weapon_mods (
-              weapon_id, category, name, effect, stat_value, stat_type, display_order
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-            [id, mod.category, mod.name, mod.effect, mod.statValue, mod.statType, mod.displayOrder || 0]
-          );
-        }
-      }
+      // Note: The weapon admin form stores mods and perks differently than the new WeaponMod system
+      // For now, we'll skip re-inserting mods since they're handled by the WeaponSlotSelectors
+      // which connects to the separate WeaponMod/WeaponModAssignment system
 
       // Re-insert character compatibility
       if (formData.compatibleCharacterIds && formData.compatibleCharacterIds.length > 0) {
         for (const characterId of formData.compatibleCharacterIds) {
           await trx.query(
-            `INSERT INTO weapon_character_compatibility (weapon_id, character_id) VALUES ($1, $2)`,
+            `INSERT INTO "WeaponCharacterCompatibility" ("weaponId", "characterId") VALUES ($1, $2)`,
             [id, characterId]
-          );
-        }
-      }
-
-      // Re-insert perks
-      if (formData.perks && formData.perks.length > 0) {
-        for (const perk of formData.perks) {
-          await trx.query(
-            `INSERT INTO perks (
-              weapon_id, perk_name, perk_description, perk_type, display_order
-            ) VALUES ($1, $2, $3, $4, $5)`,
-            [id, perk.perkName, perk.perkDescription, perk.perkType, perk.displayOrder || 0]
           );
         }
       }
@@ -397,14 +376,14 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
       // Re-insert traits (intrinsic and origin)
       if (formData.intrinsicTraitId) {
         await trx.query(
-          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          `INSERT INTO "WeaponTrait" ("weaponId", "traitId", slot) VALUES ($1, $2, $3)`,
           [id, formData.intrinsicTraitId, 1]
         );
       }
 
       if (formData.originTraitId) {
         await trx.query(
-          `INSERT INTO weapon_traits (weapon_id, trait_id, slot) VALUES ($1, $2, $3)`,
+          `INSERT INTO "WeaponTrait" ("weaponId", "traitId", slot) VALUES ($1, $2, $3)`,
           [id, formData.originTraitId, 2]
         );
       }
@@ -412,14 +391,14 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
       // Re-insert perk assignments (slots 3 and 4)
       if (formData.perk1Id) {
         await trx.query(
-          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          `INSERT INTO "WeaponPerkAssignment" ("weaponId", "perkId", slot) VALUES ($1, $2, $3)`,
           [id, formData.perk1Id, 3]
         );
       }
 
       if (formData.perk2Id) {
         await trx.query(
-          `INSERT INTO weapon_perk_assignments (weapon_id, perk_id, slot) VALUES ($1, $2, $3)`,
+          `INSERT INTO "WeaponPerkAssignment" ("weaponId", "perkId", slot) VALUES ($1, $2, $3)`,
           [id, formData.perk2Id, 4]
         );
       }
@@ -427,7 +406,7 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
       // Re-insert catalyst (only for exotic/6-star weapons)
       if (formData.catalystId && formData.rarity >= 6) {
         await trx.query(
-          `INSERT INTO weapon_catalysts (weapon_id, catalyst_id) VALUES ($1, $2)`,
+          `INSERT INTO "WeaponCatalyst" ("weaponId", "catalystId") VALUES ($1, $2)`,
           [id, formData.catalystId]
         );
       }
