@@ -91,7 +91,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           className="px-3 py-1 bg-destiny-dark hover:bg-gray-700 rounded text-sm transition"
           title="Insert Link"
         >
-          🔗 Link
+          Link
         </button>
         <button
           type="button"
@@ -102,7 +102,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           className="px-3 py-1 bg-destiny-dark hover:bg-gray-700 rounded text-sm transition"
           title="Insert Image"
         >
-          🖼️ Image
+          Image
         </button>
         <button
           type="button"
@@ -113,7 +113,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
           className="px-3 py-1 bg-destiny-dark hover:bg-gray-700 rounded text-sm transition"
           title="Text Color"
         >
-          🎨 Color
+          Color
         </button>
       </div>
 

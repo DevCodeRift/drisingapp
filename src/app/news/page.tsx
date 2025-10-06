@@ -148,7 +148,7 @@ export default function NewsPage() {
                         {post.type}
                       </span>
                       {post.url && post.type === 'VIDEO' && (
-                        <span className="text-xs text-gray-400">🎥</span>
+                        <span className="text-xs text-gray-400">[VIDEO]</span>
                       )}
                     </div>
                     <h2 className="text-2xl font-bold text-destiny-orange mb-2">

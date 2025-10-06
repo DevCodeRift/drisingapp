@@ -63,7 +63,7 @@ export default function ImageSelector({ value, onChange, label }: ImageSelectorP
             className="btn btn-secondary btn-small"
             style={{ whiteSpace: 'nowrap' }}
           >
-            {isOpen ? 'Close Gallery' : '📁 Browse Images'}
+            {isOpen ? 'Close Gallery' : 'Browse Images'}
           </button>
         </div>
 

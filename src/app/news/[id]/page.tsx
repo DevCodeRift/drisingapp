@@ -188,7 +188,7 @@ export default function NewsDetailPage() {
                   {news.type}
                 </span>
                 {news.url && news.type === 'VIDEO' && (
-                  <span className="text-xs text-gray-400">🎥</span>
+                  <span className="text-xs text-gray-400">[VIDEO]</span>
                 )}
               </div>
               <h1 className="text-4xl font-bold text-destiny-orange mb-4">

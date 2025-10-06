@@ -109,8 +109,8 @@ export default function LFGPage() {
                 />
 
                 <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                  <span className="text-destiny-blue">👥 {post.playerCount} players needed</span>
-                  {post.region && <span>🌍 {post.region}</span>}
+                  <span className="text-destiny-blue">{post.playerCount} players needed</span>
+                  {post.region && <span>Region: {post.region}</span>}
                 </div>
 
                 <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">

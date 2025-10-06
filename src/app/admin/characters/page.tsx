@@ -121,7 +121,7 @@ export default function AdminCharactersPage() {
               disabled={bulkImporting}
               className="bg-destiny-purple hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
             >
-              {bulkImporting ? 'Importing...' : '📥 Bulk Import All'}
+              {bulkImporting ? 'Importing...' : 'Bulk Import All'}
             </button>
             <button
               onClick={() => router.push('/admin')}
