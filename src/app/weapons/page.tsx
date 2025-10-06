@@ -9,6 +9,7 @@ export default function WeaponsPage() {
   const router = useRouter();
   const { colors } = useTheme();
   const [weapons, setWeapons] = useState<Weapon[]>([]);
+  const [allWeapons, setAllWeapons] = useState<Weapon[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     slot: '',
@@ -18,10 +19,31 @@ export default function WeaponsPage() {
   });
 
   useEffect(() => {
+    fetchAllWeapons();
+  }, []);
+
+  useEffect(() => {
     fetchWeapons();
-  }, [filters]);
+  }, [filters, allWeapons]);
+
+  const fetchAllWeapons = async () => {
+    try {
+      const response = await fetch('/api/weapons?limit=1000'); // Get all weapons for sidebar counts
+      const data = await response.json();
+      setAllWeapons(data.data || []);
+    } catch (error) {
+      console.error('Error fetching all weapons:', error);
+    }
+  };
 
   const fetchWeapons = async () => {
+    // If no filters applied, use allWeapons that we already fetched
+    if (!filters.slot && !filters.weaponType && !filters.element && !filters.rarity) {
+      setWeapons(allWeapons);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -131,7 +153,7 @@ export default function WeaponsPage() {
 
             <div className="mt-2 space-y-1">
               {weaponTypes.map(type => {
-                const count = !filters.weaponType ? weapons.filter(w => w.weaponType === type).length : 0;
+                const count = allWeapons.filter(w => w.weaponType === type).length;
                 return (
                   <button
                     key={type}
@@ -143,9 +165,7 @@ export default function WeaponsPage() {
                     }}
                   >
                     {type.toUpperCase()}
-                    {!filters.weaponType && (
-                      <span className="float-right text-xs opacity-60">{count}</span>
-                    )}
+                    <span className="float-right text-xs opacity-60">{count}</span>
                   </button>
                 );
               })}
