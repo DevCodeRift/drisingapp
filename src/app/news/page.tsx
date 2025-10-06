@@ -88,8 +88,8 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-destiny-darker text-white p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-destiny-bg-primary text-white">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-destiny-orange">Destiny Rising News</h1>
           {session && (
@@ -103,11 +103,11 @@ export default function NewsPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-3 mb-8">
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
           >
             <option value="">All Types</option>
             <option value="ARTICLE">Articles</option>
@@ -119,7 +119,7 @@ export default function NewsPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'upvotes' | 'recent')}
-            className="bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+            className="bg-destiny-bg-secondary text-destiny-text-primary px-4 py-2.5 rounded-md border border-destiny-border-subtle hover:border-destiny-border focus:border-destiny-orange focus:outline-none transition-all"
           >
             <option value="upvotes">Most Upvoted</option>
             <option value="recent">Most Recent</option>
