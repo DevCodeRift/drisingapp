@@ -7,7 +7,8 @@ import AdminNav from '@/components/AdminNav';
 interface ModAttribute {
   id: number;
   name: string;
-  statBonus?: string;
+  minStatBonus?: string;
+  maxStatBonus?: string;
 }
 
 export default function AdminModAttributesPage() {
@@ -15,7 +16,8 @@ export default function AdminModAttributesPage() {
   const [loading, setLoading] = useState(true);
   const [newAttribute, setNewAttribute] = useState({
     name: '',
-    statBonus: ''
+    minStatBonus: '',
+    maxStatBonus: ''
   });
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function AdminModAttributesPage() {
         body: JSON.stringify(newAttribute)
       });
       if (res.ok) {
-        setNewAttribute({ name: '', statBonus: '' });
+        setNewAttribute({ name: '', minStatBonus: '', maxStatBonus: '' });
         loadAttributes();
         alert('Attribute created!');
       }
@@ -87,15 +89,27 @@ export default function AdminModAttributesPage() {
                 placeholder="e.g., Increased Damage"
               />
             </div>
-            <div>
-              <label className="block text-sm mb-2">Stat Bonus</label>
-              <input
-                type="text"
-                value={newAttribute.statBonus}
-                onChange={(e) => setNewAttribute({...newAttribute, statBonus: e.target.value})}
-                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
-                placeholder="e.g., +15% damage"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm mb-2">Min Stat Bonus (Lowest Refinement)</label>
+                <input
+                  type="text"
+                  value={newAttribute.minStatBonus}
+                  onChange={(e) => setNewAttribute({...newAttribute, minStatBonus: e.target.value})}
+                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                  placeholder="e.g., +5% damage"
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-2">Max Stat Bonus (Max Refinement)</label>
+                <input
+                  type="text"
+                  value={newAttribute.maxStatBonus}
+                  onChange={(e) => setNewAttribute({...newAttribute, maxStatBonus: e.target.value})}
+                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                  placeholder="e.g., +15% damage"
+                />
+              </div>
             </div>
             <button type="submit" className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded">
               Create Attribute
@@ -109,7 +123,8 @@ export default function AdminModAttributesPage() {
             <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left">Attribute Name</th>
-                <th className="px-6 py-3 text-left">Stat Bonus</th>
+                <th className="px-6 py-3 text-left">Min Stat Bonus</th>
+                <th className="px-6 py-3 text-left">Max Stat Bonus</th>
                 <th className="px-6 py-3 text-left">Actions</th>
               </tr>
             </thead>
@@ -117,7 +132,8 @@ export default function AdminModAttributesPage() {
               {attributes.map(attr => (
                 <tr key={attr.id} className="hover:bg-gray-700/50">
                   <td className="px-6 py-4 font-medium">{attr.name}</td>
-                  <td className="px-6 py-4 text-sm text-green-400">{attr.statBonus}</td>
+                  <td className="px-6 py-4 text-sm text-green-400">{attr.minStatBonus || '-'}</td>
+                  <td className="px-6 py-4 text-sm text-green-400">{attr.maxStatBonus || '-'}</td>
                   <td className="px-6 py-4">
                     <button
                       onClick={() => handleDelete(attr.id, attr.name)}

@@ -10,7 +10,8 @@ export async function GET() {
         id: row.id,
         name: row.name,
         description: row.description,
-        statBonus: row.stat_bonus,
+        minStatBonus: row.min_stat_bonus,
+        maxStatBonus: row.max_stat_bonus,
         createdAt: row.created_at
       }))
     });
@@ -25,10 +26,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const result = await db.query(
-      `INSERT INTO mod_attributes (name, description, stat_bonus)
-       VALUES ($1, $2, $3)
+      `INSERT INTO mod_attributes (name, description, min_stat_bonus, max_stat_bonus)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [body.name, body.description, body.statBonus]
+      [body.name, body.description, body.minStatBonus, body.maxStatBonus]
     );
 
     return NextResponse.json({
@@ -36,7 +37,8 @@ export async function POST(request: NextRequest) {
         id: result.rows[0].id,
         name: result.rows[0].name,
         description: result.rows[0].description,
-        statBonus: result.rows[0].stat_bonus,
+        minStatBonus: result.rows[0].min_stat_bonus,
+        maxStatBonus: result.rows[0].max_stat_bonus,
         createdAt: result.rows[0].created_at
       }
     }, { status: 201 });

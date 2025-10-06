@@ -408,11 +408,12 @@ model ModRarity {
 }
 
 model ModAttribute {
-  id          String @id @default(cuid())
-  name        String
-  description String?
-  statBonus   String // e.g., "+10% damage", "+5% reload speed"
-  createdAt   DateTime @default(now())
+  id            String @id @default(cuid())
+  name          String
+  description   String?
+  minStatBonus  String? // e.g., "+5% damage" (lowest refinement)
+  maxStatBonus  String? // e.g., "+15% damage" (max refinement)
+  createdAt     DateTime @default(now())
 
   mainMods   ModMainAttribute[]
   randomMods ModRandomAttribute[]
