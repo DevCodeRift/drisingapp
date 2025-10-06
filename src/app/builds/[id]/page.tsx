@@ -289,9 +289,10 @@ export default function BuildDetailPage() {
                     : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-600'
                 }`}
               >
-              <span className="text-3xl">▲</span>
-              <span className="text-xl font-bold">{build.voteCount || 0}</span>
-            </button>
+                <span className="text-3xl">▲</span>
+                <span className="text-xl font-bold">{build.voteCount || 0}</span>
+              </button>
+            </div>
           </div>
         </div>
 
