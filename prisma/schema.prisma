@@ -249,20 +249,38 @@ model BuildWeaponMod {
 }
 
 model News {
-  id        String    @id @default(cuid())
-  title     String
-  content   String
-  type      NewsType  @default(ARTICLE)
-  url       String?
-  userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  voteCount Int       @default(0)
-  comments  Comment[]
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  votes     Vote[]
+  id            String             @id @default(cuid())
+  title         String
+  content       String             // Legacy field for simple text content
+  type          NewsType           @default(ARTICLE)
+  url           String?
+  userId        String
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  voteCount     Int                @default(0)
+  comments      Comment[]
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  votes         Vote[]
+  contentBlocks NewsContentBlock[]
 
   @@index([voteCount])
+}
+
+// Content blocks for customizable news layouts
+model NewsContentBlock {
+  id        String   @id @default(cuid())
+  newsId    String
+  type      String   // "heading", "text", "video", "image", "divider", "table-of-contents"
+  content   String   // JSON content specific to block type
+  order     Int      // Display order
+  width     String   @default("full") // "full", "half", "third", "two-thirds"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+
+  @@index([newsId])
+  @@index([order])
 }
 
 model LFGPost {
