@@ -152,7 +152,10 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
       case 'stats':
         const statsBlock = block as StatsBlock;
         return (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md border-2 border-gray-200 dark:border-gray-700">
+          <div className="rounded-xl p-6 shadow-md border-2" style={{
+            backgroundColor: colors.surface,
+            borderColor: colors.border.primary
+          }}>
             <h3 className="text-2xl font-bold mb-4" style={{ color: colors.text.primary }}>
               {statsBlock.content.title}
             </h3>
@@ -162,7 +165,7 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
                   key={index}
                   className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border-l-4 border-blue-600"
                 >
-                  <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  <div className="text-sm font-medium mb-1" style={{ color: colors.text.secondary }}>
                     {stat.label}
                   </div>
                   <div className="text-2xl font-bold" style={{ color: colors.text.primary }}>
@@ -177,7 +180,10 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
       case 'artifacts':
         if (!artifacts || artifacts.length === 0) {
           return (
-            <div className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border-2 border-dashed rounded-lg" style={{ borderColor: colors.border.secondary }}>
+            <div className="text-sm italic p-4 border-2 border-dashed rounded-lg" style={{
+              color: colors.text.secondary,
+              borderColor: colors.border.secondary
+            }}>
               No artifacts configured for this build yet.
             </div>
           );
@@ -256,7 +262,7 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
                             <div key={attr.id} className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 px-3 py-2 rounded-lg border-l-4 border-green-500">
                               <span className="font-bold text-green-700 dark:text-green-300">{attr.name}</span>
                               {attr.description && (
-                                <span className="text-gray-700 dark:text-gray-300 ml-2">• {attr.description}</span>
+                                <span className="ml-2" style={{ color: colors.text.primary }}>• {attr.description}</span>
                               )}
                             </div>
                           ))}
@@ -273,7 +279,10 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
       case 'weapons':
         if (!weapons || weapons.length === 0) {
           return (
-            <div className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border-2 border-dashed rounded-lg" style={{ borderColor: colors.border.secondary }}>
+            <div className="text-sm italic p-4 border-2 border-dashed rounded-lg" style={{
+              color: colors.text.secondary,
+              borderColor: colors.border.secondary
+            }}>
               No weapons configured for this build yet.
             </div>
           );
@@ -437,19 +446,19 @@ export default function BlockRenderer({ blocks, artifacts = [], weapons = [] }: 
                       <div>
                         <h4 className="font-bold text-sm uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: colors.text.secondary }}>
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                            <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                           </svg>
                           Mods
                         </h4>
                         <div className="space-y-3">
                           {weapon.mods.map((mod: any) => (
-                            <div key={mod.id} className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-3 rounded-lg border-l-4 border-green-500 hover:shadow-md transition-shadow">
+                            <div key={mod.id} className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-3 rounded-lg border-l-4 border-emerald-500 hover:shadow-md transition-shadow">
                               <div className="font-bold text-sm" style={{ color: colors.text.primary }}>{mod.name}</div>
                               {mod.description && (
                                 <div className="text-xs mt-1" style={{ color: colors.text.secondary }}>{mod.description}</div>
                               )}
                               {mod.effect && (
-                                <div className="text-xs text-green-700 dark:text-green-400 mt-1 font-medium">⚡ {mod.effect}</div>
+                                <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-1 font-medium">⚡ {mod.effect}</div>
                               )}
                             </div>
                           ))}

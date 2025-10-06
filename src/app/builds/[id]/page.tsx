@@ -8,6 +8,7 @@ import { getCharacterImage } from '@/lib/image-assets';
 import { getArtifactImagePath, formatArtifactName, type ArtifactSlot } from '@/lib/artifact-assets';
 import BlockRenderer from '@/components/builds/BlockRenderer';
 import { ContentBlock } from '@/types/blocks';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Character {
   id: string;
@@ -112,6 +113,7 @@ interface Comment {
 
 export default function BuildDetailPage() {
   const { data: session } = useSession();
+  const { colors } = useTheme();
   const router = useRouter();
   const params = useParams();
   const buildId = params.id as string;
@@ -217,10 +219,10 @@ export default function BuildDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-900 dark:text-white text-xl">Loading build...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: colors.primary }}></div>
+          <p className="text-xl" style={{ color: colors.text.primary }}>Loading build...</p>
         </div>
       </div>
     );
@@ -228,8 +230,8 @@ export default function BuildDetailPage() {
 
   if (!build) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-900 dark:text-white text-xl">Build not found</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background }}>
+        <p className="text-xl" style={{ color: colors.text.primary }}>Build not found</p>
       </div>
     );
   }
@@ -238,9 +240,9 @@ export default function BuildDetailPage() {
   const powerWeapon = build.weapons.find(w => w.slot === 'Power');
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
       {/* Hero Section with Character */}
-      <div className="relative h-80 overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+      <div className="relative h-80 overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600">
         <img
           src={getCharacterImage(build.character.name) || ''}
           alt={build.character.name}
@@ -318,9 +320,9 @@ export default function BuildDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Description */}
         {build.description && (
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 mb-8 shadow-md border-l-4 border-blue-600">
-            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Build Description</h3>
-            <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">{build.description}</p>
+          <div className="rounded-xl p-8 mb-8 shadow-md border-l-4 border-blue-600" style={{ backgroundColor: colors.surface }}>
+            <h3 className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: colors.text.secondary }}>Build Description</h3>
+            <p className="text-lg leading-relaxed" style={{ color: colors.text.primary }}>{build.description}</p>
           </div>
         )}
 
@@ -339,20 +341,27 @@ export default function BuildDetailPage() {
         {/* Artifacts Section */}
         {build.artifacts && build.artifacts.length > 0 && (
           <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <h2 className="text-3xl font-bold mb-6 flex items-center gap-3" style={{ color: colors.text.primary }}>
               <div className="w-1 h-8 bg-blue-600 rounded"></div>
               Artifacts
-              <span className="text-base font-normal text-gray-500 dark:text-gray-400">({build.artifacts.length}/4)</span>
+              <span className="text-base font-normal" style={{ color: colors.text.secondary }}>({build.artifacts.length}/4)</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {build.artifacts.map((artifact) => (
                 <div
                   key={artifact.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500"
+                  className="rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 hover:border-blue-500"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border.primary
+                  }}
                 >
                   <div className="flex items-start gap-5">
                     {artifact.artifactName && (
-                      <div className="flex-shrink-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-3 border-2 border-gray-200 dark:border-gray-600">
+                      <div className="flex-shrink-0 rounded-xl p-3 border-2" style={{
+                        backgroundColor: colors.background,
+                        borderColor: colors.border.secondary
+                      }}>
                         <img
                           src={getArtifactImagePath(artifact.slot as ArtifactSlot, artifact.artifactName)}
                           alt={formatArtifactName(artifact.artifactName)}
@@ -373,7 +382,7 @@ export default function BuildDetailPage() {
                           {artifact.rarity}
                         </span>
                       </div>
-                      <h3 className="font-bold text-xl mb-3 text-gray-900 dark:text-white">
+                      <h3 className="font-bold text-xl mb-3" style={{ color: colors.text.primary }}>
                         {artifact.artifactName ? formatArtifactName(artifact.artifactName) : `Artifact ${artifact.slot}`}
                       </h3>
                       <div className="flex flex-wrap gap-3 mb-4 text-sm">
@@ -399,12 +408,12 @@ export default function BuildDetailPage() {
                       </div>
                       {artifact.attributes && artifact.attributes.length > 0 && (
                         <div className="space-y-2">
-                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Attributes</p>
+                          <p className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: colors.text.secondary }}>Attributes</p>
                           {artifact.attributes.filter(attr => attr.name).map((attr) => (
                             <div key={attr.id} className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 px-3 py-2 rounded-lg border-l-4 border-green-500">
                               <span className="font-bold text-green-700 dark:text-green-300">{attr.name}</span>
                               {attr.description && (
-                                <span className="text-gray-700 dark:text-gray-300 ml-2">• {attr.description}</span>
+                                <span className="ml-2" style={{ color: colors.text.primary }}>• {attr.description}</span>
                               )}
                             </div>
                           ))}
@@ -421,16 +430,20 @@ export default function BuildDetailPage() {
         {/* Weapons Section */}
         {(primaryWeapon || powerWeapon) && (
           <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <h2 className="text-3xl font-bold mb-6 flex items-center gap-3" style={{ color: colors.text.primary }}>
               <div className="w-1 h-8 bg-blue-600 rounded"></div>
               Weapons
-              <span className="text-base font-normal text-gray-500 dark:text-gray-400">({[primaryWeapon, powerWeapon].filter(Boolean).length}/2)</span>
+              <span className="text-base font-normal" style={{ color: colors.text.secondary }}>({[primaryWeapon, powerWeapon].filter(Boolean).length}/2)</span>
             </h2>
             <div className="space-y-8">
               {[primaryWeapon, powerWeapon].filter(Boolean).map((weapon) => (
                 <div
                   key={weapon!.id}
-                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:border-blue-500 dark:hover:border-blue-500"
+                  className="rounded-xl shadow-lg border-2 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:border-blue-500"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border.primary
+                  }}
                 >
                   {/* Weapon Header with Gradient */}
                   <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
@@ -494,7 +507,7 @@ export default function BuildDetailPage() {
                     {/* Traits */}
                     {weapon!.traits && weapon!.traits.length > 0 && (
                       <div>
-                        <h4 className="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <h4 className="font-bold text-sm uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: colors.text.secondary }}>
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                           </svg>
@@ -503,9 +516,9 @@ export default function BuildDetailPage() {
                         <div className="space-y-3">
                           {weapon!.traits.map((trait) => (
                             <div key={trait.id} className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 p-3 rounded-lg border-l-4 border-amber-500 hover:shadow-md transition-shadow">
-                              <div className="font-bold text-sm text-gray-900 dark:text-white">{trait.name}</div>
+                              <div className="font-bold text-sm" style={{ color: colors.text.primary }}>{trait.name}</div>
                               {trait.description && (
-                                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{trait.description}</div>
+                                <div className="text-xs mt-1" style={{ color: colors.text.secondary }}>{trait.description}</div>
                               )}
                               {trait.effect && (
                                 <div className="text-xs text-amber-700 dark:text-amber-400 mt-1 font-medium">⚡ {trait.effect}</div>
@@ -519,7 +532,7 @@ export default function BuildDetailPage() {
                     {/* Perks */}
                     {weapon!.perks && weapon!.perks.length > 0 && (
                       <div>
-                        <h4 className="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <h4 className="font-bold text-sm uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: colors.text.secondary }}>
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
@@ -528,9 +541,9 @@ export default function BuildDetailPage() {
                         <div className="space-y-3">
                           {weapon!.perks.map((perk) => (
                             <div key={perk.id} className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-3 rounded-lg border-l-4 border-blue-500 hover:shadow-md transition-shadow">
-                              <div className="font-bold text-sm text-gray-900 dark:text-white">{perk.name}</div>
+                              <div className="font-bold text-sm" style={{ color: colors.text.primary }}>{perk.name}</div>
                               {perk.description && (
-                                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{perk.description}</div>
+                                <div className="text-xs mt-1" style={{ color: colors.text.secondary }}>{perk.description}</div>
                               )}
                               {perk.effect && (
                                 <div className="text-xs text-blue-700 dark:text-blue-400 mt-1 font-medium">⚡ {perk.effect}</div>
@@ -544,7 +557,7 @@ export default function BuildDetailPage() {
                     {/* Catalysts */}
                     {weapon!.catalysts && weapon!.catalysts.length > 0 && (
                       <div>
-                        <h4 className="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <h4 className="font-bold text-sm uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: colors.text.secondary }}>
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                           </svg>
@@ -553,9 +566,9 @@ export default function BuildDetailPage() {
                         <div className="space-y-3">
                           {weapon!.catalysts.map((catalyst) => (
                             <div key={catalyst.id} className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-3 rounded-lg border-l-4 border-purple-500 hover:shadow-md transition-shadow">
-                              <div className="font-bold text-sm text-gray-900 dark:text-white">{catalyst.name}</div>
+                              <div className="font-bold text-sm" style={{ color: colors.text.primary }}>{catalyst.name}</div>
                               {catalyst.description && (
-                                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{catalyst.description}</div>
+                                <div className="text-xs mt-1" style={{ color: colors.text.secondary }}>{catalyst.description}</div>
                               )}
                               {catalyst.effect && (
                                 <div className="text-xs text-purple-700 dark:text-purple-400 mt-1 font-medium">⚡ {catalyst.effect}</div>
@@ -569,7 +582,7 @@ export default function BuildDetailPage() {
                     {/* Mods */}
                     {weapon!.mods && weapon!.mods.length > 0 && (
                       <div>
-                        <h4 className="font-bold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <h4 className="font-bold text-sm uppercase tracking-wide mb-3 flex items-center gap-2" style={{ color: colors.text.secondary }}>
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                           </svg>
@@ -578,9 +591,9 @@ export default function BuildDetailPage() {
                         <div className="space-y-3">
                           {weapon!.mods.map((mod) => (
                             <div key={mod.id} className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 p-3 rounded-lg border-l-4 border-emerald-500 hover:shadow-md transition-shadow">
-                              <div className="font-bold text-sm text-gray-900 dark:text-white">{mod.name}</div>
+                              <div className="font-bold text-sm" style={{ color: colors.text.primary }}>{mod.name}</div>
                               {mod.description && (
-                                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{mod.description}</div>
+                                <div className="text-xs mt-1" style={{ color: colors.text.secondary }}>{mod.description}</div>
                               )}
                               {mod.effect && (
                                 <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-1 font-medium">⚡ {mod.effect}</div>
@@ -600,14 +613,20 @@ export default function BuildDetailPage() {
         )}
 
         {/* Comments Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-6 border-b-2 border-gray-200 dark:border-gray-700">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+        <div className="rounded-xl shadow-md border-2 overflow-hidden" style={{
+          backgroundColor: colors.surface,
+          borderColor: colors.border.primary
+        }}>
+          <div className="p-6 border-b-2" style={{
+            backgroundColor: colors.background,
+            borderColor: colors.border.primary
+          }}>
+            <h2 className="text-3xl font-bold flex items-center gap-3" style={{ color: colors.text.primary }}>
               <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
               </svg>
               Comments
-              <span className="text-lg font-normal text-gray-500 dark:text-gray-400">({comments.length})</span>
+              <span className="text-lg font-normal" style={{ color: colors.text.secondary }}>({comments.length})</span>
             </h2>
           </div>
 
@@ -634,11 +653,11 @@ export default function BuildDetailPage() {
                 </button>
               </form>
             ) : (
-              <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800 text-center">
+              <div className="mb-8 p-6 rounded-xl border-2 text-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800">
                 <svg className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
-                <p className="text-lg text-gray-700 dark:text-gray-300 mb-3">
+                <p className="text-lg mb-3" style={{ color: colors.text.primary }}>
                   Join the conversation
                 </p>
                 <button
@@ -654,13 +673,13 @@ export default function BuildDetailPage() {
             <div className="space-y-4">
               {comments.length === 0 ? (
                 <div className="text-center py-16">
-                  <svg className="w-20 h-20 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-20 h-20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: colors.border.primary }}>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
-                  <p className="text-xl font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                  <p className="text-xl font-semibold mb-2" style={{ color: colors.text.secondary }}>
                     No comments yet
                   </p>
-                  <p className="text-gray-400 dark:text-gray-500">
+                  <p style={{ color: colors.text.secondary, opacity: 0.7 }}>
                     Be the first to share your thoughts!
                   </p>
                 </div>
@@ -668,7 +687,11 @@ export default function BuildDetailPage() {
                 comments.map((comment) => (
                   <div
                     key={comment.id}
-                    className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-5 border-2 border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-600 transition-all"
+                    className="rounded-xl p-5 border-2 transition-all hover:border-blue-500"
+                    style={{
+                      backgroundColor: colors.background,
+                      borderColor: colors.border.primary
+                    }}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-3">
@@ -684,8 +707,8 @@ export default function BuildDetailPage() {
                           </div>
                         )}
                         <div>
-                          <p className="font-bold text-gray-900 dark:text-white">{comment.user.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className="font-bold" style={{ color: colors.text.primary }}>{comment.user.name}</p>
+                          <p className="text-xs" style={{ color: colors.text.secondary }}>
                             {new Date(comment.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>

@@ -93,6 +93,23 @@ export default function WeaponsPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+      {/* Notice Bar */}
+      <div className="bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-600 dark:to-orange-600 border-b-4 border-amber-600 dark:border-amber-700">
+        <div className="max-w-7xl mx-auto px-8 py-4">
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <h3 className="text-white font-bold text-lg mb-1">Work in Progress</h3>
+              <p className="text-white/95 text-sm leading-relaxed">
+                This section of the website is currently under development. Weapon data may contain inaccuracies or incomplete information. We&apos;re working to improve and expand the weapon database with accurate stats and details.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="py-12 px-8" style={{ backgroundColor: colors.surface }}>
         <div className="max-w-7xl mx-auto">
