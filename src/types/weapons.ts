@@ -168,12 +168,14 @@ export const WEAPON_TYPE_NAMES: Record<string, string> = {
 };
 
 export const ELEMENTS = [
+  'Unknown',
   'Arc',
   'Solar',
   'Void'
 ] as const;
 
 export const COMBAT_STYLES = [
+  'Unknown',
   'Piercing',
   'Impact',
   'Spread',
@@ -182,6 +184,7 @@ export const COMBAT_STYLES = [
 
 
 export const WEAPON_SLOTS = [
+  'Unknown',
   'Primary',
   'Power'
 ] as const;

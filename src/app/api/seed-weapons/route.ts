@@ -19,29 +19,25 @@ function createSlug(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-// Get random values for provisional data
-function getRandomRarity(): number {
-  const rarities = [3, 4, 5, 6]; // 3=Rare, 4=Legendary, 5=Mythic, 6=Exotic
-  return rarities[Math.floor(Math.random() * rarities.length)];
+// Default values for provisional data - all set to "Unknown" until manually updated
+function getDefaultRarity(): number {
+  return 3; // Default to 3-star (Rare) until manually set
 }
 
-function getRandomElement(): string {
-  const elements = ['Arc', 'Solar', 'Void'];
-  return elements[Math.floor(Math.random() * elements.length)];
+function getDefaultElement(): string {
+  return 'Unknown';
 }
 
-function getRandomCombatStyle(): string {
-  const styles = ['Rapid-Fire', 'Impact', 'Piercing', 'Spread'];
-  return styles[Math.floor(Math.random() * styles.length)];
+function getDefaultCombatStyle(): string {
+  return 'Unknown';
 }
 
-function getRandomSlot(): string {
-  const slots = ['Primary', 'Power'];
-  return slots[Math.floor(Math.random() * slots.length)];
+function getDefaultSlot(): string {
+  return 'Unknown';
 }
 
-function getRandomBasePower(): number {
-  return Math.floor(Math.random() * 500) + 1000; // 1000-1500 range
+function getDefaultBasePower(): number {
+  return 1000; // Default base value until manually set
 }
 
 // Weapon type mapping
@@ -107,12 +103,12 @@ export async function POST(request: NextRequest) {
         const weapon = {
           name: weaponName,
           slug: finalSlug,
-          rarity: getRandomRarity(),
+          rarity: getDefaultRarity(),
           weaponType: weaponTypeMapping[weaponType] || weaponType,
-          basePower: getRandomBasePower(),
-          combatStyle: getRandomCombatStyle(),
-          element: getRandomElement(),
-          slot: getRandomSlot(),
+          basePower: getDefaultBasePower(),
+          combatStyle: getDefaultCombatStyle(),
+          element: getDefaultElement(),
+          slot: getDefaultSlot(),
           imageUrl: `/images/weapons/${weaponType}/${file}`,
         };
 
