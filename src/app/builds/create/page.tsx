@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCharacterImagePath } from '@/lib/image-assets';
+import { getCharacterImage } from '@/lib/image-assets';
 import ArtifactConfigurator from '@/components/builds/ArtifactConfigurator';
 import WeaponConfigurator from '@/components/builds/WeaponConfigurator';
 
@@ -283,7 +283,7 @@ export default function CreateBuildPage() {
                     }`}
                   >
                     <img
-                      src={getCharacterImagePath(char.name)}
+                      src={getCharacterImage(char.name) || ''}
                       alt={char.name}
                       className="w-full h-24 object-cover"
                     />

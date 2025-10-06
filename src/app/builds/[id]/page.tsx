@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import RichTextEditor from '@/components/RichTextEditor';
-import { getCharacterImagePath } from '@/lib/image-assets';
+import { getCharacterImage } from '@/lib/image-assets';
 import { getArtifactImagePath, formatArtifactName, type ArtifactSlot } from '@/lib/artifact-assets';
 
 interface Character {
@@ -244,7 +244,7 @@ export default function BuildDetailPage() {
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-4">
                 <img
-                  src={getCharacterImagePath(build.character.name)}
+                  src={getCharacterImage(build.character.name) || ''}
                   alt={build.character.name}
                   className="w-16 h-16 object-cover rounded-lg"
                 />
