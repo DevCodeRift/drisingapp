@@ -29,20 +29,9 @@ export default function WeaponConfigurator({ slot, weapons, weaponData, onChange
 
   const isExotic = selectedWeapon?.rarity === 6 || weaponData.rarity === 6;
 
-  console.log('[WeaponConfigurator] Debug:', {
-    slot,
-    weaponsIsArray: Array.isArray(weapons),
-    weaponsLength: Array.isArray(weapons) ? weapons.length : 0,
-    firstWeapon: Array.isArray(weapons) && weapons.length > 0 ? weapons[0] : null,
-    searchTerm
-  });
-
   const filteredWeapons = Array.isArray(weapons) ? weapons.filter(w =>
-    w.slot === slot &&
     w.name.toLowerCase().includes(searchTerm.toLowerCase())
   ) : [];
-
-  console.log('[WeaponConfigurator] Filtered weapons:', filteredWeapons.length);
 
   const handleWeaponSelect = (weapon: any) => {
     setSelectedWeapon(weapon);
