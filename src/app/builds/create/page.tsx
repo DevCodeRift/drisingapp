@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import RichTextEditor from '@/components/RichTextEditor';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Character {
   id: string;
@@ -12,6 +13,7 @@ interface Character {
 
 export default function CreateBuildPage() {
   const { data: session } = useSession();
+  const { colors } = useTheme();
   const router = useRouter();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [formData, setFormData] = useState({
@@ -70,18 +72,23 @@ export default function CreateBuildPage() {
   }
 
   return (
-    <div className="min-h-screen bg-destiny-darker text-white p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold text-destiny-orange mb-8">Create Build</h1>
+        <h1 className="text-4xl font-bold mb-8" style={{ color: colors.primary }}>Create Build</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-2">Character</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: colors.text.primary }}>Character</label>
             <select
               value={formData.characterId}
               onChange={(e) => setFormData({ ...formData, characterId: e.target.value })}
               required
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              className="w-full px-4 py-2 rounded-lg border"
+              style={{
+                backgroundColor: colors.surface,
+                color: colors.text.primary,
+                borderColor: colors.border.primary
+              }}
             >
               <option value="">Select a character</option>
               {characters.map((char) => (
@@ -93,31 +100,41 @@ export default function CreateBuildPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Build Title</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: colors.text.primary }}>Build Title</label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              className="w-full px-4 py-2 rounded-lg border"
+              style={{
+                backgroundColor: colors.surface,
+                color: colors.text.primary,
+                borderColor: colors.border.primary
+              }}
               placeholder="e.g., Ultimate DPS Build"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Short Description</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: colors.text.primary }}>Short Description</label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
-              className="w-full bg-destiny-dark text-white px-4 py-2 rounded-lg border border-gray-700"
+              className="w-full px-4 py-2 rounded-lg border"
+              style={{
+                backgroundColor: colors.surface,
+                color: colors.text.primary,
+                borderColor: colors.border.primary
+              }}
               placeholder="Brief summary of your build"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Build Details</label>
+            <label className="block text-sm font-medium mb-2" style={{ color: colors.text.primary }}>Build Details</label>
             <RichTextEditor
               value={formData.content}
               onChange={(value) => setFormData({ ...formData, content: value })}
@@ -129,14 +146,26 @@ export default function CreateBuildPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-destiny-orange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
+              className="text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
+              style={{
+                backgroundColor: colors.primary
+              }}
+              onMouseOver={(e) => !submitting && (e.currentTarget.style.backgroundColor = colors.accent)}
+              onMouseOut={(e) => !submitting && (e.currentTarget.style.backgroundColor = colors.primary)}
             >
               {submitting ? 'Creating...' : 'Create Build'}
             </button>
             <button
               type="button"
               onClick={() => router.push('/builds')}
-              className="bg-destiny-dark hover:bg-gray-700 text-white px-6 py-2 rounded-lg border border-gray-600 transition"
+              className="px-6 py-2 rounded-lg border transition"
+              style={{
+                backgroundColor: colors.surface,
+                color: colors.text.primary,
+                borderColor: colors.border.primary
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.surface}
             >
               Cancel
             </button>

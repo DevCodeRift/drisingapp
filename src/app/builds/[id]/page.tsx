@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import RichTextEditor from '@/components/RichTextEditor';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Character {
   id: string;
@@ -43,6 +44,7 @@ interface Comment {
 
 export default function BuildDetailPage() {
   const { data: session } = useSession();
+  const { colors } = useTheme();
   const router = useRouter();
   const params = useParams();
   const buildId = params.id as string;
@@ -150,7 +152,7 @@ export default function BuildDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-destiny-darker text-white flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
         <p className="text-xl">Loading...</p>
       </div>
     );
@@ -158,44 +160,50 @@ export default function BuildDetailPage() {
 
   if (!build) {
     return (
-      <div className="min-h-screen bg-destiny-darker text-white flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
         <p className="text-xl">Build not found</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-destiny-darker text-white p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: colors.background, color: colors.text.primary }}>
       <div className="max-w-4xl mx-auto">
         <button
           onClick={() => router.push('/builds')}
-          className="text-destiny-blue hover:text-destiny-orange mb-6 transition"
+          className="mb-6 transition"
+          style={{ color: colors.primary }}
+          onMouseOver={(e) => e.currentTarget.style.color = colors.accent}
+          onMouseOut={(e) => e.currentTarget.style.color = colors.primary}
         >
           ← Back to Builds
         </button>
 
         {/* Build Header */}
-        <div className="bg-destiny-dark border border-gray-700 rounded-lg p-8 mb-6">
+        <div className="rounded-lg p-8 mb-6 border" style={{ backgroundColor: colors.surface, borderColor: colors.border.primary }}>
           <div className="flex justify-between items-start mb-4">
             <div className="flex-1">
-              <h1 className="text-4xl font-bold text-destiny-orange mb-4">
+              <h1 className="text-4xl font-bold mb-4" style={{ color: colors.primary }}>
                 {build.title}
               </h1>
-              <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                <span className="text-destiny-blue text-lg">{build.character.name}</span>
+              <div className="flex items-center gap-4 text-sm mb-4" style={{ color: colors.text.muted }}>
+                <span className="text-lg" style={{ color: colors.accent }}>{build.character.name}</span>
                 <span>by {build.user.name}</span>
                 <span>{new Date(build.createdAt).toLocaleDateString()}</span>
               </div>
-              <p className="text-gray-300 text-lg mb-6">{build.description}</p>
+              <p className="text-lg mb-6" style={{ color: colors.text.secondary }}>{build.description}</p>
             </div>
 
             <button
               onClick={handleUpvote}
-              className={`flex flex-col items-center px-6 py-3 rounded-lg transition ${
-                hasUpvoted()
-                  ? 'bg-destiny-orange text-white'
-                  : 'bg-destiny-darker border border-gray-600 hover:border-destiny-orange'
-              }`}
+              className="flex flex-col items-center px-6 py-3 rounded-lg transition border"
+              style={{
+                backgroundColor: hasUpvoted() ? colors.primary : colors.background,
+                color: hasUpvoted() ? '#ffffff' : colors.text.primary,
+                borderColor: hasUpvoted() ? colors.primary : colors.border.secondary
+              }}
+              onMouseOver={(e) => !hasUpvoted() && (e.currentTarget.style.borderColor = colors.primary)}
+              onMouseOut={(e) => !hasUpvoted() && (e.currentTarget.style.borderColor = colors.border.secondary)}
             >
               <span className="text-3xl">▲</span>
               <span className="text-xl font-bold">{build.voteCount || 0}</span>
@@ -204,14 +212,15 @@ export default function BuildDetailPage() {
 
           {/* Build Content */}
           <div
-            className="prose prose-invert max-w-none text-gray-300"
+            className="prose max-w-none"
+            style={{ color: colors.text.secondary }}
             dangerouslySetInnerHTML={{ __html: build.content }}
           />
         </div>
 
         {/* Comments Section */}
-        <div className="bg-destiny-dark border border-gray-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-destiny-orange mb-6">
+        <div className="rounded-lg p-6 border" style={{ backgroundColor: colors.surface, borderColor: colors.border.primary }}>
+          <h2 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}>
             Comments ({comments.length})
           </h2>
 
@@ -226,16 +235,22 @@ export default function BuildDetailPage() {
               <button
                 type="submit"
                 disabled={submitting || !newComment.trim()}
-                className="mt-4 bg-destiny-orange hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
+                className="mt-4 text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
+                style={{ backgroundColor: colors.primary }}
+                onMouseOver={(e) => !e.currentTarget.disabled && (e.currentTarget.style.backgroundColor = colors.accent)}
+                onMouseOut={(e) => !e.currentTarget.disabled && (e.currentTarget.style.backgroundColor = colors.primary)}
               >
                 {submitting ? 'Posting...' : 'Post Comment'}
               </button>
             </form>
           ) : (
-            <p className="text-gray-400 mb-8">
+            <p className="mb-8" style={{ color: colors.text.muted }}>
               <button
                 onClick={() => router.push('/api/auth/signin')}
-                className="text-destiny-blue hover:text-destiny-orange"
+                className="transition"
+                style={{ color: colors.primary }}
+                onMouseOver={(e) => e.currentTarget.style.color = colors.accent}
+                onMouseOut={(e) => e.currentTarget.style.color = colors.primary}
               >
                 Sign in
               </button>{' '}
@@ -246,14 +261,15 @@ export default function BuildDetailPage() {
           {/* Comments List */}
           <div className="space-y-4">
             {comments.length === 0 ? (
-              <p className="text-gray-400 text-center py-8">
+              <p className="text-center py-8" style={{ color: colors.text.muted }}>
                 No comments yet. Be the first to comment!
               </p>
             ) : (
               comments.map((comment) => (
                 <div
                   key={comment.id}
-                  className="bg-destiny-darker border border-gray-700 rounded-lg p-4"
+                  className="rounded-lg p-4 border"
+                  style={{ backgroundColor: colors.background, borderColor: colors.border.primary }}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex items-center gap-3">
@@ -265,8 +281,8 @@ export default function BuildDetailPage() {
                         />
                       )}
                       <div>
-                        <p className="font-bold">{comment.user.name}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="font-bold" style={{ color: colors.text.primary }}>{comment.user.name}</p>
+                        <p className="text-xs" style={{ color: colors.text.muted }}>
                           {new Date(comment.createdAt).toLocaleString()}
                         </p>
                       </div>
@@ -274,14 +290,18 @@ export default function BuildDetailPage() {
                     {session?.user?.id === comment.userId && (
                       <button
                         onClick={() => handleDeleteComment(comment.id)}
-                        className="text-xs text-red-400 hover:text-red-300"
+                        className="text-xs transition"
+                        style={{ color: '#ef4444' }}
+                        onMouseOver={(e) => e.currentTarget.style.color = '#dc2626'}
+                        onMouseOut={(e) => e.currentTarget.style.color = '#ef4444'}
                       >
                         Delete
                       </button>
                     )}
                   </div>
                   <div
-                    className="prose prose-invert max-w-none text-gray-300"
+                    className="prose max-w-none"
+                    style={{ color: colors.text.secondary }}
                     dangerouslySetInnerHTML={{ __html: comment.content }}
                   />
                 </div>
