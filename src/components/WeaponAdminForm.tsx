@@ -202,7 +202,7 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
           perk1Id={formData.perk1Id}
           perk2Id={formData.perk2Id}
           catalystId={formData.catalystId}
-          onChange={handleInputChange}
+          onChange={(field, value) => handleInputChange(field as keyof WeaponFormData, value)}
         />
 
 
