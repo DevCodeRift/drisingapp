@@ -146,7 +146,7 @@ export default function CreateBuildPage() {
     try {
       const [charactersRes, weaponsRes] = await Promise.all([
         fetch('/api/characters'),
-        fetch('/api/weapons')
+        fetch('/api/weapons?limit=1000') // Get all weapons for build creator
       ]);
 
       const charactersData = await charactersRes.json();
