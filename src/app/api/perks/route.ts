@@ -26,6 +26,9 @@ export async function GET(request: NextRequest) {
         description: row.description,
         effect: row.effect,
         iconUrl: row.icon_url,
+        basePower: row.base_power,
+        activePerkUpgradePower: row.active_perk_upgrade_power,
+        activeExtraFoundryEffectPower: row.active_extra_foundry_effect_power,
         createdAt: row.created_at
       }))
     });
@@ -40,10 +43,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const result = await db.query(
-      `INSERT INTO weapon_perks (name, slot, description, effect, icon_url)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO weapon_perks (name, slot, description, effect, icon_url, base_power, active_perk_upgrade_power, active_extra_foundry_effect_power)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [body.name, body.slot, body.description, body.effect, body.iconUrl]
+      [
+        body.name,
+        body.slot,
+        body.description,
+        body.effect,
+        body.iconUrl,
+        body.basePower || 0,
+        body.activePerkUpgradePower || 0,
+        body.activeExtraFoundryEffectPower || 0
+      ]
     );
 
     return NextResponse.json({
@@ -54,6 +66,9 @@ export async function POST(request: NextRequest) {
         description: result.rows[0].description,
         effect: result.rows[0].effect,
         iconUrl: result.rows[0].icon_url,
+        basePower: result.rows[0].base_power,
+        activePerkUpgradePower: result.rows[0].active_perk_upgrade_power,
+        activeExtraFoundryEffectPower: result.rows[0].active_extra_foundry_effect_power,
         createdAt: result.rows[0].created_at
       }
     }, { status: 201 });

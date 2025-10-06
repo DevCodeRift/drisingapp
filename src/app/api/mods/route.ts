@@ -74,6 +74,12 @@ export async function GET(request: NextRequest) {
         unlocksPerkUpgrade: row.unlocks_perk_upgrade,
         perkUpgradeDescription: row.perk_upgrade_description,
         iconUrl: row.icon_url,
+        refinementPowerMin: row.refinement_power_min,
+        refinementPowerMax: row.refinement_power_max,
+        enhancePerkPower: row.enhance_perk_power,
+        statBoostMin: row.stat_boost_min,
+        statBoostMax: row.stat_boost_max,
+        statBoostType: row.stat_boost_type,
         mainAttributes: row.main_attributes || [],
         randomAttributes: row.random_attributes || [],
         upgradablePerks: row.upgradable_perks || [],
@@ -93,8 +99,12 @@ export async function POST(request: NextRequest) {
     await db.transaction(async (client) => {
       // Insert mod
       const modResult = await client.query(
-        `INSERT INTO weapon_mods (name, category, rarity_id, description, combat_style, unlocks_perk_upgrade, perk_upgrade_description, icon_url)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        `INSERT INTO weapon_mods (
+          name, category, rarity_id, description, combat_style, unlocks_perk_upgrade, perk_upgrade_description, icon_url,
+          refinement_power_min, refinement_power_max, enhance_perk_power,
+          stat_boost_min, stat_boost_max, stat_boost_type
+        )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
          RETURNING *`,
         [
           body.name,
@@ -104,7 +114,13 @@ export async function POST(request: NextRequest) {
           body.combatStyle || null,
           body.unlocksPerkUpgrade || false,
           body.perkUpgradeDescription,
-          body.iconUrl
+          body.iconUrl,
+          body.refinementPowerMin || 0,
+          body.refinementPowerMax || 0,
+          body.enhancePerkPower || 0,
+          body.statBoostMin || 0,
+          body.statBoostMax || 0,
+          body.statBoostType
         ]
       );
 
