@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Weapon } from '@/types/weapons';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Zap, Filter, Star } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 
 export default function WeaponsPage() {
   const router = useRouter();
@@ -84,548 +84,304 @@ export default function WeaponsPage() {
   };
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ background: colors.background }}
-    >
-      {/* Animated background particles */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              background: `radial-gradient(circle, ${colors.primary}, transparent)`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [0.5, 1.2, 0.5],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Hero Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 px-8 py-16 text-center"
-      >
-        <h1
-          className="text-6xl md:text-8xl font-black mb-6 uppercase tracking-wider"
-          style={{
-            color: colors.text.primary,
-            textShadow: `0 0 30px ${colors.primary}80, 2px 2px 8px rgba(0,0,0,0.8)`,
-            filter: 'drop-shadow(2px 2px 8px rgba(0,0,0,0.8))'
-          }}
-        >
-          WEAPONS ARSENAL
-        </h1>
-        <p
-          className="text-2xl font-semibold mb-8"
-          style={{
-            color: colors.text.primary,
-            textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-          }}
-        >
-          Discover and master the ultimate firepower
-        </p>
-        <div
-          className="w-32 h-1 mx-auto rounded-full"
-          style={{ background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` }}
-        />
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto px-8 relative z-10">
-        <div className="flex gap-8">
-          {/* Left Sidebar - Weapon Type Filters */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-80 backdrop-blur-md rounded-2xl border-2 shadow-2xl"
-            style={{
-              background: colors.surface,
-              borderColor: colors.border.primary,
-              boxShadow: `0 0 40px ${colors.primary}30`
-            }}
-          >
-            {/* Top buttons */}
-            <div
-              className="p-6 border-b-2"
-              style={{ borderColor: colors.border.primary }}
-            >
-              <h2
-                className="text-2xl font-bold mb-4 flex items-center gap-3"
+    <div className="min-h-screen" style={{ backgroundColor: colors.background }}>
+      {/* Header */}
+      <div className="py-12 px-8" style={{ backgroundColor: colors.surface }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1
+                className="text-4xl font-bold mb-2"
+                style={{ color: colors.text.primary }}
+              >
+                Weapons
+              </h1>
+              <p
+                className="text-lg"
+                style={{ color: colors.text.secondary }}
+              >
+                Discover and explore the weapon arsenal
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div
+                className="px-4 py-2 rounded-lg border flex items-center gap-2"
                 style={{
-                  color: colors.primary,
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                  backgroundColor: colors.background,
+                  borderColor: colors.border.primary,
+                  color: colors.text.secondary
                 }}
               >
-                <Filter className="w-6 h-6" />
-                WEAPON FILTERS
-              </h2>
-              <div className="flex flex-col gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 text-sm font-bold rounded-xl border-2 transition-all duration-200 uppercase tracking-wider"
-                  style={{
-                    background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
-                    color: '#ffffff',
-                    borderColor: colors.accent,
-                    boxShadow: `0 4px 15px ${colors.primary}40`
-                  }}
-                >
-                  All Characters
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 text-sm font-bold rounded-xl border-2 transition-all duration-200 uppercase tracking-wider"
-                  style={{
-                    background: colors.button.secondary,
-                    color: colors.text.primary,
-                    borderColor: colors.border.primary,
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-                  }}
-                >
-                  Advanced Filters
-                </motion.button>
+                <Search className="w-4 h-4" />
+                <span className="text-sm">
+                  {loading ? '...' : weapons.length} weapons
+                </span>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
 
-            {/* Weapon type filters */}
-            <div className="p-6">
-              <motion.div
-                className="rounded-xl border-2 overflow-hidden"
+      <div className="max-w-7xl mx-auto px-8 py-8">
+        <div className="flex gap-8">
+          {/* Sidebar Filters */}
+          <div className="w-80">
+            <div
+              className="rounded-lg border p-6 sticky top-8"
+              style={{
+                backgroundColor: colors.surface,
+                borderColor: colors.border.primary
+              }}
+            >
+              <div className="flex items-center gap-2 mb-6">
+                <Filter className="w-5 h-5" style={{ color: colors.primary }} />
+                <h2
+                  className="text-lg font-semibold"
+                  style={{ color: colors.text.primary }}
+                >
+                  Filters
+                </h2>
+              </div>
+
+              {/* Slot Filters */}
+              <div className="mb-6">
+                <h3
+                  className="text-sm font-medium mb-3"
+                  style={{ color: colors.text.secondary }}
+                >
+                  WEAPON SLOT
+                </h3>
+                <div className="space-y-2">
+                  {['', 'Primary', 'Power'].map((slot) => (
+                    <button
+                      key={slot || 'all'}
+                      onClick={() => setFilters(prev => ({ ...prev, slot }))}
+                      className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                        filters.slot === slot ? 'font-medium' : ''
+                      }`}
+                      style={{
+                        backgroundColor: filters.slot === slot ? colors.button.secondary : 'transparent',
+                        color: filters.slot === slot ? colors.primary : colors.text.secondary
+                      }}
+                    >
+                      {slot || 'All Slots'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Type Filters */}
+              <div className="mb-6">
+                <h3
+                  className="text-sm font-medium mb-3"
+                  style={{ color: colors.text.secondary }}
+                >
+                  WEAPON TYPE
+                </h3>
+                <div className="space-y-1 max-h-64 overflow-y-auto">
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, weaponType: '' }))}
+                    className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                      !filters.weaponType ? 'font-medium' : ''
+                    }`}
+                    style={{
+                      backgroundColor: !filters.weaponType ? colors.button.secondary : 'transparent',
+                      color: !filters.weaponType ? colors.primary : colors.text.secondary
+                    }}
+                  >
+                    All Types ({allWeapons.length})
+                  </button>
+                  {weaponTypes.map((type) => {
+                    const count = allWeapons.filter(w => w.weaponType === type).length;
+                    return (
+                      <button
+                        key={type}
+                        onClick={() => setFilters(prev => ({ ...prev, weaponType: type }))}
+                        className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors flex justify-between ${
+                          filters.weaponType === type ? 'font-medium' : ''
+                        }`}
+                        style={{
+                          backgroundColor: filters.weaponType === type ? colors.button.secondary : 'transparent',
+                          color: filters.weaponType === type ? colors.primary : colors.text.secondary
+                        }}
+                      >
+                        <span>{type}</span>
+                        <span className="text-xs opacity-60">{count}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="flex items-center space-x-3">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2" style={{ borderColor: colors.primary }}></div>
+                  <span style={{ color: colors.text.secondary }}>Loading weapons...</span>
+                </div>
+              </div>
+            ) : weapons.length === 0 ? (
+              <div className="text-center py-12">
+                <p
+                  className="text-lg font-medium mb-2"
+                  style={{ color: colors.text.primary }}
+                >
+                  No weapons found
+                </p>
+                <p style={{ color: colors.text.secondary }}>
+                  Try adjusting your filters to see more results
+                </p>
+              </div>
+            ) : (
+              <div
+                className="rounded-lg border overflow-hidden"
                 style={{
-                  background: colors.button.secondary,
+                  backgroundColor: colors.surface,
                   borderColor: colors.border.primary
                 }}
               >
-                <motion.button
-                  onClick={() => setFilters(prev => ({ ...prev, weaponType: '' }))}
-                  className="w-full text-left px-6 py-4 text-sm font-bold rounded-xl transition-all duration-200 uppercase tracking-wider flex items-center justify-between"
-                  style={{
-                    background: !filters.weaponType ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : 'transparent',
-                    color: !filters.weaponType ? '#ffffff' : colors.text.primary,
-                    textShadow: !filters.weaponType ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.3)'
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center gap-2">
-                    <Zap className="w-4 h-4" />
-                    ALL WEAPONS
-                  </span>
-                  <span className="text-xs opacity-80 font-bold">
-                    {!filters.weaponType ? `[${weapons.length}]` : ''}
-                  </span>
-                </motion.button>
-              </motion.div>
-
-              <div className="mt-4 space-y-2">
-                {weaponTypes.map((type, index) => {
-                  const count = allWeapons.filter(w => w.weaponType === type).length;
-                  return (
-                    <motion.button
-                      key={type}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      onClick={() => setFilters(prev => ({ ...prev, weaponType: type }))}
-                      className="w-full text-left px-6 py-3 text-sm rounded-xl transition-all duration-200 font-semibold uppercase tracking-wide flex items-center justify-between border-2"
-                      style={{
-                        background: filters.weaponType === type ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
-                        color: filters.weaponType === type ? '#ffffff' : colors.text.primary,
-                        borderColor: filters.weaponType === type ? colors.accent : colors.border.secondary,
-                        boxShadow: filters.weaponType === type ? `0 4px 15px ${colors.primary}30` : '0 2px 8px rgba(0,0,0,0.1)',
-                        textShadow: filters.weaponType === type ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
-                      }}
-                      whileHover={{ scale: 1.02, x: 4 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span>{type.toUpperCase()}</span>
-                      <span className="text-xs opacity-80 font-bold bg-black/20 px-2 py-1 rounded-full">{count}</span>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Main Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex-1 backdrop-blur-md rounded-2xl border-2 shadow-2xl"
-            style={{
-              background: colors.surface,
-              borderColor: colors.border.primary,
-              boxShadow: `0 0 40px ${colors.primary}20`
-            }}
-          >
-            {/* Header with slot filters and results count */}
-            <div
-              className="flex justify-between items-center p-8 border-b-2"
-              style={{ borderColor: colors.border.primary }}
-            >
-              <div className="flex gap-4">
-                <motion.button
-                  onClick={() => setFilters(prev => ({ ...prev, slot: '' }))}
-                  className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
-                  style={{
-                    background: !filters.slot ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
-                    color: !filters.slot ? '#ffffff' : colors.text.primary,
-                    borderColor: !filters.slot ? colors.accent : colors.border.primary,
-                    boxShadow: !filters.slot ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
-                    textShadow: !filters.slot ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  All Slots
-                </motion.button>
-                <motion.button
-                  onClick={() => setFilters(prev => ({ ...prev, slot: 'Primary' }))}
-                  className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
-                  style={{
-                    background: filters.slot === 'Primary' ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
-                    color: filters.slot === 'Primary' ? '#ffffff' : colors.text.primary,
-                    borderColor: filters.slot === 'Primary' ? colors.accent : colors.border.primary,
-                    boxShadow: filters.slot === 'Primary' ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
-                    textShadow: filters.slot === 'Primary' ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Primary
-                </motion.button>
-                <motion.button
-                  onClick={() => setFilters(prev => ({ ...prev, slot: 'Power' }))}
-                  className="px-6 py-3 text-sm font-bold rounded-xl transition-all duration-200 border-2 uppercase tracking-wider"
-                  style={{
-                    background: filters.slot === 'Power' ? `linear-gradient(45deg, ${colors.primary}, ${colors.accent})` : colors.button.secondary,
-                    color: filters.slot === 'Power' ? '#ffffff' : colors.text.primary,
-                    borderColor: filters.slot === 'Power' ? colors.accent : colors.border.primary,
-                    boxShadow: filters.slot === 'Power' ? `0 4px 15px ${colors.primary}40` : '0 2px 8px rgba(0,0,0,0.1)',
-                    textShadow: filters.slot === 'Power' ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(0,0,0,0.2)'
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Power
-                </motion.button>
-              </div>
-              <div
-                className="text-lg font-bold flex items-center gap-3"
-                style={{ color: colors.text.primary, textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}
-              >
-                <Star className="w-5 h-5" style={{ color: colors.accent }} />
-                Results: <span style={{ color: colors.primary }}>{loading ? '...' : weapons.length}</span>
-              </div>
-            </div>
-
-            {/* Table */}
-            <div className="p-8">
-              {/* Table Header */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="border-2 rounded-2xl overflow-hidden shadow-2xl"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.surface}, ${colors.button.secondary})`,
-                  borderColor: colors.border.primary,
-                  boxShadow: `0 0 30px ${colors.primary}20`
-                }}
-              >
+                {/* Table Header */}
                 <div
-                  className="grid grid-cols-12 gap-4 px-6 py-4 border-b-2"
+                  className="grid grid-cols-12 gap-4 px-6 py-4 border-b text-sm font-medium"
                   style={{
                     borderColor: colors.border.primary,
-                    background: `linear-gradient(90deg, ${colors.primary}20, ${colors.accent}20)`
+                    backgroundColor: colors.button.secondary,
+                    color: colors.text.secondary
                   }}
                 >
-                  <div
-                    className="col-span-6 text-sm font-bold uppercase tracking-wider flex items-center"
-                    style={{
-                      color: colors.text.primary,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    Weapon Name
-                  </div>
-                  <div
-                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
-                    style={{
-                      color: colors.text.primary,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    Combat Style
-                  </div>
-                  <div
-                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
-                    style={{
-                      color: colors.text.primary,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    Slot
-                  </div>
-                  <div
-                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
-                    style={{
-                      color: colors.text.primary,
-                      textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    Characters
-                  </div>
+                  <div className="col-span-5">WEAPON</div>
+                  <div className="col-span-2">TYPE</div>
+                  <div className="col-span-2">SLOT</div>
+                  <div className="col-span-2">ELEMENT</div>
+                  <div className="col-span-1">RARITY</div>
                 </div>
 
                 {/* Table Body */}
-                {loading ? (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="px-8 py-16 text-center"
-                  >
-                    <motion.div
-                      className="w-16 h-16 rounded-full border-4 mx-auto mb-6"
-                      style={{
-                        borderColor: colors.primary,
-                        borderTopColor: 'transparent'
-                      }}
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    />
-                    <p
-                      className="text-xl font-bold"
-                      style={{
-                        color: colors.text.primary,
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                      }}
-                    >
-                      Loading Arsenal...
-                    </p>
-                  </motion.div>
-                ) : weapons.length === 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="px-8 py-16 text-center"
-                  >
-                    <div
-                      className="text-4xl mb-4 font-bold"
-                      style={{ color: colors.primary }}
-                    >
-                      NO RESULTS
-                    </div>
-                    <p
-                      className="text-2xl font-bold mb-4"
-                      style={{
-                        color: colors.text.primary,
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                      }}
-                    >
-                      NO WEAPONS FOUND
-                    </p>
-                    <p
-                      className="text-lg"
-                      style={{
-                        color: colors.text.secondary,
-                        textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-                      }}
-                    >
-                      Try adjusting your filters to discover more arsenal
-                    </p>
-                  </motion.div>
-                ) : (
-                  <div>
-                    {weapons.map((weapon, index) => {
-                      const rarityColors = getRarityColors(weapon.rarity);
-                      return (
-                        <motion.div
-                          key={weapon.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: index * 0.05 }}
-                          className="grid grid-cols-12 gap-4 px-6 py-4 transition-all duration-300 cursor-pointer border-b-2"
-                          style={{
-                            borderBottomColor: index !== weapons.length - 1 ? colors.border.secondary : 'transparent',
-                            background: `linear-gradient(90deg, transparent, ${colors.button.secondary}30, transparent)`
-                          }}
-                          whileHover={{
-                            background: `linear-gradient(90deg, ${colors.primary}10, ${colors.accent}20, ${colors.primary}10)`,
-                            boxShadow: `0 8px 25px ${colors.primary}20`
-                          }}
-                          onClick={() => router.push(`/weapons/${weapon.slug}`)}
-                        >
-                          {/* Name Column */}
-                          <div className="col-span-6 flex items-center gap-4">
-                            {/* Weapon Image with rarity border */}
-                            <motion.div
-                              className={`relative w-32 h-24 ${rarityColors.border} border-2 rounded-xl overflow-hidden ${rarityColors.bg} shadow-lg`}
-                              whileHover={{ scale: 1.05 }}
-                              style={{
-                                boxShadow: `0 0 15px ${rarityColors.text.replace('text-', '').replace('-400', '')}30`
-                              }}
-                            >
-                              {weapon.imageUrl ? (
-                                <img
-                                  src={weapon.imageUrl}
-                                  alt={weapon.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              ) : (
-                                <div
-                                  className="flex items-center justify-center h-full text-sm font-bold"
-                                  style={{
-                                    color: colors.text.primary,
-                                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
-                                  }}
-                                >
-                                  No Image
-                                </div>
-                              )}
-                            </motion.div>
-
-                            {/* Weapon Info */}
-                            <div className="flex-1">
-                              {/* Rarity stars */}
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`text-lg ${rarityColors.text} drop-shadow-lg`}>
-                                  {getRarityStars(weapon.rarity)}
-                                </span>
-                                <span
-                                  className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide"
-                                  style={{
-                                    background: `linear-gradient(45deg, ${rarityColors.text.replace('text-', '').replace('-400', '')}40, ${rarityColors.text.replace('text-', '').replace('-400', '')}60)`,
-                                    color: rarityColors.text.replace('text-', '#').replace('-400', '')
-                                  }}
-                                >
-                                  {weapon.rarity} STAR
-                                </span>
-                              </div>
-
-                              {/* Weapon name */}
-                              <h3
-                                className="text-lg font-bold mb-1 uppercase tracking-wide"
-                                style={{
-                                  color: colors.text.primary,
-                                  textShadow: `1px 1px 2px rgba(0,0,0,0.5)`
-                                }}
+                <div>
+                  {weapons.map((weapon, index) => {
+                    const rarityColors = getRarityColors(weapon.rarity);
+                    return (
+                      <motion.div
+                        key={weapon.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: index * 0.02 }}
+                        className="grid grid-cols-12 gap-4 px-6 py-4 cursor-pointer transition-colors border-b hover:bg-opacity-50"
+                        style={{
+                          borderColor: colors.border.secondary,
+                          backgroundColor: 'transparent'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.button.secondary;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        onClick={() => router.push(`/weapons/${weapon.slug}`)}
+                      >
+                        {/* Weapon Column */}
+                        <div className="col-span-5 flex items-center gap-4">
+                          <div
+                            className={`w-16 h-12 rounded-md border overflow-hidden ${rarityColors.bg} ${rarityColors.border}`}
+                          >
+                            {weapon.imageUrl ? (
+                              <img
+                                src={weapon.imageUrl}
+                                alt={weapon.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div
+                                className="flex items-center justify-center h-full text-xs"
+                                style={{ color: colors.text.muted }}
                               >
-                                {weapon.name}
-                              </h3>
-
-                              {/* Weapon type and element */}
-                              <div className="flex items-center gap-3">
-                                <span
-                                  className="text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wide"
-                                  style={{
-                                    background: colors.button.secondary,
-                                    color: colors.text.primary,
-                                    textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
-                                  }}
-                                >
-                                  {weapon.weaponType}
-                                </span>
-                                <motion.span
-                                  className="px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide"
-                                  style={{
-                                    background: weapon.element === 'Arc' ? 'linear-gradient(45deg, #3b82f6, #60a5fa)' :
-                                               weapon.element === 'Solar' ? 'linear-gradient(45deg, #f97316, #fb923c)' :
-                                               weapon.element === 'Void' ? 'linear-gradient(45deg, #9333ea, #a78bfa)' :
-                                               `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
-                                    color: '#ffffff',
-                                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                    boxShadow: `0 2px 8px ${weapon.element === 'Arc' ? '#3b82f6' : weapon.element === 'Solar' ? '#f97316' : weapon.element === 'Void' ? '#9333ea' : colors.primary}40`
-                                  }}
-                                  whileHover={{ scale: 1.05 }}
-                                >
-                                  {weapon.element}
-                                </motion.span>
+                                No Image
                               </div>
+                            )}
+                          </div>
+                          <div>
+                            <h3
+                              className="font-medium mb-1"
+                              style={{ color: colors.text.primary }}
+                            >
+                              {weapon.name}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm ${rarityColors.text}`}>
+                                {getRarityStars(weapon.rarity)}
+                              </span>
+                              <span
+                                className="text-xs"
+                                style={{ color: colors.text.muted }}
+                              >
+                                {weapon.combatStyle}
+                              </span>
                             </div>
                           </div>
+                        </div>
 
-                          {/* Combat Style Column */}
-                          <div className="col-span-2 flex items-center">
-                            <span
-                              className="font-semibold text-sm px-3 py-1 rounded-lg border"
-                              style={{
-                                color: colors.text.primary,
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-                                background: colors.button.secondary,
-                                borderColor: colors.border.primary
-                              }}
-                            >
-                              {weapon.combatStyle}
-                            </span>
-                          </div>
+                        {/* Type Column */}
+                        <div className="col-span-2 flex items-center">
+                          <span
+                            className="text-sm"
+                            style={{ color: colors.text.secondary }}
+                          >
+                            {weapon.weaponType}
+                          </span>
+                        </div>
 
-                          {/* Slot Column */}
-                          <div className="col-span-2 flex items-center">
-                            <motion.span
-                              className="inline-flex items-center px-3 py-1 rounded-lg text-sm font-semibold border uppercase tracking-wide"
-                              style={{
-                                background: weapon.slot === 'Primary' ? 'linear-gradient(45deg, #16a34a, #22c55e)' : 'linear-gradient(45deg, #9333ea, #a855f7)',
-                                color: '#ffffff',
-                                borderColor: weapon.slot === 'Primary' ? '#22c55e' : '#a855f7',
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                boxShadow: `0 2px 8px ${weapon.slot === 'Primary' ? '#16a34a' : '#9333ea'}30`
-                              }}
-                              whileHover={{ scale: 1.05 }}
-                            >
-                              {weapon.slot}
-                            </motion.span>
-                          </div>
+                        {/* Slot Column */}
+                        <div className="col-span-2 flex items-center">
+                          <span
+                            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                            style={{
+                              backgroundColor: weapon.slot === 'Primary' ? '#10b98120' : '#8b5cf620',
+                              color: weapon.slot === 'Primary' ? '#059669' : '#8b5cf6'
+                            }}
+                          >
+                            {weapon.slot}
+                          </span>
+                        </div>
 
-                          {/* Characters Column */}
-                          <div className="col-span-2 flex items-center">
-                            <div className="flex gap-2">
-                              <motion.div
-                                className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg border border-orange-400 flex items-center justify-center shadow-md"
-                                whileHover={{ scale: 1.1 }}
-                                style={{
-                                  boxShadow: '0 2px 8px #f9731640'
-                                }}
-                              >
-                                <span className="text-sm font-bold text-white">H</span>
-                              </motion.div>
-                              <motion.div
-                                className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg border border-blue-400 flex items-center justify-center shadow-md"
-                                whileHover={{ scale: 1.1 }}
-                                style={{
-                                  boxShadow: '0 2px 8px #3b82f640'
-                                }}
-                              >
-                                <span className="text-sm font-bold text-white">W</span>
-                              </motion.div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                )}
-              </motion.div>
-            </div>
-          </motion.div>
+                        {/* Element Column */}
+                        <div className="col-span-2 flex items-center">
+                          <span
+                            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                            style={{
+                              backgroundColor: weapon.element === 'Arc' ? '#3b82f620' :
+                                             weapon.element === 'Solar' ? '#f9731620' :
+                                             weapon.element === 'Void' ? '#8b5cf620' :
+                                             colors.button.secondary,
+                              color: weapon.element === 'Arc' ? '#3b82f6' :
+                                     weapon.element === 'Solar' ? '#f97316' :
+                                     weapon.element === 'Void' ? '#8b5cf6' :
+                                     colors.text.secondary
+                            }}
+                          >
+                            {weapon.element}
+                          </span>
+                        </div>
+
+                        {/* Rarity Column */}
+                        <div className="col-span-1 flex items-center">
+                          <span
+                            className="text-sm font-medium"
+                            style={{ color: colors.text.secondary }}
+                          >
+                            {weapon.rarity}
+                          </span>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
