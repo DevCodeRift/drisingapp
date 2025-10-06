@@ -21,6 +21,7 @@ export default function AdminCharactersPage() {
     description: '',
     imageUrl: '',
   });
+  const [bulkImporting, setBulkImporting] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -67,6 +68,34 @@ export default function AdminCharactersPage() {
     }
   };
 
+  const handleBulkImport = async () => {
+    if (!confirm('Import all characters from the public/characters folder? This will create 12 characters.')) {
+      return;
+    }
+
+    setBulkImporting(true);
+
+    try {
+      const res = await fetch('/api/admin/seed-characters', {
+        method: 'POST',
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(`Successfully imported ${result.created} characters. Skipped ${result.skipped} duplicates.`);
+        fetchCharacters();
+      } else {
+        alert(result.error || 'Failed to import characters');
+      }
+    } catch (error) {
+      console.error('Error importing characters:', error);
+      alert('Failed to import characters');
+    } finally {
+      setBulkImporting(false);
+    }
+  };
+
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-destiny-darker text-white flex items-center justify-center">
@@ -84,12 +113,21 @@ export default function AdminCharactersPage() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-destiny-orange">Manage Characters</h1>
-          <button
-            onClick={() => router.push('/admin')}
-            className="text-destiny-blue hover:text-destiny-orange transition"
-          >
-            ← Back to Admin
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={handleBulkImport}
+              disabled={bulkImporting}
+              className="bg-destiny-purple hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
+            >
+              {bulkImporting ? 'Importing...' : '📥 Bulk Import All'}
+            </button>
+            <button
+              onClick={() => router.push('/admin')}
+              className="text-destiny-blue hover:text-destiny-orange transition"
+            >
+              ← Back to Admin
+            </button>
+          </div>
         </div>
 
         {/* Create New Character */}
