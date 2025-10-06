@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react'
 import { UserTask, TaskCategory } from '@/types/tasks'
 import TaskSection from '@/components/TaskSection'
 import LoginButton from '@/components/LoginButton'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export default function Dashboard() {
   const { data: session, status } = useSession()
+  const { colors } = useTheme()
   const [tasks, setTasks] = useState<UserTask[]>([])
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -77,19 +79,19 @@ export default function Dashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen p-8 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-destiny-orange"></div>
+      <div className="min-h-screen p-8 flex items-center justify-center" style={{ backgroundColor: colors.background }}>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2" style={{ borderColor: colors.primary }}></div>
       </div>
     )
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen p-8 flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-destiny-orange mb-8">
+      <div className="min-h-screen p-8 flex flex-col items-center justify-center" style={{ backgroundColor: colors.background }}>
+        <h1 className="text-4xl font-bold mb-8" style={{ color: colors.primary }}>
           Destiny Task Manager
         </h1>
-        <p className="text-gray-300 mb-8 text-center max-w-md">
+        <p className="mb-8 text-center max-w-md" style={{ color: colors.text.secondary }}>
           Sign in with Discord to track your daily, weekly, and seasonal Destiny 2 activities
         </p>
         <LoginButton />
@@ -103,14 +105,14 @@ export default function Dashboard() {
   const seasonalTasks = tasks.filter(t => t.taskTemplate.category === TaskCategory.SEASONAL)
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-8" style={{ backgroundColor: colors.background }}>
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-destiny-orange">
+            <h1 className="text-4xl font-bold" style={{ color: colors.primary }}>
               Destiny Rising Task Manager
             </h1>
-            <p className="text-gray-300 mt-2">
+            <p className="mt-2" style={{ color: colors.text.secondary }}>
               Welcome back, {session.user?.name}
             </p>
           </div>
@@ -118,7 +120,10 @@ export default function Dashboard() {
             {isAdmin && (
               <a
                 href="/admin"
-                className="px-4 py-2 bg-destiny-purple text-white rounded-lg hover:bg-destiny-purple/80 transition-colors"
+                className="px-4 py-2 text-white rounded-lg transition-colors"
+                style={{ backgroundColor: colors.accent }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.accent + '80'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.accent}
               >
                 Admin Panel
               </a>
