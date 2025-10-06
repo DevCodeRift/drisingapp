@@ -65,9 +65,9 @@ const themes: Record<Theme, ThemeColors> = {
     background: '#111827',
     surface: '#1f2937',
     text: {
-      primary: '#f9fafb',
-      secondary: '#d1d5db',
-      muted: '#9ca3af'
+      primary: '#ffffff', // Pure white for maximum contrast
+      secondary: '#e5e7eb', // Lighter gray for better readability
+      muted: '#d1d5db'
     },
     border: {
       primary: '#374151',
@@ -80,7 +80,7 @@ const themes: Record<Theme, ThemeColors> = {
     },
     navigation: {
       background: '#1f2937',
-      text: '#f9fafb',
+      text: '#ffffff',
       active: '#3b82f6'
     }
   },
@@ -91,9 +91,9 @@ const themes: Record<Theme, ThemeColors> = {
     background: '#1c1917', // Dark industrial
     surface: '#292524',
     text: {
-      primary: '#fbbf24', // Gold text
-      secondary: '#dc2626', // Red secondary
-      muted: '#a8a29e'
+      primary: '#fef3c7', // Brighter gold text for better contrast
+      secondary: '#fca5a5', // Lighter red for better readability
+      muted: '#d6d3d1'
     },
     border: {
       primary: '#44403c',
@@ -106,7 +106,7 @@ const themes: Record<Theme, ThemeColors> = {
     },
     navigation: {
       background: '#292524',
-      text: '#fbbf24',
+      text: '#fef3c7',
       active: '#dc2626'
     }
   },
@@ -117,9 +117,9 @@ const themes: Record<Theme, ThemeColors> = {
     background: '#0f172a', // Deep space blue
     surface: '#1e293b',
     text: {
-      primary: '#06b6d4', // Cyan text
-      secondary: '#a855f7', // Purple secondary
-      muted: '#64748b'
+      primary: '#67e8f9', // Brighter cyan for better contrast
+      secondary: '#c4b5fd', // Lighter purple for readability
+      muted: '#94a3b8'
     },
     border: {
       primary: '#334155',
@@ -132,7 +132,7 @@ const themes: Record<Theme, ThemeColors> = {
     },
     navigation: {
       background: '#1e293b',
-      text: '#06b6d4',
+      text: '#67e8f9',
       active: '#a855f7'
     }
   },
@@ -143,9 +143,9 @@ const themes: Record<Theme, ThemeColors> = {
     background: '#1e1b4b', // Deep purple space
     surface: '#312e81',
     text: {
-      primary: '#c4b5fd', // Light purple text
-      secondary: '#14b8a6', // Teal secondary
-      muted: '#8b5cf6'
+      primary: '#e0e7ff', // Much lighter text for better contrast
+      secondary: '#5eead4', // Brighter teal for readability
+      muted: '#c4b5fd'
     },
     border: {
       primary: '#4c1d95',
@@ -158,7 +158,7 @@ const themes: Record<Theme, ThemeColors> = {
     },
     navigation: {
       background: '#312e81',
-      text: '#c4b5fd',
+      text: '#e0e7ff',
       active: '#14b8a6'
     }
   }
