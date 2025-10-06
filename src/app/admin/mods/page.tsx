@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminNav from '@/components/AdminNav';
+import ImageSelector from '@/components/ImageSelector';
 
 interface ModAttribute {
   id: number;
@@ -36,6 +37,16 @@ interface WeaponMod {
   description?: string;
   combatStyle?: string;
   unlocksPerkUpgrade: boolean;
+  iconUrl?: string;
+
+  // Power fields
+  refinementPowerMin?: number;
+  refinementPowerMax?: number;
+  enhancePerkPower?: number;
+  statBoostMin?: number;
+  statBoostMax?: number;
+  statBoostType?: string;
+
   mainAttributes?: ModAttribute[];
   randomAttributes?: ModAttribute[];
   upgradablePerks?: WeaponPerk[];
@@ -55,6 +66,13 @@ export default function AdminModsPage() {
     description: '',
     combatStyle: '',
     unlocksPerkUpgrade: false,
+    iconUrl: '',
+    refinementPowerMin: 0,
+    refinementPowerMax: 0,
+    enhancePerkPower: 0,
+    statBoostMin: 0,
+    statBoostMax: 0,
+    statBoostType: '',
     mainAttributeIds: [] as number[],
     randomAttributeIds: [] as number[],
     upgradablePerkIds: [] as number[],
@@ -109,6 +127,13 @@ export default function AdminModsPage() {
           description: '',
           combatStyle: '',
           unlocksPerkUpgrade: false,
+          iconUrl: '',
+          refinementPowerMin: 0,
+          refinementPowerMax: 0,
+          enhancePerkPower: 0,
+          statBoostMin: 0,
+          statBoostMax: 0,
+          statBoostType: '',
           mainAttributeIds: [],
           randomAttributeIds: [],
           upgradablePerkIds: [],
@@ -250,6 +275,97 @@ export default function AdminModsPage() {
               </div>
             </div>
 
+            {/* Icon Upload */}
+            <div>
+              <ImageSelector
+                label="Mod Icon/Logo"
+                value={newMod.iconUrl || ''}
+                onChange={(url) => setNewMod({...newMod, iconUrl: url})}
+              />
+            </div>
+
+            {/* Mod Power Section */}
+            <div className="bg-gray-700/50 p-4 rounded">
+              <h3 className="text-lg font-semibold mb-3 text-blue-400">Mod Power (Refinement + Enhance Perk)</h3>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="block text-sm mb-2">Refinement Power Min (Level 1)</label>
+                  <input
+                    type="number"
+                    value={newMod.refinementPowerMin}
+                    onChange={(e) => setNewMod({...newMod, refinementPowerMin: parseInt(e.target.value) || 0})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., 266"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-2">Refinement Power Max (Level 10)</label>
+                  <input
+                    type="number"
+                    value={newMod.refinementPowerMax}
+                    onChange={(e) => setNewMod({...newMod, refinementPowerMax: parseInt(e.target.value) || 0})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., 860"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-2">Enhance Perk Power</label>
+                  <input
+                    type="number"
+                    value={newMod.enhancePerkPower}
+                    onChange={(e) => setNewMod({...newMod, enhancePerkPower: parseInt(e.target.value) || 0})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., 100"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-gray-400">
+                Total Power Range: {newMod.refinementPowerMin + newMod.enhancePerkPower} (Min) - {newMod.refinementPowerMax + newMod.enhancePerkPower} (Max)
+              </p>
+            </div>
+
+            {/* Stat Boost Range */}
+            <div className="bg-gray-700/50 p-4 rounded">
+              <h3 className="text-lg font-semibold mb-3 text-green-400">Stat Boost Range</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm mb-2">Min Boost % (Level 1)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newMod.statBoostMin}
+                    onChange={(e) => setNewMod({...newMod, statBoostMin: parseFloat(e.target.value) || 0})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., 1.4"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-2">Max Boost % (Level 10)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newMod.statBoostMax}
+                    onChange={(e) => setNewMod({...newMod, statBoostMax: parseFloat(e.target.value) || 0})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., 14"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm mb-2">Stat Type</label>
+                  <input
+                    type="text"
+                    value={newMod.statBoostType}
+                    onChange={(e) => setNewMod({...newMod, statBoostType: e.target.value})}
+                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2"
+                    placeholder="e.g., body shot dmg"
+                  />
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 mt-2">
+                Range: +{newMod.statBoostMin}% to +{newMod.statBoostMax}% {newMod.statBoostType}
+              </p>
+            </div>
+
             {/* Main Attributes */}
             <div>
               <label className="block text-sm mb-2 font-semibold">Main Attributes (Always Active)</label>
@@ -337,59 +453,93 @@ export default function AdminModsPage() {
           <table className="w-full">
             <thead className="bg-gray-700">
               <tr>
+                <th className="px-6 py-3 text-left">Icon</th>
                 <th className="px-6 py-3 text-left">Name</th>
-                <th className="px-6 py-3 text-left">Category</th>
                 <th className="px-6 py-3 text-left">Rarity</th>
+                <th className="px-6 py-3 text-left">Power Range</th>
+                <th className="px-6 py-3 text-left">Stat Boost</th>
                 <th className="px-6 py-3 text-left">Combat Style</th>
-                <th className="px-6 py-3 text-left">Main Attributes</th>
-                <th className="px-6 py-3 text-left">Random Pool</th>
-                <th className="px-6 py-3 text-left">Perk Upgrades</th>
+                <th className="px-6 py-3 text-left">Attributes</th>
                 <th className="px-6 py-3 text-left">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {mods.map(mod => (
-                <tr key={mod.id} className="hover:bg-gray-700/50">
-                  <td className="px-6 py-4 font-medium">{mod.name}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-gray-600 rounded text-xs">{mod.category}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    {mod.rarity && (
-                      <span
-                        className="px-2 py-1 rounded text-xs"
-                        style={{ backgroundColor: mod.rarity.colorCode || '#666' }}
+              {mods.map(mod => {
+                const powerMin = (mod.refinementPowerMin || 0) + (mod.enhancePerkPower || 0);
+                const powerMax = (mod.refinementPowerMax || 0) + (mod.enhancePerkPower || 0);
+
+                return (
+                  <tr key={mod.id} className="hover:bg-gray-700/50">
+                    <td className="px-6 py-4">
+                      {mod.iconUrl && (
+                        <img src={mod.iconUrl} alt={mod.name} className="w-10 h-10 rounded" />
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="font-medium">{mod.name}</div>
+                      <div className="text-xs text-gray-400">{mod.category}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      {mod.rarity && (
+                        <span
+                          className="px-2 py-1 rounded text-xs font-semibold"
+                          style={{ backgroundColor: mod.rarity.colorCode || '#666' }}
+                        >
+                          {mod.rarity.name}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {powerMin > 0 && powerMax > 0 && (
+                        <div>
+                          <div className="text-blue-400 font-semibold">+{powerMin} - +{powerMax}</div>
+                          <div className="text-xs text-gray-400">
+                            Refine: {mod.refinementPowerMin}-{mod.refinementPowerMax}
+                            {mod.enhancePerkPower > 0 && ` + ${mod.enhancePerkPower}`}
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {mod.statBoostMin && mod.statBoostMax && (
+                        <div>
+                          <div className="text-green-400 font-semibold">+{mod.statBoostMin}% - +{mod.statBoostMax}%</div>
+                          <div className="text-xs text-gray-400">{mod.statBoostType}</div>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <span className="px-2 py-1 bg-gray-600 rounded text-xs">{mod.combatStyle || 'Universal'}</span>
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {mod.mainAttributes && mod.mainAttributes.length > 0 && (
+                        <div className="mb-1">
+                          <div className="text-xs text-gray-500">Main:</div>
+                          {mod.mainAttributes.map(attr => (
+                            <div key={attr.id} className="text-green-400 text-xs">{attr.name}</div>
+                          ))}
+                        </div>
+                      )}
+                      {mod.randomAttributes && mod.randomAttributes.length > 0 && (
+                        <div>
+                          <div className="text-xs text-gray-500">Random:</div>
+                          {mod.randomAttributes.map(attr => (
+                            <div key={attr.id} className="text-yellow-400 text-xs">{attr.name}</div>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleDelete(mod.id, mod.name)}
+                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
                       >
-                        {mod.rarity.name}
-                      </span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm">{mod.combatStyle || 'Universal'}</td>
-                  <td className="px-6 py-4 text-sm">
-                    {mod.mainAttributes?.map(attr => (
-                      <div key={attr.id} className="text-green-400 text-xs">{attr.name}</div>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    {mod.randomAttributes?.map(attr => (
-                      <div key={attr.id} className="text-yellow-400 text-xs">{attr.name}</div>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    {mod.upgradablePerks?.map(perk => (
-                      <div key={perk.id} className="text-purple-400 text-xs">{perk.name}</div>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleDelete(mod.id, mod.name)}
-                      className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
