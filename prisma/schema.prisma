@@ -104,7 +104,8 @@ model Build {
   description String
   characterId String
   userId      String
-  content     String
+  content     String    // Legacy field, can store additional notes
+  isPublic    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   voteCount   Int       @default(0)
@@ -112,9 +113,121 @@ model Build {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comments    Comment[]
   votes       Vote[]
+  artifacts   BuildArtifact[]
+  weapons     BuildWeapon[]
 
   @@index([characterId])
   @@index([voteCount])
+  @@index([isPublic])
+}
+
+// Build Artifacts (4 per build)
+model BuildArtifact {
+  id               String   @id @default(cuid())
+  buildId          String
+  slot             Int      // 1-4
+  artifactName     String   // e.g., "abundant-planetesimal"
+  rarity           String   // Rare, Legendary, Mythic, Exotic
+  power            Int?
+  gearLevel        Int?
+  enhancementLevel Int?
+  createdAt        DateTime @default(now())
+
+  build      Build                    @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  attributes BuildArtifactAttribute[]
+
+  @@index([buildId])
+}
+
+// Artifact Attributes (3-4 per artifact)
+model BuildArtifactAttribute {
+  id          String   @id @default(cuid())
+  artifactId  String
+  name        String   // Free text
+  description String?  // Free text
+  createdAt   DateTime @default(now())
+
+  artifact BuildArtifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+
+  @@index([artifactId])
+}
+
+// Build Weapons (Primary + Power)
+model BuildWeapon {
+  id               String  @id @default(cuid())
+  buildId          String
+  weaponId         String? // Reference to base weapon (optional)
+  slot             String  // "Primary" or "Power"
+  customName       String? // Override weapon name
+  gearLevel        Int?
+  enhancementLevel Int?
+  createdAt        DateTime @default(now())
+
+  build     Build                  @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  weapon    Weapon?                @relation(fields: [weaponId], references: [id], onDelete: SetNull)
+  traits    BuildWeaponTrait[]
+  perks     BuildWeaponPerk[]
+  catalysts BuildWeaponCatalyst[]
+  mods      BuildWeaponMod[]
+
+  @@index([buildId])
+  @@index([weaponId])
+}
+
+// Custom Traits for Build Weapons
+model BuildWeaponTrait {
+  id          String  @id @default(cuid())
+  weaponId    String
+  name        String
+  description String?
+  effect      String?
+  createdAt   DateTime @default(now())
+
+  weapon BuildWeapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
+}
+
+// Custom Perks for Build Weapons
+model BuildWeaponPerk {
+  id          String  @id @default(cuid())
+  weaponId    String
+  name        String
+  description String?
+  effect      String?
+  createdAt   DateTime @default(now())
+
+  weapon BuildWeapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
+}
+
+// Custom Catalysts for Build Weapons
+model BuildWeaponCatalyst {
+  id          String  @id @default(cuid())
+  weaponId    String
+  name        String
+  description String?
+  effect      String?
+  createdAt   DateTime @default(now())
+
+  weapon BuildWeapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
+}
+
+// Custom Mods for Build Weapons (only for non-Exotic weapons)
+model BuildWeaponMod {
+  id          String  @id @default(cuid())
+  weaponId    String
+  name        String
+  description String?
+  effect      String?
+  createdAt   DateTime @default(now())
+
+  weapon BuildWeapon @relation(fields: [weaponId], references: [id], onDelete: Cascade)
+
+  @@index([weaponId])
 }
 
 model News {
@@ -255,6 +368,7 @@ model Weapon {
   mods                 WeaponModAssignment[]
   perks                WeaponPerkAssignment[]
   traits               WeaponTrait[]
+  buildWeapons         BuildWeapon[]
 
   @@index([weaponType])
   @@index([element])
