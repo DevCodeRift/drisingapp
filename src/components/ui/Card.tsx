@@ -12,6 +12,7 @@ interface CardProps {
   glass?: boolean;
   gradient?: boolean;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }
 
 export function Card({
@@ -21,7 +22,8 @@ export function Card({
   glow = false,
   glass = false,
   gradient = false,
-  onClick
+  onClick,
+  style
 }: CardProps) {
   const baseClasses = "rounded-xl border transition-all duration-300";
 
@@ -42,6 +44,7 @@ export function Card({
       whileHover={hover ? { y: -4 } : undefined}
       className={cn(baseClasses, variantClasses, className)}
       onClick={onClick}
+      style={style}
     >
       {children}
     </motion.div>
