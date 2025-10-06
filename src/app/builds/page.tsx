@@ -106,8 +106,7 @@ export default function BuildsPage() {
               onClick={() => router.push('/builds/create')}
               className="text-white px-6 py-2 rounded-lg transition min-h-[44px] flex items-center"
               style={{
-                backgroundColor: colors.primary,
-                '&:hover': { backgroundColor: colors.accent }
+                backgroundColor: colors.primary
               }}
               onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.accent}
               onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
