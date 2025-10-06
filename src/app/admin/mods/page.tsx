@@ -495,7 +495,7 @@ export default function AdminModsPage() {
                           <div className="text-blue-400 font-semibold">+{powerMin} - +{powerMax}</div>
                           <div className="text-xs text-gray-400">
                             Refine: {mod.refinementPowerMin}-{mod.refinementPowerMax}
-                            {mod.enhancePerkPower > 0 && ` + ${mod.enhancePerkPower}`}
+                            {(mod.enhancePerkPower || 0) > 0 && ` + ${mod.enhancePerkPower}`}
                           </div>
                         </div>
                       )}
