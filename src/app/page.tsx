@@ -77,7 +77,7 @@ export default function Home() {
               textShadow: `2px 2px 4px rgba(0,0,0,0.5)`
             }}
           >
-            🚀 Loading Destiny Rising... 🚀
+            Loading Destiny Rising...
           </span>
         </motion.div>
       </div>
@@ -176,7 +176,7 @@ export default function Home() {
                 className="font-bold tracking-widest uppercase text-lg"
                 style={{ color: colors.primary }}
               >
-                ⚡ DESTINY RISING ⚡
+                DESTINY RISING
               </span>
             </div>
           </motion.div>
@@ -228,7 +228,7 @@ export default function Home() {
                 textShadow: `0 2px 4px rgba(0,0,0,0.3)`
               }}
             >
-              🎯 Track Tasks • 🛠️ Share Builds • 👥 Find Teams • 🏆 Achieve Glory
+              Track Tasks • Share Builds • Find Teams • Achieve Glory
             </p>
             <div
               className="w-32 h-1 mx-auto rounded-full"
@@ -253,7 +253,7 @@ export default function Home() {
                 }}
                 onClick={() => router.push('/api/auth/signin')}
               >
-                🚀 JOIN THE COMMUNITY 🚀
+                JOIN THE COMMUNITY
               </Button>
             </motion.div>
           )}
@@ -278,7 +278,7 @@ export default function Home() {
               textShadow: `0 0 30px ${colors.primary}50`
             }}
           >
-            🔥 EXPLORE FEATURES 🔥
+            EXPLORE FEATURES
           </h2>
           <p
             className="text-xl font-semibold max-w-3xl mx-auto"
@@ -402,7 +402,7 @@ export default function Home() {
               textShadow: `0 0 30px ${colors.accent}50`
             }}
           >
-            ⚡ RECENT ACTIVITY ⚡
+            RECENT ACTIVITY
           </h2>
           <p
             className="text-xl font-semibold"
@@ -429,7 +429,7 @@ export default function Home() {
               className="text-2xl font-bold mb-6 flex items-center gap-3"
               style={{ color: colors.primary }}
             >
-              🛠️ Latest Builds
+              Latest Builds
             </h3>
             {activity.builds.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No builds yet</p>
@@ -467,7 +467,7 @@ export default function Home() {
                         textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
                       }}
                     >
-                      🎯 {build.character.name} • by {build.user.name}
+                      {build.character.name} • by {build.user.name}
                     </div>
                   </motion.div>
                 ))}
@@ -483,7 +483,7 @@ export default function Home() {
                 boxShadow: `0 4px 15px ${colors.primary}40`
               }}
             >
-              🔥 View All Builds 🔥
+              View All Builds
             </Button>
           </Card>
 
@@ -500,7 +500,7 @@ export default function Home() {
               className="text-2xl font-bold mb-6 flex items-center gap-3"
               style={{ color: colors.accent }}
             >
-              📰 Latest News
+              Latest News
             </h3>
             {activity.news.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No news yet</p>
@@ -538,7 +538,7 @@ export default function Home() {
                         textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
                       }}
                     >
-                      📰 {post.type} • by {post.user.name}
+                      {post.type} • by {post.user.name}
                     </div>
                   </motion.div>
                 ))}
@@ -554,7 +554,7 @@ export default function Home() {
                 boxShadow: `0 4px 15px ${colors.accent}40`
               }}
             >
-              📰 View All News 📰
+              View All News
             </Button>
           </Card>
 
@@ -571,7 +571,7 @@ export default function Home() {
               className="text-2xl font-bold mb-6 flex items-center gap-3"
               style={{ color: colors.primary }}
             >
-              👥 Active LFG
+              Active LFG
             </h3>
             {activity.lfg.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No active LFG posts</p>
@@ -607,7 +607,7 @@ export default function Home() {
                         textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
                       }}
                     >
-                      👤 by {post.user.name}
+                      by {post.user.name}
                     </div>
                   </motion.div>
                 ))}
@@ -623,7 +623,7 @@ export default function Home() {
                 boxShadow: `0 4px 15px ${colors.primary}40`
               }}
             >
-              👥 View All LFG 👥
+              View All LFG
             </Button>
           </Card>
 
@@ -640,7 +640,7 @@ export default function Home() {
               className="text-2xl font-bold mb-6 flex items-center gap-3"
               style={{ color: colors.accent }}
             >
-              🏰 Recruiting Clans
+              Recruiting Clans
             </h3>
             {activity.clans.length === 0 ? (
               <p style={{ color: colors.text.muted }}>No clan recruitment posts</p>
@@ -676,7 +676,7 @@ export default function Home() {
                         textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
                       }}
                     >
-                      👤 by {post.user.name}
+                      by {post.user.name}
                     </div>
                   </motion.div>
                 ))}
@@ -692,7 +692,7 @@ export default function Home() {
                 boxShadow: `0 4px 15px ${colors.accent}40`
               }}
             >
-              🏰 View All Clans 🏰
+              View All Clans
             </Button>
           </Card>
         </div>

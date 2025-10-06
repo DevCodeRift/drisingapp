@@ -123,15 +123,12 @@ export default function WeaponsPage() {
         <h1
           className="text-6xl md:text-8xl font-black mb-6 uppercase tracking-wider"
           style={{
-            background: `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            textShadow: `0 0 50px ${colors.primary}50`,
+            color: colors.text.primary,
+            textShadow: `0 0 30px ${colors.primary}80, 2px 2px 8px rgba(0,0,0,0.8)`,
             filter: 'drop-shadow(2px 2px 8px rgba(0,0,0,0.8))'
           }}
         >
-          ⚔️ WEAPONS ARSENAL ⚔️
+          WEAPONS ARSENAL
         </h1>
         <p
           className="text-2xl font-semibold mb-8"
@@ -175,7 +172,7 @@ export default function WeaponsPage() {
                 }}
               >
                 <Filter className="w-6 h-6" />
-                ARSENAL FILTERS
+                WEAPON FILTERS
               </h2>
               <div className="flex flex-col gap-3">
                 <motion.button
@@ -189,7 +186,7 @@ export default function WeaponsPage() {
                     boxShadow: `0 4px 15px ${colors.primary}40`
                   }}
                 >
-                  👤 All Characters
+                  All Characters
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -202,7 +199,7 @@ export default function WeaponsPage() {
                     textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                   }}
                 >
-                  🔧 Advanced Filters
+                  Advanced Filters
                 </motion.button>
               </div>
             </div>
@@ -298,7 +295,7 @@ export default function WeaponsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  🎯 All Slots
+                  All Slots
                 </motion.button>
                 <motion.button
                   onClick={() => setFilters(prev => ({ ...prev, slot: 'Primary' }))}
@@ -313,7 +310,7 @@ export default function WeaponsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  ⚡ Primary
+                  Primary
                 </motion.button>
                 <motion.button
                   onClick={() => setFilters(prev => ({ ...prev, slot: 'Power' }))}
@@ -328,7 +325,7 @@ export default function WeaponsPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  💥 Power
+                  Power
                 </motion.button>
               </div>
               <div
@@ -355,47 +352,47 @@ export default function WeaponsPage() {
                 }}
               >
                 <div
-                  className="grid grid-cols-12 gap-6 px-8 py-6 border-b-2"
+                  className="grid grid-cols-12 gap-4 px-6 py-4 border-b-2"
                   style={{
                     borderColor: colors.border.primary,
                     background: `linear-gradient(90deg, ${colors.primary}20, ${colors.accent}20)`
                   }}
                 >
                   <div
-                    className="col-span-5 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                    className="col-span-6 text-sm font-bold uppercase tracking-wider flex items-center"
                     style={{
                       color: colors.text.primary,
                       textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                   >
-                    🎯 Weapon Name
+                    Weapon Name
                   </div>
                   <div
-                    className="col-span-2 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
                     style={{
                       color: colors.text.primary,
                       textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                   >
-                    ⚔️ Combat Style
+                    Combat Style
                   </div>
                   <div
-                    className="col-span-2 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
                     style={{
                       color: colors.text.primary,
                       textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                   >
-                    📦 Slot
+                    Slot
                   </div>
                   <div
-                    className="col-span-3 text-lg font-bold uppercase tracking-wider flex items-center gap-2"
+                    className="col-span-2 text-sm font-bold uppercase tracking-wider flex items-center"
                     style={{
                       color: colors.text.primary,
                       textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                     }}
                   >
-                    👥 Characters
+                    Characters
                   </div>
                 </div>
 
@@ -422,7 +419,7 @@ export default function WeaponsPage() {
                         textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                       }}
                     >
-                      🔮 Loading Arsenal... 🔮
+                      Loading Arsenal...
                     </p>
                   </motion.div>
                 ) : weapons.length === 0 ? (
@@ -432,10 +429,10 @@ export default function WeaponsPage() {
                     className="px-8 py-16 text-center"
                   >
                     <div
-                      className="text-6xl mb-6"
+                      className="text-4xl mb-4 font-bold"
                       style={{ color: colors.primary }}
                     >
-                      🚧
+                      NO RESULTS
                     </div>
                     <p
                       className="text-2xl font-bold mb-4"
@@ -466,7 +463,7 @@ export default function WeaponsPage() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.4, delay: index * 0.05 }}
-                          className="grid grid-cols-12 gap-6 px-8 py-6 transition-all duration-300 cursor-pointer border-b-2 hover:scale-[1.02]"
+                          className="grid grid-cols-12 gap-4 px-6 py-4 transition-all duration-300 cursor-pointer border-b-2"
                           style={{
                             borderBottomColor: index !== weapons.length - 1 ? colors.border.secondary : 'transparent',
                             background: `linear-gradient(90deg, transparent, ${colors.button.secondary}30, transparent)`
@@ -478,13 +475,13 @@ export default function WeaponsPage() {
                           onClick={() => router.push(`/weapons/${weapon.slug}`)}
                         >
                           {/* Name Column */}
-                          <div className="col-span-5 flex items-center gap-6">
+                          <div className="col-span-6 flex items-center gap-4">
                             {/* Weapon Image with rarity border */}
                             <motion.div
-                              className={`relative w-48 h-20 ${rarityColors.border} border-4 rounded-2xl overflow-hidden ${rarityColors.bg} shadow-2xl`}
-                              whileHover={{ scale: 1.05, rotate: 1 }}
+                              className={`relative w-32 h-24 ${rarityColors.border} border-2 rounded-xl overflow-hidden ${rarityColors.bg} shadow-lg`}
+                              whileHover={{ scale: 1.05 }}
                               style={{
-                                boxShadow: `0 0 20px ${rarityColors.text.replace('text-', '').replace('-400', '')}40`
+                                boxShadow: `0 0 15px ${rarityColors.text.replace('text-', '').replace('-400', '')}30`
                               }}
                             >
                               {weapon.imageUrl ? (
@@ -501,7 +498,7 @@ export default function WeaponsPage() {
                                     textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                                   }}
                                 >
-                                  📷 No Image
+                                  No Image
                                 </div>
                               )}
                             </motion.div>
@@ -509,12 +506,12 @@ export default function WeaponsPage() {
                             {/* Weapon Info */}
                             <div className="flex-1">
                               {/* Rarity stars */}
-                              <div className="flex items-center gap-2 mb-2">
-                                <span className={`text-2xl ${rarityColors.text} drop-shadow-lg`}>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-lg ${rarityColors.text} drop-shadow-lg`}>
                                   {getRarityStars(weapon.rarity)}
                                 </span>
                                 <span
-                                  className="text-sm font-bold px-2 py-1 rounded-full uppercase tracking-wide"
+                                  className="text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide"
                                   style={{
                                     background: `linear-gradient(45deg, ${rarityColors.text.replace('text-', '').replace('-400', '')}40, ${rarityColors.text.replace('text-', '').replace('-400', '')}60)`,
                                     color: rarityColors.text.replace('text-', '#').replace('-400', '')
@@ -526,10 +523,10 @@ export default function WeaponsPage() {
 
                               {/* Weapon name */}
                               <h3
-                                className="text-2xl font-black mb-2 uppercase tracking-wider"
+                                className="text-lg font-bold mb-1 uppercase tracking-wide"
                                 style={{
                                   color: colors.text.primary,
-                                  textShadow: `2px 2px 4px rgba(0,0,0,0.5), 0 0 10px ${rarityColors.text.replace('text-', '').replace('-400', '')}40`
+                                  textShadow: `1px 1px 2px rgba(0,0,0,0.5)`
                                 }}
                               >
                                 {weapon.name}
@@ -538,17 +535,17 @@ export default function WeaponsPage() {
                               {/* Weapon type and element */}
                               <div className="flex items-center gap-3">
                                 <span
-                                  className="text-sm font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+                                  className="text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wide"
                                   style={{
                                     background: colors.button.secondary,
                                     color: colors.text.primary,
                                     textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                                   }}
                                 >
-                                  ⚔️ {weapon.weaponType}
+                                  {weapon.weaponType}
                                 </span>
                                 <motion.span
-                                  className="px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wide"
+                                  className="px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide"
                                   style={{
                                     background: weapon.element === 'Arc' ? 'linear-gradient(45deg, #3b82f6, #60a5fa)' :
                                                weapon.element === 'Solar' ? 'linear-gradient(45deg, #f97316, #fb923c)' :
@@ -556,11 +553,11 @@ export default function WeaponsPage() {
                                                `linear-gradient(45deg, ${colors.primary}, ${colors.accent})`,
                                     color: '#ffffff',
                                     textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                    boxShadow: `0 4px 15px ${weapon.element === 'Arc' ? '#3b82f6' : weapon.element === 'Solar' ? '#f97316' : weapon.element === 'Void' ? '#9333ea' : colors.primary}40`
+                                    boxShadow: `0 2px 8px ${weapon.element === 'Arc' ? '#3b82f6' : weapon.element === 'Solar' ? '#f97316' : weapon.element === 'Void' ? '#9333ea' : colors.primary}40`
                                   }}
-                                  whileHover={{ scale: 1.1 }}
+                                  whileHover={{ scale: 1.05 }}
                                 >
-                                  ⚡ {weapon.element}
+                                  {weapon.element}
                                 </motion.span>
                               </div>
                             </div>
@@ -569,55 +566,55 @@ export default function WeaponsPage() {
                           {/* Combat Style Column */}
                           <div className="col-span-2 flex items-center">
                             <span
-                              className="font-bold text-lg px-4 py-2 rounded-xl border-2"
+                              className="font-semibold text-sm px-3 py-1 rounded-lg border"
                               style={{
                                 color: colors.text.primary,
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
                                 background: colors.button.secondary,
                                 borderColor: colors.border.primary
                               }}
                             >
-                              🎨 {weapon.combatStyle}
+                              {weapon.combatStyle}
                             </span>
                           </div>
 
                           {/* Slot Column */}
                           <div className="col-span-2 flex items-center">
                             <motion.span
-                              className="inline-flex items-center px-4 py-2 rounded-xl text-lg font-bold border-2 uppercase tracking-wider"
+                              className="inline-flex items-center px-3 py-1 rounded-lg text-sm font-semibold border uppercase tracking-wide"
                               style={{
                                 background: weapon.slot === 'Primary' ? 'linear-gradient(45deg, #16a34a, #22c55e)' : 'linear-gradient(45deg, #9333ea, #a855f7)',
                                 color: '#ffffff',
                                 borderColor: weapon.slot === 'Primary' ? '#22c55e' : '#a855f7',
                                 textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                                boxShadow: `0 4px 15px ${weapon.slot === 'Primary' ? '#16a34a' : '#9333ea'}40`
+                                boxShadow: `0 2px 8px ${weapon.slot === 'Primary' ? '#16a34a' : '#9333ea'}30`
                               }}
-                              whileHover={{ scale: 1.1, rotate: 2 }}
+                              whileHover={{ scale: 1.05 }}
                             >
-                              {weapon.slot === 'Primary' ? '⚡' : '💥'} {weapon.slot}
+                              {weapon.slot}
                             </motion.span>
                           </div>
 
                           {/* Characters Column */}
-                          <div className="col-span-3 flex items-center">
-                            <div className="flex gap-3">
+                          <div className="col-span-2 flex items-center">
+                            <div className="flex gap-2">
                               <motion.div
-                                className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl border-2 border-orange-400 flex items-center justify-center shadow-lg"
-                                whileHover={{ scale: 1.15, rotate: 5 }}
+                                className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg border border-orange-400 flex items-center justify-center shadow-md"
+                                whileHover={{ scale: 1.1 }}
                                 style={{
-                                  boxShadow: '0 4px 15px #f97316a0'
+                                  boxShadow: '0 2px 8px #f9731640'
                                 }}
                               >
-                                <span className="text-lg font-black text-white">H</span>
+                                <span className="text-sm font-bold text-white">H</span>
                               </motion.div>
                               <motion.div
-                                className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl border-2 border-blue-400 flex items-center justify-center shadow-lg"
-                                whileHover={{ scale: 1.15, rotate: -5 }}
+                                className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg border border-blue-400 flex items-center justify-center shadow-md"
+                                whileHover={{ scale: 1.1 }}
                                 style={{
-                                  boxShadow: '0 4px 15px #3b82f6a0'
+                                  boxShadow: '0 2px 8px #3b82f640'
                                 }}
                               >
-                                <span className="text-lg font-black text-white">W</span>
+                                <span className="text-sm font-bold text-white">W</span>
                               </motion.div>
                             </div>
                           </div>
