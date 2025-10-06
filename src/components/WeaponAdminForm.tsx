@@ -178,7 +178,13 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
           </div>
 
           <div className="form-row">
-<div className="form-row">            <div className="form-group">              <ImageSelector                label="Image URL"                value={formData.imageUrl || ''}                onChange={(url) => handleInputChange('imageUrl', url)}              />            </div>            <div className="form-group">              <ImageSelector                label="Thumbnail URL"                value={formData.thumbnailUrl || ''}                onChange={(url) => handleInputChange('thumbnailUrl', url)}              />            </div>          </div>
+            <div className="form-group">
+              <ImageSelector
+                label="Image URL"
+                value={formData.imageUrl || ''}
+                onChange={(url) => handleInputChange('imageUrl', url)}
+              />
+            </div>
           </div>
         </section>
         {/* Traits & Perks Section */}

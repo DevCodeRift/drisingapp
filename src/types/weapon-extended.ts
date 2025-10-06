@@ -4,7 +4,7 @@
 // TRAITS
 // ============================================================================
 export interface Trait {
-  id: number;
+  id: string;
   name: string;
   type: 'intrinsic' | 'origin';
   description?: string;
@@ -25,7 +25,7 @@ export interface TraitFormData {
 // PERKS
 // ============================================================================
 export interface WeaponPerk {
-  id: number;
+  id: string;
   name: string;
   slot: number; // 1-4
   description?: string;
@@ -57,7 +57,7 @@ export interface WeaponPerkFormData {
 // CATALYSTS
 // ============================================================================
 export interface Catalyst {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   effect?: string;
@@ -78,27 +78,27 @@ export interface CatalystFormData {
 // WEAPON ASSIGNMENTS
 // ============================================================================
 export interface WeaponTrait {
-  id: number;
-  weaponId: number;
-  traitId: number;
+  id: string;
+  weaponId: string;
+  traitId: string;
   slot: number; // 1 = Intrinsic, 2 = Origin
   trait?: Trait;
   createdAt: Date;
 }
 
 export interface WeaponPerkAssignment {
-  id: number;
-  weaponId: number;
-  perkId: number;
+  id: string;
+  weaponId: string;
+  perkId: string;
   slot: number; // 3 = Perk 1, 4 = Perk 2
   perk?: WeaponPerk;
   createdAt: Date;
 }
 
 export interface WeaponCatalyst {
-  id: number;
-  weaponId: number;
-  catalystId: number;
+  id: string;
+  weaponId: string;
+  catalystId: string;
   catalyst?: Catalyst;
   createdAt: Date;
 }
@@ -107,7 +107,7 @@ export interface WeaponCatalyst {
 // ENHANCED MODS SYSTEM
 // ============================================================================
 export interface ModRarity {
-  id: number;
+  id: string;
   name: 'Rare' | 'Legendary' | 'Mythic' | 'Exotic';
   mainAttributeCount: number;
   randomAttributeCount: number;
@@ -115,7 +115,7 @@ export interface ModRarity {
 }
 
 export interface ModAttribute {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   statBonus?: string;
@@ -123,10 +123,10 @@ export interface ModAttribute {
 }
 
 export interface WeaponMod {
-  id: number;
+  id: string;
   name: string;
   category: 'Ammo' | 'Scope' | 'Magazine';
-  rarityId?: number;
+  rarityId?: string;
   rarity?: ModRarity;
   description?: string;
   combatStyle?: string;
@@ -159,7 +159,7 @@ export interface WeaponMod {
 export interface WeaponModFormData {
   name: string;
   category: 'Ammo' | 'Scope' | 'Magazine';
-  rarityId?: number;
+  rarityId?: string;
   description?: string;
   combatStyle?: string;
   unlocksPerkUpgrade: boolean;
@@ -180,10 +180,10 @@ export interface WeaponModFormData {
   refinementLevelMin?: number;
   refinementLevelMax?: number;
 
-  mainAttributeIds: number[];
-  randomAttributeIds: number[];
-  upgradablePerkIds: number[];
-  perkUpgradeDescriptions: { [perkId: number]: string };
+  mainAttributeIds: string[];
+  randomAttributeIds: string[];
+  upgradablePerkIds: string[];
+  perkUpgradeDescriptions: { [perkId: string]: string };
 }
 
 export interface ModAttributeFormData {
@@ -193,9 +193,9 @@ export interface ModAttributeFormData {
 }
 
 export interface WeaponModAssignment {
-  id: number;
-  weaponId: number;
-  modId: number;
+  id: string;
+  weaponId: string;
+  modId: string;
   slotCategory: 'Ammo' | 'Scope' | 'Magazine';
   displayOrder: number;
   mod?: WeaponMod;
@@ -206,7 +206,7 @@ export interface WeaponModAssignment {
 // UPDATED WEAPON TYPE WITH NEW FIELDS
 // ============================================================================
 export interface WeaponWithExtendedData {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   rarity: number;
@@ -237,20 +237,20 @@ export interface ExtendedWeaponFormData {
   // ... other basic fields
 
   // Trait selections (Slot 1 & 2)
-  intrinsicTraitId?: number;
-  originTraitId?: number;
+  intrinsicTraitId?: string;
+  originTraitId?: string;
 
   // Perk selections (Slot 3 & 4)
-  perk1Id?: number;
-  perk2Id?: number;
+  perk1Id?: string;
+  perk2Id?: string;
 
   // Catalyst selection (if rarity >= 6)
-  catalystId?: number;
+  catalystId?: string;
 
   // Mod selections
-  ammoModIds: number[];
-  scopeModIds: number[];
-  magazineModIds: number[];
+  ammoModIds: string[];
+  scopeModIds: string[];
+  magazineModIds: string[];
 }
 
 // Constants

@@ -22,7 +22,7 @@ export default function AdminWeaponsPage() {
       });
   }, []);
 
-  const handleDelete = async (id: number, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
 
     try {

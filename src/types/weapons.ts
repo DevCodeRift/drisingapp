@@ -1,5 +1,7 @@
 // TypeScript interfaces for Lightbearer weapons database
 
+import { WeaponTrait, WeaponPerkAssignment, WeaponCatalyst, WeaponModAssignment } from './weapon-extended';
+
 export interface Weapon {
   id: string;
   name: string;
@@ -36,8 +38,8 @@ export interface Weapon {
 }
 
 export interface WeaponMod {
-  id: number;
-  weaponId: number;
+  id: string;
+  weaponId: string;
   category: 'Ammo' | 'Scope' | 'Magazine';
   name: string;
   effect: string;
@@ -48,7 +50,7 @@ export interface WeaponMod {
 }
 
 export interface Character {
-  id: number;
+  id: string;
   name: string;
   role?: string;
   rarity?: number;
@@ -57,15 +59,15 @@ export interface Character {
 }
 
 export interface WeaponCharacterCompatibility {
-  id: number;
-  weaponId: number;
-  characterId: number;
+  id: string;
+  weaponId: string;
+  characterId: string;
   createdAt: Date;
 }
 
 export interface Perk {
-  id: number;
-  weaponId: number;
+  id: string;
+  weaponId: string;
   perkName: string;
   perkDescription?: string;
   perkType?: string;
@@ -97,15 +99,15 @@ export interface WeaponFormData {
   range?: number;
 
   // Trait/Perk/Catalyst selections
-  intrinsicTraitId?: number;
-  originTraitId?: number;
-  perk1Id?: number;
-  perk2Id?: number;
-  catalystId?: number;
+  intrinsicTraitId?: string;
+  originTraitId?: string;
+  perk1Id?: string;
+  perk2Id?: string;
+  catalystId?: string;
 
   // Nested data
   mods: WeaponModFormData[];
-  compatibleCharacterIds: number[];
+  compatibleCharacterIds: string[];
   perks: PerkFormData[];
 }
 
@@ -178,6 +180,11 @@ export const COMBAT_STYLES = [
   'Rapid-Fire'
 ] as const;
 
+
+export const WEAPON_SLOTS = [
+  'Primary',
+  'Power'
+] as const;
 
 export const MOD_CATEGORIES = [
   'Ammo',

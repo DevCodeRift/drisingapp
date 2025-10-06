@@ -41,9 +41,21 @@ export default function EditWeaponPage({ params }: { params: Promise<{ id: strin
             stability: weapon.stability,
             handling: weapon.handling,
             range: weapon.range,
-            mods: weapon.mods || [],
+            mods: weapon.mods?.map(mod => ({
+              category: mod.slotCategory,
+              name: mod.mod?.name || '',
+              effect: mod.mod?.description || '',
+              statValue: 0,
+              statType: '',
+              displayOrder: mod.displayOrder
+            })) || [],
             compatibleCharacterIds: weapon.compatibleCharacters?.map(c => c.characterId) || [],
-            perks: weapon.perks || []
+            perks: weapon.perks?.map(perk => ({
+              perkName: perk.perk?.name || '',
+              perkDescription: perk.perk?.description || '',
+              perkType: '',
+              displayOrder: perk.slot
+            })) || []
           });
           setLoading(false);
         })

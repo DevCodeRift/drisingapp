@@ -228,18 +228,18 @@ export async function createWeapon(req: Request, res: Response, db: DatabaseClie
       // Insert weapon
       const weaponResult = await trx.query(
         `INSERT INTO weapons (
-          name, slug, rarity, weapon_type, base_power_min, base_power_max,
-          combat_style, element, weapon_slot, image_url, thumbnail_url,
-          dps, precision_bonus, magazine_capacity, rate_of_fire, damage,
+          name, slug, rarity, weapon_type, base_power,
+          combat_style, element, slot, image_url,
+          dps, precision_bonus, magazine_cap, rate_of_fire, max_ammo, damage,
           reload_speed, stability, handling, range
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
         RETURNING id`,
         [
           formData.name, slug, formData.rarity, formData.weaponType,
-          formData.basePowerMin, formData.basePowerMax, formData.combatStyle,
-          formData.element, formData.weaponSlot, formData.imageUrl, formData.thumbnailUrl,
-          formData.dps, formData.precisionBonus, formData.magazineCapacity,
-          formData.rateOfFire, formData.damage, formData.reloadSpeed,
+          formData.basePower, formData.combatStyle,
+          formData.element, formData.slot, formData.imageUrl,
+          formData.dps, formData.precisionBonus, formData.magazineCap,
+          formData.rateOfFire, formData.maxAmmo, formData.damage, formData.reloadSpeed,
           formData.stability, formData.handling, formData.range
         ]
       );
@@ -348,10 +348,10 @@ export async function updateWeapon(req: Request, res: Response, db: DatabaseClie
         WHERE id = $21`,
         [
           formData.name, slug, formData.rarity, formData.weaponType,
-          formData.basePowerMin, formData.basePowerMax, formData.combatStyle,
-          formData.element, formData.weaponSlot, formData.imageUrl, formData.thumbnailUrl,
-          formData.dps, formData.precisionBonus, formData.magazineCapacity,
-          formData.rateOfFire, formData.damage, formData.reloadSpeed,
+          formData.basePower, formData.combatStyle,
+          formData.element, formData.slot, formData.imageUrl,
+          formData.dps, formData.precisionBonus, formData.magazineCap,
+          formData.rateOfFire, formData.maxAmmo, formData.damage, formData.reloadSpeed,
           formData.stability, formData.handling, formData.range, id
         ]
       );
@@ -477,17 +477,16 @@ function mapDatabaseToWeapon(row: any): Weapon {
     slug: row.slug,
     rarity: row.rarity,
     weaponType: row.weapon_type,
-    basePowerMin: row.base_power_min,
-    basePowerMax: row.base_power_max,
+    basePower: row.base_power,
     combatStyle: row.combat_style,
     element: row.element,
-    weaponSlot: row.weapon_slot,
+    slot: row.slot,
     imageUrl: row.image_url,
-    thumbnailUrl: row.thumbnail_url,
     dps: row.dps,
     precisionBonus: row.precision_bonus,
-    magazineCapacity: row.magazine_capacity,
+    magazineCap: row.magazine_cap,
     rateOfFire: row.rate_of_fire,
+    maxAmmo: row.max_ammo,
     damage: row.damage,
     reloadSpeed: row.reload_speed,
     stability: row.stability,

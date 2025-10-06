@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 interface Trait {
-  id: number;
+  id: string;
   name: string;
   type: string;
   description?: string;
@@ -11,7 +11,7 @@ interface Trait {
 }
 
 interface Perk {
-  id: number;
+  id: string;
   name: string;
   slot: number;
   description?: string;
@@ -19,7 +19,7 @@ interface Perk {
 }
 
 interface Catalyst {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   effect?: string;
@@ -27,11 +27,11 @@ interface Catalyst {
 
 interface WeaponSlotSelectorsProps {
   rarity: number;
-  intrinsicTraitId?: number;
-  originTraitId?: number;
-  perk1Id?: number;
-  perk2Id?: number;
-  catalystId?: number;
+  intrinsicTraitId?: string;
+  originTraitId?: string;
+  perk1Id?: string;
+  perk2Id?: string;
+  catalystId?: string;
   onChange: (field: string, value: any) => void;
 }
 
@@ -97,7 +97,7 @@ export default function WeaponSlotSelectors({
         <select
           id="intrinsicTrait"
           value={intrinsicTraitId || ''}
-          onChange={(e) => onChange('intrinsicTraitId', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e) => onChange('intrinsicTraitId', e.target.value || undefined)}
         >
           <option value="">-- Select Intrinsic Trait --</option>
           {intrinsicTraits.map(trait => (
@@ -119,7 +119,7 @@ export default function WeaponSlotSelectors({
         <select
           id="originTrait"
           value={originTraitId || ''}
-          onChange={(e) => onChange('originTraitId', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e) => onChange('originTraitId', e.target.value || undefined)}
         >
           <option value="">-- Select Origin Trait --</option>
           {originTraits.map(trait => (
@@ -141,7 +141,7 @@ export default function WeaponSlotSelectors({
         <select
           id="perk1"
           value={perk1Id || ''}
-          onChange={(e) => onChange('perk1Id', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e) => onChange('perk1Id', e.target.value || undefined)}
         >
           <option value="">-- Select Perk 1 --</option>
           {perks3.map(perk => (
@@ -163,7 +163,7 @@ export default function WeaponSlotSelectors({
         <select
           id="perk2"
           value={perk2Id || ''}
-          onChange={(e) => onChange('perk2Id', e.target.value ? Number(e.target.value) : undefined)}
+          onChange={(e) => onChange('perk2Id', e.target.value || undefined)}
         >
           <option value="">-- Select Perk 2 --</option>
           {perks4.map(perk => (
@@ -186,7 +186,7 @@ export default function WeaponSlotSelectors({
           <select
             id="catalyst"
             value={catalystId || ''}
-            onChange={(e) => onChange('catalystId', e.target.value ? Number(e.target.value) : undefined)}
+            onChange={(e) => onChange('catalystId', e.target.value || undefined)}
           >
             <option value="">-- Select Catalyst --</option>
             {catalysts.map(catalyst => (

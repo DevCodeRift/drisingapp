@@ -16,7 +16,7 @@ function filenameToName(filename: string): string {
 
 // Helper function to create slug from name
 function createSlug(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').trim('-');
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
 }
 
 // Get random values for provisional data
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     }
 
     const weaponsDir = path.join(process.cwd(), 'public/images/weapons');
-    const weapons = [];
+    const weapons: any[] = [];
 
     // Read weapon types (directories)
     const weaponTypes = fs.readdirSync(weaponsDir, { withFileTypes: true })
