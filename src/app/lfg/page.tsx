@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface LFGPost {
   id: string;
@@ -24,6 +25,7 @@ interface LFGPost {
 export default function LFGPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { colors } = useTheme();
   const [lfgPosts, setLfgPosts] = useState<LFGPost[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,14 +63,20 @@ export default function LFGPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: colors.background }}>
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Looking For Group</h1>
+          <h1 className="text-4xl font-bold" style={{ color: colors.text.primary }}>Looking For Group</h1>
           {session && (
             <button
               onClick={() => router.push('/lfg/create')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              className="px-6 py-2 rounded-lg transition"
+              style={{
+                backgroundColor: colors.primary,
+                color: '#ffffff'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.hover}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
             >
               Create LFG Post
             </button>
@@ -76,9 +84,9 @@ export default function LFGPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Loading LFG posts...</div>
+          <div className="text-center py-8" style={{ color: colors.text.secondary }}>Loading LFG posts...</div>
         ) : lfgPosts.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-8" style={{ color: colors.text.muted }}>
             No active LFG posts. Be the first to create one!
           </div>
         ) : (
@@ -86,34 +94,42 @@ export default function LFGPage() {
             {lfgPosts.map((post) => (
               <div
                 key={post.id}
-                className={`bg-white dark:bg-gray-800 border rounded-lg p-6 transition shadow-sm ${
-                  post.active
-                    ? 'border-blue-500 dark:border-blue-500'
-                    : 'border-gray-300 dark:border-gray-700 opacity-60'
-                }`}
+                className="border rounded-lg p-6 transition shadow-sm"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderColor: post.active ? colors.primary : colors.border.secondary,
+                  opacity: post.active ? 1 : 0.6
+                }}
               >
                 <div className="flex justify-between items-start mb-3">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h2 className="text-2xl font-bold" style={{ color: colors.text.primary }}>
                     {post.activity}
                   </h2>
                   {!post.active && (
-                    <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded font-medium">
+                    <span
+                      className="text-xs px-2 py-1 rounded font-medium"
+                      style={{
+                        backgroundColor: colors.button.secondary,
+                        color: colors.text.secondary
+                      }}
+                    >
                       CLOSED
                     </span>
                   )}
                 </div>
 
                 <div
-                  className="text-gray-700 dark:text-gray-300 mb-4 prose dark:prose-invert max-w-none"
+                  className="mb-4 prose prose-sm max-w-none"
+                  style={{ color: colors.text.secondary }}
                   dangerouslySetInnerHTML={{ __html: post.description }}
                 />
 
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  <span className="text-blue-600 dark:text-blue-400 font-medium">{post.playerCount} players needed</span>
+                <div className="flex items-center gap-4 text-sm mb-4" style={{ color: colors.text.secondary }}>
+                  <span className="font-medium" style={{ color: colors.primary }}>{post.playerCount} players needed</span>
                   {post.region && <span>Region: {post.region}</span>}
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <div className="flex items-center gap-4 text-sm mb-4" style={{ color: colors.text.secondary }}>
                   <span>Posted by {post.user.name}</span>
                   <span>{new Date(post.createdAt).toLocaleString()}</span>
                 </div>
@@ -121,7 +137,13 @@ export default function LFGPage() {
                 {session?.user?.id === post.userId && post.active && (
                   <button
                     onClick={() => handleToggleActive(post.id, post.active)}
-                    className="mt-2 text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded transition"
+                    className="mt-2 text-sm px-4 py-1 rounded transition"
+                    style={{
+                      backgroundColor: '#dc2626',
+                      color: '#ffffff'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b91c1c'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
                   >
                     Mark as Closed
                   </button>

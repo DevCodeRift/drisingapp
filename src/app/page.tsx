@@ -118,30 +118,33 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* Main Content - Features and Recent Activity */}
       <div className="py-16 px-8" style={{ backgroundColor: colors.surface }}>
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-4"
-              style={{ color: colors.text.primary }}
-            >
-              Features
-            </h2>
-            <p
-              className="text-lg max-w-2xl mx-auto"
-              style={{ color: colors.text.secondary }}
-            >
-              Everything you need to enhance your Destiny Rising experience
-            </p>
-          </motion.div>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Features - Left Side (2/3 width) */}
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="mb-8"
+              >
+                <h2
+                  className="text-3xl font-bold mb-2"
+                  style={{ color: colors.text.primary }}
+                >
+                  Features
+                </h2>
+                <p
+                  className="text-lg"
+                  style={{ color: colors.text.secondary }}
+                >
+                  Everything you need to enhance your Destiny Rising experience
+                </p>
+              </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
                 icon: Target,
@@ -216,130 +219,131 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Recent Activity */}
-      <div className="py-16 px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+      {/* Recent Activity - Right Sidebar */}
+      <div className="lg:col-span-1">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8"
+        >
+          <h2
+            className="text-3xl font-bold mb-2"
+            style={{ color: colors.text.primary }}
           >
-            <h2
-              className="text-3xl md:text-4xl font-bold mb-4"
+            Recent Activity
+          </h2>
+          <p
+            className="text-lg"
+            style={{ color: colors.text.secondary }}
+          >
+            Community updates
+          </p>
+        </motion.div>
+
+        <div className="space-y-6">
+          {/* Recent Builds */}
+          <Card
+            className="p-6 border"
+            style={{
+              backgroundColor: colors.background,
+              borderColor: colors.border.primary
+            }}
+          >
+            <h3
+              className="text-lg font-semibold mb-4"
               style={{ color: colors.text.primary }}
             >
-              Recent Activity
-            </h2>
-            <p
-              className="text-lg"
-              style={{ color: colors.text.secondary }}
-            >
-              See what&apos;s happening in the community
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Recent Builds */}
-            <Card
-              className="p-6 border"
-              style={{
-                backgroundColor: colors.surface,
-                borderColor: colors.border.primary
-              }}
-            >
-              <h3
-                className="text-xl font-semibold mb-4"
-                style={{ color: colors.text.primary }}
-              >
-                Latest Builds
-              </h3>
-              {activity.builds.length === 0 ? (
-                <p style={{ color: colors.text.muted }}>No builds yet</p>
-              ) : (
-                <div className="space-y-3">
-                  {activity.builds.map((build) => (
-                    <div
-                      key={build.id}
-                      onClick={() => router.push(`/builds/${build.id}`)}
-                      className="p-3 rounded-lg cursor-pointer transition-colors border"
-                      style={{
-                        backgroundColor: colors.background,
-                        borderColor: colors.border.secondary
-                      }}
-                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
-                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.background}
-                    >
-                      <div className="font-medium" style={{ color: colors.text.primary }}>{build.title}</div>
-                      <div className="text-sm" style={{ color: colors.text.secondary }}>
-                        {build.character.name} • by {build.user.name}
-                      </div>
+              Latest Builds
+            </h3>
+            {activity.builds.length === 0 ? (
+              <p className="text-sm" style={{ color: colors.text.muted }}>No builds yet</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.builds.slice(0, 3).map((build) => (
+                  <div
+                    key={build.id}
+                    onClick={() => router.push(`/builds/${build.id}`)}
+                    className="p-3 rounded-lg cursor-pointer transition-colors border"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border.secondary
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.surface}
+                  >
+                    <div className="font-medium text-sm" style={{ color: colors.text.primary }}>{build.title}</div>
+                    <div className="text-xs" style={{ color: colors.text.secondary }}>
+                      {build.character.name}
                     </div>
-                  ))}
-                </div>
-              )}
-              <Button
-                onClick={() => router.push('/builds')}
-                variant="ghost"
-                size="sm"
-                className="mt-4"
-                style={{ color: colors.primary }}
-              >
-                View all builds →
-              </Button>
-            </Card>
-
-            {/* Recent News */}
-            <Card
-              className="p-6 border"
-              style={{
-                backgroundColor: colors.surface,
-                borderColor: colors.border.primary
-              }}
+                  </div>
+                ))}
+              </div>
+            )}
+            <Button
+              onClick={() => router.push('/builds')}
+              variant="ghost"
+              size="sm"
+              className="mt-4 text-sm"
+              style={{ color: colors.primary }}
             >
-              <h3
-                className="text-xl font-semibold mb-4"
-                style={{ color: colors.text.primary }}
-              >
-                Latest News
-              </h3>
-              {activity.news.length === 0 ? (
-                <p style={{ color: colors.text.muted }}>No news yet</p>
-              ) : (
-                <div className="space-y-3">
-                  {activity.news.map((post) => (
-                    <div
-                      key={post.id}
-                      onClick={() => router.push(`/news/${post.id}`)}
-                      className="p-3 rounded-lg cursor-pointer transition-colors border"
-                      style={{
-                        backgroundColor: colors.background,
-                        borderColor: colors.border.secondary
-                      }}
-                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
-                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.background}
-                    >
-                      <div className="font-medium" style={{ color: colors.text.primary }}>{post.title}</div>
-                      <div className="text-sm" style={{ color: colors.text.secondary }}>
-                        {post.type} • by {post.user.name}
-                      </div>
+              View all →
+            </Button>
+          </Card>
+
+          {/* Recent News */}
+          <Card
+            className="p-6 border"
+            style={{
+              backgroundColor: colors.background,
+              borderColor: colors.border.primary
+            }}
+          >
+            <h3
+              className="text-lg font-semibold mb-4"
+              style={{ color: colors.text.primary }}
+            >
+              Latest News
+            </h3>
+            {activity.news.length === 0 ? (
+              <p className="text-sm" style={{ color: colors.text.muted }}>No news yet</p>
+            ) : (
+              <div className="space-y-3">
+                {activity.news.slice(0, 3).map((post) => (
+                  <div
+                    key={post.id}
+                    onClick={() => router.push(`/news/${post.id}`)}
+                    className="p-3 rounded-lg cursor-pointer transition-colors border"
+                    style={{
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border.secondary
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.secondary}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.surface}
+                  >
+                    <div className="font-medium text-sm" style={{ color: colors.text.primary }}>{post.title}</div>
+                    <div className="text-xs" style={{ color: colors.text.secondary }}>
+                      {post.type}
                     </div>
-                  ))}
-                </div>
-              )}
-              <Button
-                onClick={() => router.push('/news')}
-                variant="ghost"
-                size="sm"
-                className="mt-4"
-                style={{ color: colors.primary }}
-              >
-                View all news →
-              </Button>
-            </Card>
-          </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Button
+              onClick={() => router.push('/news')}
+              variant="ghost"
+              size="sm"
+              className="mt-4 text-sm"
+              style={{ color: colors.primary }}
+            >
+              View all →
+            </Button>
+          </Card>
         </div>
       </div>
+    </div>
+  </div>
+</div>
     </main>
   );
 }

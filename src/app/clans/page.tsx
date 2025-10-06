@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface ClanPost {
   id: string;
@@ -23,6 +24,7 @@ interface ClanPost {
 export default function ClansPage() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { colors } = useTheme();
   const [clanPosts, setClanPosts] = useState<ClanPost[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,14 +62,20 @@ export default function ClansPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: colors.background }}>
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Clan Recruitment</h1>
+          <h1 className="text-4xl font-bold" style={{ color: colors.text.primary }}>Clan Recruitment</h1>
           {session && (
             <button
               onClick={() => router.push('/clans/create')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
+              className="px-6 py-2 rounded-lg transition"
+              style={{
+                backgroundColor: colors.primary,
+                color: '#ffffff'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.button.hover}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
             >
               Post Recruitment
             </button>
@@ -75,9 +83,9 @@ export default function ClansPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">Loading clan posts...</div>
+          <div className="text-center py-8" style={{ color: colors.text.secondary }}>Loading clan posts...</div>
         ) : clanPosts.length === 0 ? (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-8" style={{ color: colors.text.muted }}>
             No clan recruitment posts. Be the first to create one!
           </div>
         ) : (
@@ -85,19 +93,26 @@ export default function ClansPage() {
             {clanPosts.map((post) => (
               <div
                 key={post.id}
-                className={`bg-white dark:bg-gray-800 border rounded-lg p-6 transition shadow-sm ${
-                  post.active
-                    ? 'border-blue-500 dark:border-blue-500'
-                    : 'border-gray-300 dark:border-gray-700 opacity-60'
-                }`}
+                className="border rounded-lg p-6 transition shadow-sm"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderColor: post.active ? colors.primary : colors.border.secondary,
+                  opacity: post.active ? 1 : 0.6
+                }}
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center gap-3">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-3xl font-bold" style={{ color: colors.text.primary }}>
                       {post.clanName}
                     </h2>
                     {!post.active && (
-                      <span className="text-xs bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded font-medium">
+                      <span
+                        className="text-xs px-2 py-1 rounded font-medium"
+                        style={{
+                          backgroundColor: colors.button.secondary,
+                          color: colors.text.secondary
+                        }}
+                      >
                         CLOSED
                       </span>
                     )}
@@ -105,30 +120,32 @@ export default function ClansPage() {
                 </div>
 
                 <div
-                  className="text-gray-700 dark:text-gray-300 mb-4 text-lg prose dark:prose-invert max-w-none"
+                  className="mb-4 text-lg prose prose-sm max-w-none"
+                  style={{ color: colors.text.secondary }}
                   dangerouslySetInnerHTML={{ __html: post.description }}
                 />
 
                 {post.requirements && (
                   <div className="mb-4">
-                    <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 mb-2">
+                    <h3 className="text-sm font-bold mb-2" style={{ color: colors.primary }}>
                       Requirements:
                     </h3>
                     <div
-                      className="text-gray-600 dark:text-gray-400 prose dark:prose-invert max-w-none"
+                      className="prose prose-sm max-w-none"
+                      style={{ color: colors.text.secondary }}
                       dangerouslySetInnerHTML={{ __html: post.requirements }}
                     />
                   </div>
                 )}
 
                 <div className="mb-4">
-                  <h3 className="text-sm font-bold text-amber-600 dark:text-amber-400 mb-2">
+                  <h3 className="text-sm font-bold mb-2" style={{ color: colors.accent }}>
                     Contact:
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300">{post.contactInfo}</p>
+                  <p style={{ color: colors.text.secondary }}>{post.contactInfo}</p>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-4 text-sm" style={{ color: colors.text.secondary }}>
                   <span>Posted by {post.user.name}</span>
                   <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
@@ -136,7 +153,13 @@ export default function ClansPage() {
                 {session?.user?.id === post.userId && post.active && (
                   <button
                     onClick={() => handleToggleActive(post.id, post.active)}
-                    className="mt-4 text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+                    className="mt-4 text-sm px-4 py-2 rounded transition"
+                    style={{
+                      backgroundColor: '#dc2626',
+                      color: '#ffffff'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#b91c1c'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
                   >
                     Close Recruitment
                   </button>
