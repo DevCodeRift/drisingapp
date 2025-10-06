@@ -29,10 +29,10 @@ export default function WeaponConfigurator({ slot, weapons, weaponData, onChange
 
   const isExotic = selectedWeapon?.rarity === 6 || weaponData.rarity === 6;
 
-  const filteredWeapons = weapons.filter(w =>
+  const filteredWeapons = Array.isArray(weapons) ? weapons.filter(w =>
     w.slot === slot &&
     w.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) : [];
 
   const handleWeaponSelect = (weapon: any) => {
     setSelectedWeapon(weapon);
