@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Weapon } from '@/types/weapons';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Filter, Search } from 'lucide-react';
+import { getCombatStyleImage, getWeaponSlotImage, getElementImage, getRarityStarsData } from '@/lib/image-assets';
 
 export default function WeaponsPage() {
   const router = useRouter();
@@ -70,7 +71,14 @@ export default function WeaponsPage() {
   ];
 
   const getRarityStars = (rarity: number) => {
-    return '★'.repeat(rarity);
+    return getRarityStarsData(rarity).map((star) => (
+      <img
+        key={star.key}
+        src={star.src}
+        alt={star.alt}
+        className={star.className}
+      />
+    ));
   };
 
   const getRarityColors = (rarity: number) => {
@@ -311,15 +319,24 @@ export default function WeaponsPage() {
                               {weapon.name}
                             </h3>
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm ${rarityColors.text}`}>
+                              <div className={`flex items-center gap-1 ${rarityColors.text}`}>
                                 {getRarityStars(weapon.rarity)}
-                              </span>
-                              <span
-                                className="text-xs"
-                                style={{ color: colors.text.muted }}
-                              >
-                                {weapon.combatStyle}
-                              </span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {getCombatStyleImage(weapon.combatStyle) && (
+                                  <img
+                                    src={getCombatStyleImage(weapon.combatStyle)!}
+                                    alt={weapon.combatStyle}
+                                    className="w-4 h-4"
+                                  />
+                                )}
+                                <span
+                                  className="text-xs"
+                                  style={{ color: colors.text.muted }}
+                                >
+                                  {weapon.combatStyle}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -337,12 +354,19 @@ export default function WeaponsPage() {
                         {/* Slot Column */}
                         <div className="col-span-2 flex items-center">
                           <span
-                            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium"
                             style={{
                               backgroundColor: weapon.slot === 'Primary' ? '#10b98120' : '#8b5cf620',
                               color: weapon.slot === 'Primary' ? '#059669' : '#8b5cf6'
                             }}
                           >
+                            {getWeaponSlotImage(weapon.slot) && (
+                              <img
+                                src={getWeaponSlotImage(weapon.slot)!}
+                                alt={weapon.slot}
+                                className="w-3 h-3"
+                              />
+                            )}
                             {weapon.slot}
                           </span>
                         </div>
@@ -350,7 +374,7 @@ export default function WeaponsPage() {
                         {/* Element Column */}
                         <div className="col-span-2 flex items-center">
                           <span
-                            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium"
                             style={{
                               backgroundColor: weapon.element === 'Arc' ? '#3b82f620' :
                                              weapon.element === 'Solar' ? '#f9731620' :
@@ -362,6 +386,13 @@ export default function WeaponsPage() {
                                      colors.text.secondary
                             }}
                           >
+                            {getElementImage(weapon.element) && (
+                              <img
+                                src={getElementImage(weapon.element)!}
+                                alt={weapon.element}
+                                className="w-3 h-3"
+                              />
+                            )}
                             {weapon.element}
                           </span>
                         </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WeaponFormData, WeaponModFormData, PerkFormData, WEAPON_TYPES, ELEMENTS, COMBAT_STYLES, MOD_CATEGORIES } from '@/types/weapons';
 import ImageSelector from './ImageSelector';
+import { getCombatStyleImage, getWeaponSlotImage, getElementImage, getCharacterImage, getRarityStarsData } from '@/lib/image-assets';
 
 import WeaponSlotSelectors from './WeaponSlotSelectors';
 interface WeaponAdminFormProps {
@@ -40,6 +41,21 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [characters, setCharacters] = useState<Array<{id: string, name: string}>>([]);
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const response = await fetch('/api/characters');
+        const data = await response.json();
+        setCharacters(data);
+      } catch (error) {
+        console.error('Error fetching characters:', error);
+      }
+    };
+
+    fetchCharacters();
+  }, []);
 
   const handleInputChange = (field: keyof WeaponFormData, value: any) => {
     setFormData(prev => ({
@@ -98,10 +114,20 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
                 value={formData.rarity}
                 onChange={(e) => handleInputChange('rarity', parseInt(e.target.value))}
               >
-                {[1, 2, 3, 4, 5].map(r => (
+                {[1, 2, 3, 4, 5, 6].map(r => (
                   <option key={r} value={r}>{r} Stars</option>
                 ))}
               </select>
+              <div className="form-hint flex items-center gap-1 mt-2">
+                Current rarity: {getRarityStarsData(formData.rarity).map((star) => (
+                  <img
+                    key={star.key}
+                    src={star.src}
+                    alt={star.alt}
+                    className={star.className}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
@@ -132,6 +158,16 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
                   <option key={element} value={element}>{element}</option>
                 ))}
               </select>
+              {formData.element && getElementImage(formData.element) && (
+                <div className="form-hint flex items-center gap-2 mt-2">
+                  <img
+                    src={getElementImage(formData.element)!}
+                    alt={formData.element}
+                    className="w-6 h-6"
+                  />
+                  <span>{formData.element} Element</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -148,6 +184,16 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
                   <option key={style} value={style}>{style}</option>
                 ))}
               </select>
+              {formData.combatStyle && getCombatStyleImage(formData.combatStyle) && (
+                <div className="form-hint flex items-center gap-2 mt-2">
+                  <img
+                    src={getCombatStyleImage(formData.combatStyle)!}
+                    alt={formData.combatStyle}
+                    className="w-6 h-6"
+                  />
+                  <span>{formData.combatStyle}</span>
+                </div>
+              )}
             </div>
 
             <div className="form-group">
@@ -161,6 +207,16 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
                 <option value="Primary">Primary</option>
                 <option value="Power">Power</option>
               </select>
+              {formData.slot && getWeaponSlotImage(formData.slot) && (
+                <div className="form-hint flex items-center gap-2 mt-2">
+                  <img
+                    src={getWeaponSlotImage(formData.slot)!}
+                    alt={formData.slot}
+                    className="w-6 h-6"
+                  />
+                  <span>{formData.slot} Weapon</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -187,6 +243,46 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
             </div>
           </div>
         </section>
+
+        {/* Compatible Characters Section */}
+        <section className="form-section">
+          <h3>Compatible Characters</h3>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Select Compatible Characters</label>
+              <div className="character-checkboxes">
+                {characters.map(character => (
+                  <label key={character.id} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={formData.compatibleCharacterIds.includes(character.id)}
+                      onChange={(e) => {
+                        const characterIds = formData.compatibleCharacterIds;
+                        if (e.target.checked) {
+                          handleInputChange('compatibleCharacterIds', [...characterIds, character.id]);
+                        } else {
+                          handleInputChange('compatibleCharacterIds', characterIds.filter(id => id !== character.id));
+                        }
+                      }}
+                    />
+                    {getCharacterImage(character.name) && (
+                      <img
+                        src={getCharacterImage(character.name)!}
+                        alt={character.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    )}
+                    <span>{character.name}</span>
+                  </label>
+                ))}
+              </div>
+              {formData.compatibleCharacterIds.length === 0 && (
+                <p className="form-hint">Select at least one compatible character</p>
+              )}
+            </div>
+          </div>
+        </section>
+
         {/* Traits & Perks Section */}
         <WeaponSlotSelectors
           rarity={formData.rarity}

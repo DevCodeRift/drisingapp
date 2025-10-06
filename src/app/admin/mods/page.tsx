@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminNav from '@/components/AdminNav';
 import ImageSelector from '@/components/ImageSelector';
+import { getCombatStyleImage } from '@/lib/image-assets';
 
 interface ModAttribute {
   id: number;
@@ -263,6 +264,16 @@ export default function AdminModsPage() {
                   <option value="Spread">Spread</option>
                   <option value="Rapid-Fire">Rapid-Fire</option>
                 </select>
+                {newMod.combatStyle && getCombatStyleImage(newMod.combatStyle) && (
+                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                    <img
+                      src={getCombatStyleImage(newMod.combatStyle)!}
+                      alt={newMod.combatStyle}
+                      className="w-4 h-4"
+                    />
+                    <span>{newMod.combatStyle} Combat Style</span>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm mb-2">Description</label>
@@ -509,7 +520,16 @@ export default function AdminModsPage() {
                       )}
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      <span className="px-2 py-1 bg-gray-600 rounded text-xs">{mod.combatStyle || 'Universal'}</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-600 rounded text-xs">
+                        {mod.combatStyle && getCombatStyleImage(mod.combatStyle) && (
+                          <img
+                            src={getCombatStyleImage(mod.combatStyle)!}
+                            alt={mod.combatStyle}
+                            className="w-3 h-3"
+                          />
+                        )}
+                        {mod.combatStyle || 'Universal'}
+                      </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
                       {mod.mainAttributes && mod.mainAttributes.length > 0 && (
