@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { WeaponFormData, WeaponModFormData, PerkFormData, WEAPON_TYPES, ELEMENTS, COMBAT_STYLES, WEAPON_SLOTS, MOD_CATEGORIES } from '@/types/weapons';
+import { WeaponFormData, WeaponModFormData, PerkFormData, WEAPON_TYPES, ELEMENTS, COMBAT_STYLES, MOD_CATEGORIES } from '@/types/weapons';
 import ImageSelector from './ImageSelector';
 
 import WeaponSlotSelectors from './WeaponSlotSelectors';
@@ -18,17 +18,16 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
     name: '',
     rarity: 4,
     weaponType: 'Hand Cannon',
-    basePowerMin: 1080,
-    basePowerMax: 3130,
+    basePower: 1500,
     combatStyle: 'Piercing',
     element: 'Arc',
-    weaponSlot: 'Primary',
+    slot: 'Primary',
     imageUrl: '',
-    thumbnailUrl: '',
     dps: 0,
     precisionBonus: 1.0,
-    magazineCapacity: 10,
+    magazineCap: 10,
     rateOfFire: 140,
+    maxAmmo: 100,
     damage: 100,
     reloadSpeed: 50,
     stability: 50,
@@ -152,40 +151,28 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
             </div>
 
             <div className="form-group">
-              <label htmlFor="weaponSlot">Weapon Slot *</label>
+              <label htmlFor="slot">Weapon Slot *</label>
               <select
-                id="weaponSlot"
+                id="slot"
                 required
-                value={formData.weaponSlot}
-                onChange={(e) => handleInputChange('weaponSlot', e.target.value)}
+                value={formData.slot}
+                onChange={(e) => handleInputChange('slot', e.target.value)}
               >
-                {WEAPON_SLOTS.map(slot => (
-                  <option key={slot} value={slot}>{slot}</option>
-                ))}
+                <option value="Primary">Primary</option>
+                <option value="Power">Power</option>
               </select>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="basePowerMin">Base Power Min *</label>
+              <label htmlFor="basePower">Base Power *</label>
               <input
-                id="basePowerMin"
+                id="basePower"
                 type="number"
                 required
-                value={formData.basePowerMin}
-                onChange={(e) => handleInputChange('basePowerMin', parseInt(e.target.value))}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="basePowerMax">Base Power Max *</label>
-              <input
-                id="basePowerMax"
-                type="number"
-                required
-                value={formData.basePowerMax}
-                onChange={(e) => handleInputChange('basePowerMax', parseInt(e.target.value))}
+                value={formData.basePower}
+                onChange={(e) => handleInputChange('basePower', parseInt(e.target.value))}
               />
             </div>
           </div>
@@ -245,12 +232,22 @@ export const WeaponAdminForm: React.FC<WeaponAdminFormProps> = ({
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="magazineCapacity">Magazine Capacity</label>
+              <label htmlFor="magazineCap">Magazine Capacity</label>
               <input
-                id="magazineCapacity"
+                id="magazineCap"
                 type="number"
-                value={formData.magazineCapacity}
-                onChange={(e) => handleInputChange('magazineCapacity', parseInt(e.target.value))}
+                value={formData.magazineCap}
+                onChange={(e) => handleInputChange('magazineCap', parseInt(e.target.value))}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="maxAmmo">Max Ammo</label>
+              <input
+                id="maxAmmo"
+                type="number"
+                value={formData.maxAmmo}
+                onChange={(e) => handleInputChange('maxAmmo', parseInt(e.target.value))}
               />
             </div>
 

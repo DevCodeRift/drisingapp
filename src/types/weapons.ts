@@ -78,19 +78,18 @@ export interface WeaponFormData {
   name: string;
   rarity: number;
   weaponType: string;
-  basePowerMin: number;
-  basePowerMax: number;
+  basePower: number;
   combatStyle: string;
   element: string;
-  weaponSlot: string;
+  slot: string; // Changed from weaponSlot to slot
   imageUrl?: string;
-  thumbnailUrl?: string;
 
   // Stats
   dps?: number;
   precisionBonus?: number;
-  magazineCapacity?: number;
+  magazineCap?: number; // Changed from magazineCapacity to magazineCap
   rateOfFire?: number;
+  maxAmmo?: number; // Added this field
   damage?: number;
   reloadSpeed?: number;
   stability?: number;
@@ -179,10 +178,6 @@ export const COMBAT_STYLES = [
   'Rapid-Fire'
 ] as const;
 
-export const WEAPON_SLOTS = [
-  'Primary',
-  'Power'
-] as const;
 
 export const MOD_CATEGORIES = [
   'Ammo',
