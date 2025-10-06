@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
-export type Theme = 'light' | 'dark' | 'cabal' | 'vex' | 'fallen'
+export type Theme = 'light' | 'dark'
 
 interface ThemeColors {
   primary: string
@@ -65,8 +65,8 @@ const themes: Record<Theme, ThemeColors> = {
     background: '#111827',
     surface: '#1f2937',
     text: {
-      primary: '#ffffff', // Pure white for maximum contrast
-      secondary: '#e5e7eb', // Lighter gray for better readability
+      primary: '#ffffff',
+      secondary: '#e5e7eb',
       muted: '#d1d5db'
     },
     border: {
@@ -83,84 +83,6 @@ const themes: Record<Theme, ThemeColors> = {
       text: '#ffffff',
       active: '#3b82f6'
     }
-  },
-  cabal: {
-    primary: '#dc2626', // Red Legion red
-    secondary: '#b91c1c',
-    accent: '#fbbf24', // Cabal gold
-    background: '#1c1917', // Dark industrial
-    surface: '#292524',
-    text: {
-      primary: '#fef3c7', // Brighter gold text for better contrast
-      secondary: '#fca5a5', // Lighter red for better readability
-      muted: '#d6d3d1'
-    },
-    border: {
-      primary: '#44403c',
-      secondary: '#57534e'
-    },
-    button: {
-      primary: '#dc2626',
-      secondary: '#b91c1c',
-      hover: '#b91c1c'
-    },
-    navigation: {
-      background: '#292524',
-      text: '#fef3c7',
-      active: '#dc2626'
-    }
-  },
-  vex: {
-    primary: '#06b6d4', // Cybernetic blue
-    secondary: '#0891b2',
-    accent: '#a855f7', // Synthwave purple
-    background: '#0f172a', // Deep space blue
-    surface: '#1e293b',
-    text: {
-      primary: '#67e8f9', // Brighter cyan for better contrast
-      secondary: '#c4b5fd', // Lighter purple for readability
-      muted: '#94a3b8'
-    },
-    border: {
-      primary: '#334155',
-      secondary: '#475569'
-    },
-    button: {
-      primary: '#06b6d4',
-      secondary: '#0891b2',
-      hover: '#0891b2'
-    },
-    navigation: {
-      background: '#1e293b',
-      text: '#67e8f9',
-      active: '#a855f7'
-    }
-  },
-  fallen: {
-    primary: '#7c3aed', // Eliksni purple
-    secondary: '#6d28d9',
-    accent: '#14b8a6', // Fallen tech teal
-    background: '#1e1b4b', // Deep purple space
-    surface: '#312e81',
-    text: {
-      primary: '#e0e7ff', // Much lighter text for better contrast
-      secondary: '#5eead4', // Brighter teal for readability
-      muted: '#c4b5fd'
-    },
-    border: {
-      primary: '#4c1d95',
-      secondary: '#5b21b6'
-    },
-    button: {
-      primary: '#7c3aed',
-      secondary: '#6d28d9',
-      hover: '#6d28d9'
-    },
-    navigation: {
-      background: '#312e81',
-      text: '#e0e7ff',
-      active: '#14b8a6'
-    }
   }
 }
 
@@ -173,7 +95,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('dark')
+  const [theme, setThemeState] = useState<Theme>('light')
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('destiny-theme') as Theme

@@ -5,18 +5,12 @@ import { useState } from 'react'
 
 const themeNames: Record<Theme, string> = {
   light: 'Light Mode',
-  dark: 'Dark Mode',
-  cabal: 'Cabal',
-  vex: 'Vex',
-  fallen: 'Fallen'
+  dark: 'Dark Mode'
 }
 
 const themeDescriptions: Record<Theme, string> = {
   light: 'Clean and bright interface',
-  dark: 'Easy on the eyes dark theme',
-  cabal: 'Red Legion industrial warfare aesthetic',
-  vex: 'Cybernetic synthwave digital landscape',
-  fallen: 'Eliksni purple and teal technology'
+  dark: 'Easy on the eyes dark theme'
 }
 
 export default function ThemeSelector() {
@@ -110,17 +104,5 @@ const themes = {
   dark: {
     primary: '#3b82f6',
     accent: '#f59e0b'
-  },
-  cabal: {
-    primary: '#dc2626',
-    accent: '#fbbf24'
-  },
-  vex: {
-    primary: '#06b6d4',
-    accent: '#a855f7'
-  },
-  fallen: {
-    primary: '#7c3aed',
-    accent: '#14b8a6'
   }
 }

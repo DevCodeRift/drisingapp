@@ -110,7 +110,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">✓</div>
             <div className="font-bold" style={{ color: colors.accent }}>Tasks</div>
           </button>
 
@@ -130,7 +129,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">⚔️</div>
             <div className="font-bold" style={{ color: colors.primary }}>Builds</div>
           </button>
 
@@ -150,7 +148,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">📰</div>
             <div className="font-bold" style={{ color: '#fbbf24' }}>News</div>
           </button>
 
@@ -170,7 +167,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">👥</div>
             <div className="font-bold" style={{ color: '#a855f7' }}>LFG</div>
           </button>
 
@@ -190,7 +186,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">🛡️</div>
             <div className="font-bold" style={{ color: '#dc2626' }}>Clans</div>
           </button>
 
@@ -210,7 +205,6 @@ export default function Home() {
               e.currentTarget.style.borderColor = colors.border.primary;
             }}
           >
-            <div className="text-3xl mb-2">🏆</div>
             <div className="font-bold" style={{ color: '#10b981' }}>Achievements</div>
           </button>
         </div>
