@@ -46,8 +46,11 @@ export default function Home() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-destiny-darker via-destiny-dark to-black">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-destiny-orange"></div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex items-center space-x-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-destiny-orange"></div>
+          <span className="text-text-secondary">Loading...</span>
+        </div>
       </div>
     );
   }

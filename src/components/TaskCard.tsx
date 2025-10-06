@@ -9,31 +9,31 @@ interface TaskCardProps {
 
 export default function TaskCard({ task, onToggle }: TaskCardProps) {
   return (
-    <div className={`p-4 rounded-lg border transition-all cursor-pointer ${
+    <div className={`group p-3 rounded-lg border transition-all cursor-pointer ${
       task.completed
-        ? 'bg-destiny-dark/50 border-destiny-gold/50 opacity-75'
-        : 'bg-destiny-dark border-destiny-orange/20 hover:border-destiny-orange/50'
+        ? 'bg-gray-50 border-gray-200'
+        : 'bg-white border-gray-200 hover:border-gray-300 hover:bg-gray-50/50'
     }`}
     onClick={() => onToggle(task.id)}
     >
       <div className="flex items-center space-x-3">
-        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
           task.completed
-            ? 'bg-destiny-gold border-destiny-gold'
-            : 'border-destiny-orange'
+            ? 'bg-green-500 border-green-500'
+            : 'border-gray-300 group-hover:border-gray-400'
         }`}>
           {task.completed && (
-            <svg className="w-3 h-3 text-destiny-dark" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           )}
         </div>
-        <div className="flex-1">
-          <h3 className={`font-medium ${task.completed ? 'line-through text-gray-400' : 'text-white'}`}>
+        <div className="flex-1 min-w-0">
+          <h3 className={`font-medium text-sm ${task.completed ? 'line-through text-text-muted' : 'text-text-primary'}`}>
             {task.taskTemplate.title}
           </h3>
           {task.taskTemplate.description && (
-            <p className={`text-sm ${task.completed ? 'text-gray-500' : 'text-gray-300'}`}>
+            <p className={`text-xs mt-1 ${task.completed ? 'text-text-muted line-through' : 'text-text-secondary'}`}>
               {task.taskTemplate.description}
             </p>
           )}
